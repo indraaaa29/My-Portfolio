@@ -95,7 +95,7 @@ export default function CaseStudyMonolith() {
           <section ref={addToRefs} className="max-w-xl">
             <h3 className="font-mono text-[#a3a3a3] text-sm tracking-widest uppercase mb-6">01 / The Problem</h3>
             <p className="text-xl leading-relaxed font-serif text-[#f5f5f5]">
-              Navigating election information is notoriously difficult. Official government portals are dense, and political data is heavily fragmented. Voters needed a unified, conversational interface to access accurate, unbiased election data instantly. However, deploying Generative AI in the civic space carries a massive risk: hallucinations.
+              Voters needed a unified, conversational interface to access accurate election data instantly. However, deploying Generative AI in the civic space carries a massive risk: hallucinations. Providing a slightly incorrect polling date or candidate stance is worse than providing no answer at all.
             </p>
           </section>
 
@@ -104,15 +104,15 @@ export default function CaseStudyMonolith() {
             <ul className="space-y-4">
               <li className="flex gap-4 items-start">
                 <span className="text-[#ffb347] font-mono mt-1">→</span>
-                <p className="text-[#a3a3a3] leading-relaxed"><strong className="text-[#f5f5f5] font-medium">Zero Hallucination Tolerance:</strong> In civic tech, providing a slightly incorrect polling date or candidate stance is worse than providing no answer at all.</p>
+                <p className="text-[#a3a3a3] leading-relaxed"><strong className="text-[#f5f5f5] font-medium">Strict Accuracy:</strong> The system had to reliably say "I don't know" rather than guess if data was missing.</p>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-[#ffb347] font-mono mt-1">→</span>
-                <p className="text-[#a3a3a3] leading-relaxed"><strong className="text-[#f5f5f5] font-medium">Data Freshness:</strong> Election guidelines and candidate lists update rapidly; the system could not rely on stale, pre-trained model weights.</p>
+                <p className="text-[#a3a3a3] leading-relaxed"><strong className="text-[#f5f5f5] font-medium">Data Freshness:</strong> Election guidelines update rapidly; the app needed to instantly reflect new information without retraining a model.</p>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-[#ffb347] font-mono mt-1">→</span>
-                <p className="text-[#a3a3a3] leading-relaxed"><strong className="text-[#f5f5f5] font-medium">Inference Latency:</strong> Conversational interfaces degrade rapidly if response times exceed a few seconds, requiring aggressive caching strategies.</p>
+                <p className="text-[#a3a3a3] leading-relaxed"><strong className="text-[#f5f5f5] font-medium">Development Velocity:</strong> As a lean project, building a complex microservice architecture would severely bottleneck iteration speed.</p>
               </li>
             </ul>
           </section>
@@ -120,31 +120,31 @@ export default function CaseStudyMonolith() {
           <section ref={addToRefs} className="max-w-xl">
             <h3 className="font-mono text-[#a3a3a3] text-sm tracking-widest uppercase mb-6">03 / Engineering Decisions</h3>
             <p className="text-[#f5f5f5] text-lg leading-relaxed mb-6">
-              I entirely rejected the idea of fine-tuning an LLM. Fine-tuning embeds knowledge into model weights, making it impossible to update dynamically or trace the exact source of a claim.
+              I rejected fine-tuning an LLM. It is expensive, hard to update dynamically, and makes it difficult to trace the exact source of a claim.
             </p>
             <p className="text-[#a3a3a3] text-lg leading-relaxed">
-              Instead, I implemented a strict Retrieval-Augmented Generation (RAG) architecture. The LLM acts solely as a reasoning and summarization engine, explicitly instructed to refuse answering if the retrieved context (from verified official sources) does not contain the answer. This decoupled the intelligence from the knowledge base.
+              Instead, I implemented a straightforward Retrieval-Augmented Generation (RAG) architecture. The LLM is given strict system prompts to act purely as a summarization engine. It only answers using the retrieved context blocks provided to it. This completely decouples the intelligence layer from the factual knowledge layer.
             </p>
           </section>
 
           <section ref={addToRefs} className="max-w-xl">
             <h3 className="font-mono text-[#ffb347] text-sm tracking-widest uppercase mb-6">04 / Architecture</h3>
             <div className="border-l-2 border-[#11131b] pl-6 py-2 mb-8">
-              <h4 className="text-lg font-medium mb-2">The Interface</h4>
+              <h4 className="text-lg font-medium mb-2">The Monorepo (Next.js)</h4>
               <p className="text-[#a3a3a3] text-sm leading-relaxed">
-                A highly responsive React/Next.js frontend using Server-Sent Events (SSE) to stream AI responses token-by-token, drastically lowering the perceived latency for the user.
+                To maximize velocity, I kept everything full-stack within Next.js. The frontend handles the chat UI, while Next.js API routes securely manage the OpenAI API calls and orchestration.
               </p>
             </div>
             <div className="border-l-2 border-[#11131b] pl-6 py-2 mb-8">
-              <h4 className="text-lg font-medium mb-2">The Orchestrator</h4>
+              <h4 className="text-lg font-medium mb-2">The Streaming Layer</h4>
               <p className="text-[#a3a3a3] text-sm leading-relaxed">
-                A Python-based middle tier that intercepts user queries, rewrites them for semantic clarity, and handles the orchestration between the vector database and the LLM API.
+                Utilized the Vercel AI SDK to stream responses token-by-token directly to the client, drastically improving perceived performance over standard REST requests.
               </p>
             </div>
             <div className="border-l-2 border-[#11131b] pl-6 py-2">
-              <h4 className="text-lg font-medium mb-2">Hybrid Retrieval Layer</h4>
+              <h4 className="text-lg font-medium mb-2">The Knowledge Base</h4>
               <p className="text-[#a3a3a3] text-sm leading-relaxed">
-                A Pinecone vector database storing chunked, embedded government documents, paired with traditional BM25 keyword search to ensure exact-match retrieval for specific legislative terms.
+                A simple vector database holding chunked official documents. When a user asks a question, their query is embedded and matched against the closest document chunks via cosine similarity.
               </p>
             </div>
           </section>
@@ -152,17 +152,17 @@ export default function CaseStudyMonolith() {
           <section ref={addToRefs} className="max-w-xl">
             <h3 className="font-mono text-[#a3a3a3] text-sm tracking-widest uppercase mb-6">05 / Challenges</h3>
             <p className="text-lg leading-relaxed text-[#f5f5f5] mb-6">
-              Early prototypes revealed that pure semantic search (vector embeddings) often failed on highly specific queries, like matching a particular constituency ID or a candidate's exact last name. 
+              A major issue was the LLM returning unstructured text when the UI needed structured data (like displaying a neat list of candidates or polling locations). 
             </p>
             <p className="text-lg leading-relaxed text-[#a3a3a3]">
-              I solved this by implementing a Hybrid Search pipeline. The system executes both a dense vector search (for semantic intent) and a sparse keyword search (for exact matches), applying reciprocal rank fusion (RRF) to merge and rank the most relevant context chunks before passing them to the LLM.
+              Instead of relying on fragile regex parsing on the frontend, I migrated to OpenAI's Structured Outputs (Function Calling). By forcing the model to return data matching a strict JSON schema, the frontend could reliably map the output to clean React components.
             </p>
           </section>
 
           <section ref={addToRefs} className="max-w-xl">
             <h3 className="font-mono text-[#a3a3a3] text-sm tracking-widest uppercase mb-6">06 / The Solution</h3>
             <p className="text-lg leading-relaxed text-[#f5f5f5]">
-              VoteSetu stands as a robust, hallucination-resistant civic assistant. By strictly isolating the verified data layer from the generative language layer and enforcing source-grounding in the system prompt, it transforms complex bureaucratic information into accessible, trustworthy conversational assistance.
+              VoteSetu is a lean, maintainable AI application. By avoiding premature optimization and sticking to a robust Next.js/RAG stack, the platform successfully balances generative assistance with strict factual grounding.
             </p>
           </section>
 
@@ -170,16 +170,16 @@ export default function CaseStudyMonolith() {
             <h3 className="font-mono text-[#ffb347] text-sm tracking-widest uppercase mb-6">07 / Impact</h3>
             <div className="grid grid-cols-2 gap-8 border-t border-[#11131b] pt-8">
               <div>
-                <p className="text-4xl md:text-5xl font-serif text-[#f5f5f5] mb-2">99.8<span className="text-xl text-[#a3a3a3]">%</span></p>
-                <p className="text-xs font-mono text-[#6b7280] uppercase tracking-wider">Source Grounding Accuracy</p>
+                <p className="text-4xl md:text-5xl font-serif text-[#f5f5f5] mb-2">100<span className="text-xl text-[#a3a3a3]">%</span></p>
+                <p className="text-xs font-mono text-[#6b7280] uppercase tracking-wider">Source Traceability</p>
               </div>
               <div>
-                <p className="text-4xl md:text-5xl font-serif text-[#f5f5f5] mb-2">~1.2<span className="text-xl text-[#a3a3a3]">s</span></p>
-                <p className="text-xs font-mono text-[#6b7280] uppercase tracking-wider">Time to First Token (TTFT)</p>
+                <p className="text-4xl md:text-5xl font-serif text-[#f5f5f5] mb-2">O(1)</p>
+                <p className="text-xs font-mono text-[#6b7280] uppercase tracking-wider">Developer Context Switching</p>
               </div>
               <div className="col-span-2">
-                <p className="text-4xl md:text-5xl font-serif text-[#f5f5f5] mb-2">Multi-lingual</p>
-                <p className="text-xs font-mono text-[#6b7280] uppercase tracking-wider">Regional Dialect Support via LLM</p>
+                <p className="text-4xl md:text-5xl font-serif text-[#f5f5f5] mb-2">Serverless</p>
+                <p className="text-xs font-mono text-[#6b7280] uppercase tracking-wider">Zero Infrastructure Maintenance</p>
               </div>
             </div>
           </section>
@@ -187,7 +187,7 @@ export default function CaseStudyMonolith() {
           <section ref={addToRefs} className="max-w-xl">
             <h3 className="font-mono text-[#a3a3a3] text-sm tracking-widest uppercase mb-6">08 / Reflection</h3>
             <p className="text-lg leading-relaxed text-[#f5f5f5]">
-              If I were to rebuild this system today, I would move away from external vector database dependencies (like Pinecone) and utilize `pgvector` directly within PostgreSQL. This would drastically simplify the data infrastructure, allowing relational candidate data and semantic document chunks to be queried and joined in a single, transactional operation.
+              The biggest lesson was realizing that in AI applications, the model integration is the easy part. Preparing, cleaning, and chunking the source documents effectively dictates 80% of the app's actual quality. If I rebuilt this, I would invest significantly more time in building an automated data-ingestion pipeline rather than tuning prompts.
             </p>
           </section>
 
