@@ -1,14 +1,14 @@
 # dependencies
+/node_modules
 node_modules/
-Website/node_modules/
 
 # next.js build output
+/.next
 .next/
-Website/.next/
 
 # production
-build/
-dist/
+/build
+/dist
 
 # misc
 .DS_Store
