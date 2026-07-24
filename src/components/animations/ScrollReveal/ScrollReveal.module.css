@@ -1,0 +1,18 @@
+/* ──────────────────────────────────────────────
+ * ScrollReveal — CSS Module
+ * Scroll-triggered text reveal with rotation, opacity, and blur.
+ * ────────────────────────────────────────────── */
+
+.container {
+  margin: 20px 0;
+}
+
+.text {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.word {
+  display: inline-block;
+}

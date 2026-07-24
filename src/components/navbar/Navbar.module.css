@@ -1,0 +1,174 @@
+/* ──────────────────────────────────────────────
+ * Navbar — Minimal Premium Navigation
+ * Visual: Apple / Linear inspired, transparent, sticky
+ * ────────────────────────────────────────────── */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 64px;
+  background: transparent;
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ─── Brand ─── */
+
+.brand {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-neutral-100, #f5f5f5);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.brand:hover {
+  opacity: 0.7;
+}
+
+/* ─── Desktop Links ─── */
+
+.desktopLinks {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--color-neutral-400, #a0a0a0);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  padding: 0.25rem 0;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-primary-500, #f5b532);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navLink:hover {
+  color: var(--color-neutral-100, #f5f5f5);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--color-primary-500, #f5b532);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Resume link */
+.resumeLink {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-primary-500, #f5b532);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.resumeLink:hover {
+  opacity: 0.7;
+}
+
+/* ─── Separator dot ─── */
+
+.separator {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-neutral-700, #404040);
+  flex-shrink: 0;
+}
+
+/* ─── Mobile Hamburger ─── */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-neutral-300, #c0c0c0);
+  transition: color 0.2s ease;
+}
+
+.hamburger:hover {
+  color: var(--color-neutral-100, #f5f5f5);
+}
+
+.hamburger:focus-visible {
+  outline: 2px solid var(--color-primary-500, #f5b532);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.hamburgerLine {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s ease;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 768px) {
+  .nav {
+    padding: 0 1.25rem;
+    height: 56px;
+  }
+
+  .desktopLinks {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
