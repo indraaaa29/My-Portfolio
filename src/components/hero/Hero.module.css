@@ -199,8 +199,9 @@
   cursor: pointer;
   text-decoration: none;
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
   white-space: nowrap;
 }
 
@@ -210,6 +211,7 @@
 
 .ctaPrimary:active {
   background-color: var(--color-neutral-300, #d4d4d4);
+  transform: scale(0.98);
 }
 
 .ctaPrimary:focus-visible {
@@ -234,9 +236,10 @@
   cursor: pointer;
   text-decoration: none;
   transition:
-    border-color 0.25s ease,
-    background-color 0.25s ease,
-    color 0.25s ease;
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
   white-space: nowrap;
 }
 
@@ -248,6 +251,7 @@
 
 .ctaSecondary:active {
   background-color: rgba(255, 255, 255, 0.08);
+  transform: scale(0.98);
 }
 
 .ctaSecondary:focus-visible {
