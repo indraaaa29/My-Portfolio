@@ -13,9 +13,10 @@
   flex-direction: column;
   background: var(--color-surface-dark, #080808);
   overflow: hidden;
+  isolation: isolate;
 }
 
-/* ─── Background Ambience ─── */
+/* ─── Layered Background Ambience ─── */
 
 .background {
   position: absolute;
@@ -25,42 +26,46 @@
   overflow: hidden;
 }
 
+/* Layer 2: Primary Warm Champagne Radial Glow (Upper-Left / Center-Left) */
 .background::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80vw;
-  height: 80vw;
-  max-width: 900px;
-  max-height: 900px;
-  transform: translate(-50%, -55%);
+  top: 35%;
+  left: 20%;
+  width: 75vw;
+  height: 75vw;
+  max-width: 1000px;
+  max-height: 1000px;
+  transform: translate(-50%, -50%);
   background: radial-gradient(
     circle at center,
-    rgba(245, 181, 50, 0.04) 0%,
-    rgba(245, 181, 50, 0.02) 25%,
-    rgba(240, 155, 90, 0.01) 50%,
+    rgba(228, 196, 141, 0.03) 0%,
+    rgba(215, 185, 135, 0.012) 35%,
     transparent 70%
   );
   border-radius: 50%;
+  filter: blur(40px);
 }
 
+/* Layer 3: Soft Secondary Champagne Haze (Upper-Right) */
 .background::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 50vw;
-  height: 100vh;
+  top: -15%;
+  right: -5%;
+  width: 60vw;
+  height: 70vh;
   background: radial-gradient(
-    ellipse at 100% 20%,
-    rgba(200, 194, 184, 0.015) 0%,
-    transparent 60%
+    ellipse at 85% 15%,
+    rgba(228, 196, 141, 0.018) 0%,
+    rgba(200, 194, 184, 0.008) 40%,
+    transparent 65%
   );
   pointer-events: none;
+  filter: blur(30px);
 }
 
-/* ─── Light Vignette ─── */
+/* ─── Layer 5: Cinematic Multi-Stop Vignette & Micro-Texture ─── */
 
 .vignette {
   position: absolute;
@@ -68,22 +73,23 @@
   z-index: 1;
   pointer-events: none;
   background: radial-gradient(
-    ellipse at center,
-    transparent 50%,
-    rgba(0, 0, 0, 0.4) 100%
+    ellipse at 50% 45%,
+    transparent 45%,
+    rgba(8, 8, 8, 0.3) 75%,
+    rgba(8, 8, 8, 0.58) 100%
   );
 }
 
-/* ─── Inner Wrapper ─── */
+/* ─── Inner Wrapper (Two-Column Layout) ─── */
 
 .inner {
   position: relative;
   z-index: 2;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 3rem;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -91,16 +97,24 @@
   padding-top: 64px; /* nav height */
 }
 
+/* ─── Left Column: Text Content ─── */
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 /* ─── Top Label ─── */
 
 .topLabel {
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: clamp(0.8125rem, 1.2vw, 1rem);
-  font-weight: 400;
-  letter-spacing: 0.12em;
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  font-weight: 500;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-neutral-500, #808080);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   user-select: none;
 }
 
@@ -109,11 +123,11 @@
 .name {
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
   font-size: clamp(2.8rem, 7.5vw, 6.5rem);
-  font-weight: 600;
-  letter-spacing: -0.045em;
-  line-height: 1.05;
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  line-height: 1;
   color: var(--color-neutral-50, #fafafa);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 1rem 0;
   text-wrap: balance;
 }
 
@@ -124,7 +138,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem 1.5rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
 }
 
 .titleSeparator {
@@ -140,9 +154,9 @@
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
   font-size: clamp(1.1rem, 2.2vw, 1.5rem);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   color: var(--color-neutral-400, #a0a0a0);
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 /* ─── Description ─── */
@@ -151,10 +165,11 @@
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
   font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
   font-weight: 400;
-  line-height: 1.7;
+  letter-spacing: -0.01em;
+  line-height: 1.65;
   color: var(--color-neutral-500, #808080);
-  max-width: 540px;
-  margin: 0 0 2.5rem 0;
+  max-width: 52ch;
+  margin: 0 0 3rem 0;
   text-wrap: pretty;
 }
 
@@ -163,7 +178,7 @@
 .ctaGroup {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 
@@ -172,36 +187,33 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
-  border: none;
+  padding: 0.8125rem 1.875rem;
+  border: 1px solid transparent;
   border-radius: 9999px;
-  background: var(--color-neutral-50, #fafafa);
+  background-color: var(--color-neutral-50, #fafafa);
   color: var(--color-neutral-950, #080808);
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
   font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   cursor: pointer;
   text-decoration: none;
   transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background-color 0.25s ease,
+    color 0.25s ease;
   white-space: nowrap;
 }
 
 .ctaPrimary:hover {
-  background: var(--color-neutral-200, #e0e0e0);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-neutral-200, #e0e0e0);
 }
 
 .ctaPrimary:active {
-  transform: translateY(0);
+  background-color: var(--color-neutral-300, #d4d4d4);
 }
 
 .ctaPrimary:focus-visible {
-  outline: 2px solid var(--color-primary-500, #f5b532);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
   outline-offset: 2px;
 }
 
@@ -210,37 +222,85 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
-  border: 1px solid var(--color-neutral-700, #404040);
+  padding: 0.8125rem 1.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  background: transparent;
-  color: var(--color-neutral-300, #c0c0c0);
+  background-color: transparent;
+  color: var(--color-neutral-200, #e0e0e0);
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
   font-size: 0.875rem;
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   cursor: pointer;
   text-decoration: none;
   transition:
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease;
   white-space: nowrap;
 }
 
 .ctaSecondary:hover {
-  border-color: var(--color-neutral-500, #808080);
-  color: var(--color-neutral-100, #f5f5f5);
-  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-neutral-50, #fafafa);
 }
 
 .ctaSecondary:active {
-  transform: translateY(0);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .ctaSecondary:focus-visible {
-  outline: 2px solid var(--color-primary-500, #f5b532);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
   outline-offset: 2px;
+}
+
+/* ─── Right Column: Minimal Portrait Placeholder ─── */
+
+.portraitContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  align-self: end;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+/* Layer 4: Portrait Support Glow (Larger 160%, lower opacity champagne glow) */
+.portraitContainer::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160%;
+  height: 160%;
+  transform: translate(-50%, -40%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(228, 196, 141, 0.02) 0%,
+    rgba(215, 185, 135, 0.006) 50%,
+    transparent 70%
+  );
+  filter: blur(24px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.portraitPlaceholder {
+  width: min(100%, 420px);
+  aspect-ratio: 3 / 4;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  user-select: none;
 }
 
 /* ─── Scroll Indicator ─── */
@@ -282,16 +342,26 @@
   top: 6px;
 }
 
-/* ─── Responsive ─── */
+/* ─── Responsive Breakdown ─── */
 
 @media (max-width: 1024px) {
   .inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
     padding: 0 1.5rem;
     padding-top: 64px;
   }
 
   .ctaGroup {
     gap: 0.875rem;
+  }
+
+  .portraitContainer {
+    justify-content: flex-start;
+  }
+
+  .portraitPlaceholder {
+    max-width: 280px;
   }
 }
 
@@ -303,11 +373,12 @@
 
   .name {
     font-size: clamp(2.2rem, 10vw, 3.2rem);
+    letter-spacing: -0.025em;
   }
 
   .titleRow {
     gap: 0.5rem 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
 
   .titleText {
@@ -317,7 +388,7 @@
   .description {
     max-width: 100%;
     font-size: 0.9375rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
   .ctaGroup {
@@ -335,6 +406,10 @@
   .scrollIndicator {
     display: none;
   }
+
+  .portraitPlaceholder {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -347,3 +422,5 @@
     font-size: clamp(1.8rem, 12vw, 2.5rem);
   }
 }
+
+
