@@ -1,20 +1,16 @@
-export type ProjectVariant = 'immersive' | 'editorial' | 'typography' | 'fullscreen';
-
 export interface Project {
-  index: string; // "01", "02", ...
+  index: string;     // "01", "02", ...
   title: string;
   category: string;
   year: string;
   tagline: string;
-  /** Storytelling arc — each project reads like a story, not a resume entry. */
-  context: string;   // where the story begins — the scene
-  thinking: string;  // the question / the reasoning
-  execution: string; // what was built and how
-  outcome: string;   // what changed because of it
+  context: string;
+  thinking: string;
+  execution: string;
+  outcome: string;
   stack: string[];
-  color: string;     // accent hue for subtle hover states
-  image: string;     // editorial visual
-  variant: ProjectVariant; // editorial layout identity
+  color: string;     // accent hue for hover state
+  imageHue: string;  // CSS gradient for placeholder image
   link?: string;
 }
 
@@ -25,18 +21,13 @@ export const PROJECTS: Project[] = [
     category: 'Interaction Design',
     year: '2025',
     tagline: 'Scroll-driven film, frame by frame.',
-    context:
-      'The brief was the medium itself — prove that motion-first design thinking is an architecture, not decoration. The most honest way to show it was to become it.',
-    thinking:
-      'If cinema is twenty-four frames a second, a website can be a thousand frames per scroll. What if the introduction wasn\u2019t a page you read, but a film you scrub with your own hand?',
-    execution:
-      'A 995-frame scroll-sequenced canvas engine with scene management, narrative overlays, and GSAP synchronisation — this very experience, composed frame by frame.',
-    outcome:
-      'Sub-16ms frame delivery. Zero layout shift. A steady 60 FPS on mobile — performance written into the story itself.',
+    context: 'Static portfolio sites fail to communicate motion-first design thinking.',
+    thinking: 'To show, not tell, we needed a seamless experience where the portfolio itself becomes the showcase piece, behaving like a film director\'s cut.',
+    execution: 'A 995-frame scroll-sequenced canvas engine was engineered with custom scene management, narrative overlays, and GSAP synchronisation.',
+    outcome: 'Sub-16ms frame delivery. Zero layout shift. Smooth 60 FPS on mobile devices.',
     stack: ['Next.js', 'TypeScript', 'GSAP', 'Canvas API', 'Lenis'],
     color: '#D4C5A9',
-    image: '/project-01.png',
-    variant: 'immersive',
+    imageHue: 'linear-gradient(135deg, #0F0E0C 0%, #1A1714 40%, #2C2419 100%)',
   },
   {
     index: '02',
@@ -44,18 +35,13 @@ export const PROJECTS: Project[] = [
     category: 'Data Visualisation',
     year: '2024',
     tagline: 'Real-time intelligence at institutional scale.',
-    context:
-      'Trading desks were drowning in raw streams. Risk lived somewhere in the noise, but nobody could see where — spatial awareness had collapsed.',
-    thinking:
-      'Don\u2019t show everything at once. Give the noise a place to rest, and the signal becomes self-evident. Calm is a design decision.',
-    execution:
-      'A live streaming data surface with WebSocket ingestion, GPU-accelerated canvas charts, and a composable filter architecture tuned for split-second reading.',
-    outcome:
-      '4× reduction in analyst response time. 800K events processed per minute without dropping a frame.',
+    context: 'Financial teams were drowning in raw data streams, lacking any spatial awareness of where risk actually lived.',
+    thinking: 'We stripped away the noise. The interface needed to be as silent and precise as a cockpit, surfacing only actionable anomalies.',
+    execution: 'Built a live streaming data surface using WebSocket ingestion, highly optimized GPU-accelerated canvas charts, and a composable filter architecture.',
+    outcome: 'Analysts saw a 4× reduction in response time, comfortably processing over 800K events per minute without UI stutter.',
     stack: ['React', 'D3.js', 'WebSocket', 'WebGL', 'Rust backend'],
     color: '#B8C9D4',
-    image: '/project-02.png',
-    variant: 'editorial',
+    imageHue: 'linear-gradient(135deg, #080C10 0%, #101820 40%, #141F2A 100%)',
   },
   {
     index: '03',
@@ -63,36 +49,26 @@ export const PROJECTS: Project[] = [
     category: 'Design Engineering',
     year: '2024',
     tagline: 'One language. Thirty teams. Zero drift.',
-    context:
-      'A 120-person product org was shipping inconsistent interfaces across twelve products. Every screen disagreed with the one next to it.',
-    thinking:
-      'A design system is not a component library — it is a language. Start with the atoms, the tokens, and let the grammar fall out of them.',
-    execution:
-      'A token-first design system — 400+ components, a Figma-to-code pipeline, automated visual regression, published as a versioned npm package.',
-    outcome:
-      '68% fewer UI-related bug reports. Feature cycles collapsed from three weeks to four days.',
+    context: 'A 120-person product organization was shipping inconsistent interfaces across a suite of twelve different products.',
+    thinking: 'Consistency couldn\'t rely on discipline alone; it had to be engineered. We needed a single source of truth from design tokens to production code.',
+    execution: 'Developed a token-first design system with over 400 components, a seamless Figma-to-code pipeline, and automated visual regression testing.',
+    outcome: 'Achieved a 68% reduction in UI-related bug reports and compressed the average feature cycle from 3 weeks to just 4 days.',
     stack: ['React', 'Storybook', 'Style Dictionary', 'Chromatic', 'Turborepo'],
     color: '#C9C2D4',
-    image: '/project-03.png',
-    variant: 'typography',
+    imageHue: 'linear-gradient(135deg, #0C080F 0%, #180F1E 40%, #1E1528 100%)',
   },
   {
     index: '04',
-    title: 'Parallax Narrative Engine',
+    title: 'Parallax Narrative',
     category: 'Creative Technology',
     year: '2023',
     tagline: 'Stories that respond to how you read them.',
-    context:
-      'Long-form editorial had a 23% scroll depth. Readers were not leaving the story — they were leaving the page that ignored how they read.',
-    thinking:
-      'Reading has a rhythm. What if the page could feel how fast you were reading, and pace itself to keep you inside the story?',
-    execution:
-      'A scroll-aware narrative pacing engine — text, imagery, and ambient sound synchronised to reading velocity and dwell time.',
-    outcome:
-      'Average scroll depth rose to 81%. Time-on-site grew 340%. Readers stopped skipping and started living in the story.',
+    context: 'Long-form editorial content was suffering, with average scroll depth stalling at 23% before readers abandoned the page.',
+    thinking: 'Reading shouldn\'t be static. By tying the environment to the user\'s reading velocity, we could pull them deeper into the narrative.',
+    execution: 'Engineered a scroll-aware pacing engine where text, cinematic imagery, and ambient sound synchronize perfectly with the reader\'s pace and dwell time.',
+    outcome: 'Average scroll depth increased to 81%, and total time-on-site grew by an unprecedented 340%.',
     stack: ['Three.js', 'GSAP', 'Howler.js', 'Next.js', 'Framer Motion'],
     color: '#C9D4C2',
-    image: '/project-04.png',
-    variant: 'fullscreen',
+    imageHue: 'linear-gradient(135deg, #080F08 0%, #0F1A0E 40%, #141F14 100%)',
   },
 ];

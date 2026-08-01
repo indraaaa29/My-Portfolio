@@ -28,11 +28,12 @@ const DebugOverlay = forwardRef<DebugOverlayHandle, DebugOverlayProps>(
     const overlayLifecycleRef = useRef<HTMLSpanElement>(null);
     const narrativeRef = useRef<HTMLSpanElement>(null);
 
-    // Gate: only show when ?debug=1 in the URL OR NEXT_PUBLIC_DEBUG=true
+    // Gate: only show when ?debug=1 is in the URL or NEXT_PUBLIC_DEBUG is true
     useEffect(() => {
       const params = new URLSearchParams(window.location.search);
-      const envDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
-      setIsDebugEnabled(params.get('debug') === '1' || envDebug);
+      const isUrlDebug = params.get('debug') === '1';
+      const isEnvDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
+      setIsDebugEnabled(isUrlDebug || isEnvDebug);
     }, []);
 
     useImperativeHandle(ref, () => ({
