@@ -1,42 +1,34 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter, Bebas_Neue } from 'next/font/google';
+import './globals.css';
+import SmoothScroll from '@/components/SmoothScroll';
+import CustomCursor from '@/components/CustomCursor';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const bebasNeue = Bebas_Neue({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-bebas',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Alex Thorne | Cinematic Portfolio & Staff Creative Technologist",
-  description: "A world-class scroll-driven cinematic experience and high-performance digital portfolio showcasing 3D WebGL, AI platforms, and modern web applications.",
-  keywords: ["Creative Technologist", "Frontend Engineer", "WebGL", "GSAP", "Next.js", "TypeScript", "3D Web", "Portfolio"],
-  authors: [{ name: "Alex Thorne" }],
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
+  title: 'Premium Cinematic Portfolio',
+  description: 'A scroll-driven cinematic landing experience',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark scroll-smooth`}
-    >
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-black text-white font-sans selection:bg-amber-500 selection:text-zinc-950">
-        {children}
+    <html lang="en">
+      <body className={`${inter.variable} ${bebasNeue.variable} font-sans antialiased`}>
+        <CustomCursor />
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

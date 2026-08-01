@@ -1,191 +1,132 @@
 'use client';
-import { useEffect, useRef, useState, useImperativeHandle, forwardRef, useCallback } from 'react';
+
+import { useEffect, useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
+import { CINEMATIC_CONFIG } from '@/config/cinematic';
+import { AssetManager } from '@/utils/AssetManager';
+import { RendererState } from '@/types/cinematic';
+
+interface CanvasRendererProps {
+  onStateChange: (state: RendererState) => void;
+  onLoadedCountChange: (count: number) => void;
+}
 
 export interface CanvasRendererHandle {
-  renderFrame: (index: number) => void;
+  drawFrame: (index: number) => void;
 }
 
-export interface CanvasRendererProps {
-  className?: string;
-}
+const CanvasRenderer = forwardRef<CanvasRendererHandle, CanvasRendererProps>(
+  ({ onStateChange, onLoadedCountChange }, ref) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const assetManagerRef = useRef<AssetManager | null>(null);
+    const stateRef = useRef<RendererState>('Boot');
+    const currentFrameRef = useRef<number>(1);
+    const lastDrawnFrameRef = useRef<number>(0);
 
-const CanvasRenderer = forwardRef<CanvasRendererHandle, CanvasRendererProps>((_, ref) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const totalFrames = 995;
-  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(totalFrames).fill(null));
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Keep track of last requested frame to render it once loaded if it missed
-  const lastRequestedFrameRef = useRef(0);
-
-  const renderCanvas = useCallback((frameIndex: number) => {
-    lastRequestedFrameRef.current = frameIndex;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Use DPR for high-res screens
-    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2 for performance
-    const rect = canvas.getBoundingClientRect();
-
-    if (rect.width === 0 || rect.height === 0) return;
-
-    // Only resize internal canvas if dimensions changed
-    if (canvas.width !== Math.floor(rect.width * dpr) || canvas.height !== Math.floor(rect.height * dpr)) {
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor(rect.height * dpr);
-      ctx.scale(dpr, dpr);
-    }
-
-    const safeIndex = Math.max(0, Math.min(totalFrames - 1, Math.floor(frameIndex)));
-    const img = imagesRef.current[safeIndex];
-
-    ctx.clearRect(0, 0, rect.width, rect.height);
-
-    if (img && img.complete && img.naturalWidth > 0) {
-      const imgAspect = img.naturalWidth / img.naturalHeight;
-      const canvasAspect = rect.width / rect.height;
-      let drawWidth, drawHeight, offsetX, offsetY;
-
-      if (canvasAspect > imgAspect) {
-        drawWidth = rect.width;
-        drawHeight = rect.width / imgAspect;
-        offsetX = 0;
-        offsetY = (rect.height - drawHeight) / 2;
-      } else {
-        drawHeight = rect.height;
-        drawWidth = rect.height * imgAspect;
-        offsetX = (rect.width - drawWidth) / 2;
-        offsetY = 0;
+    const updateState = useCallback((newState: RendererState) => {
+      if (stateRef.current !== newState) {
+        stateRef.current = newState;
+        onStateChange(newState);
       }
+    }, [onStateChange]);
 
-      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-    } else {
-      // Fallback: draw nearest available loaded frame (backward or forward)
-      let nearestImg: HTMLImageElement | null = null;
+    const render = useCallback(() => {
+      const canvas = canvasRef.current;
+      if (!canvas || !assetManagerRef.current) return;
       
-      // Search backwards first
-      for (let i = safeIndex - 1; i >= 0; i--) {
-        const prevImg = imagesRef.current[i];
-        if (prevImg && prevImg.complete && prevImg.naturalWidth > 0) {
-          nearestImg = prevImg;
-          break;
+      // Prevent duplicate draw calls for the exact same frame
+      if (lastDrawnFrameRef.current === currentFrameRef.current) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const frame = assetManagerRef.current.getFrame(currentFrameRef.current);
+      
+      if (frame) {
+        if (stateRef.current === 'Loading') {
+          updateState('Ready');
         }
+        
+        const dpr = Math.min(window.devicePixelRatio || 1, CINEMATIC_CONFIG.MAX_DEVICE_PIXEL_RATIO);
+        const rect = canvas.getBoundingClientRect();
+        
+        if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+        }
+        
+        const scale = Math.max(canvas.width / frame.width, canvas.height / frame.height);
+        const x = (canvas.width / 2) - (frame.width / 2) * scale;
+        const y = (canvas.height / 2) - (frame.height / 2) * scale;
+        
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(frame, x, y, frame.width * scale, frame.height * scale);
+        
+        lastDrawnFrameRef.current = currentFrameRef.current;
       }
-      
-      // If not found, search forward
-      if (!nearestImg) {
-        for (let i = safeIndex + 1; i < totalFrames; i++) {
-          const nextImg = imagesRef.current[i];
-          if (nextImg && nextImg.complete && nextImg.naturalWidth > 0) {
-            nearestImg = nextImg;
-            break;
+    }, [updateState]);
+
+    useImperativeHandle(ref, () => ({
+      drawFrame: (index: number) => {
+        currentFrameRef.current = index;
+        if (assetManagerRef.current) {
+          assetManagerRef.current.updateWindow(index);
+        }
+        render();
+      }
+    }), [render]);
+
+    useEffect(() => {
+      if (stateRef.current === 'Boot') {
+        const checkReady = () => {
+          if (assetManagerRef.current && assetManagerRef.current.getLoadedCount() > 5) {
+            updateState('Ready');
+            render();
+          } else {
+            requestAnimationFrame(checkReady);
           }
-        }
+        };
+        checkReady();
       }
+    }, [render, updateState]);
 
-      if (nearestImg) {
-        const imgAspect = nearestImg.naturalWidth / nearestImg.naturalHeight;
-        const canvasAspect = rect.width / rect.height;
-        let drawWidth, drawHeight, offsetX, offsetY;
-
-        if (canvasAspect > imgAspect) {
-          drawWidth = rect.width;
-          drawHeight = rect.width / imgAspect;
-          offsetX = 0;
-          offsetY = (rect.height - drawHeight) / 2;
-        } else {
-          drawHeight = rect.height;
-          drawWidth = rect.height * imgAspect;
-          offsetX = (rect.width - drawWidth) / 2;
-          offsetY = 0;
+    useEffect(() => {
+      updateState('Boot');
+      const isMobile = window.innerWidth < 768;
+      assetManagerRef.current = new AssetManager(isMobile, (count) => {
+        onLoadedCountChange(count);
+        // Attempt to render in case the current frame was just loaded
+        if (lastDrawnFrameRef.current !== currentFrameRef.current) {
+           render();
         }
+      });
+      updateState('Loading');
+      
+      // Load initial frame
+      assetManagerRef.current.updateWindow(currentFrameRef.current);
+      render();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Only run once on mount
 
-        ctx.drawImage(nearestImg, offsetX, offsetY, drawWidth, drawHeight);
-      }
-    }
-  }, [totalFrames]);
+    useEffect(() => {
+      const handleResize = () => render();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, [render]);
 
-  useEffect(() => {
-    let isCancelled = false;
-
-    // Load initial 30 frames immediately for fast interactive start
-    const preloadPriority = 30;
-
-    const loadSingleFrame = (i: number) => {
-      if (imagesRef.current[i - 1]) return; // already loading/loaded
-
-      const img = new Image();
-      const paddedIndex = String(i).padStart(6, '0');
-      img.src = `/frames/frame_${paddedIndex}.jpg`;
-
-      img.onload = () => {
-        if (isCancelled) return;
-        setIsLoaded(true);
-        if (Math.floor(lastRequestedFrameRef.current) === i - 1) {
-          renderCanvas(lastRequestedFrameRef.current);
-        }
-      };
-
-      imagesRef.current[i - 1] = img;
-    };
-
-    // Burst 1-30
-    for (let i = 1; i <= preloadPriority; i++) {
-      loadSingleFrame(i);
-    }
-
-    // Lazy background load in batches of 50 to avoid network congestion
-    const loadRemainingInChunks = async () => {
-      const chunkSize = 50;
-      for (let start = preloadPriority + 1; start <= totalFrames; start += chunkSize) {
-        if (isCancelled) break;
-        const end = Math.min(start + chunkSize - 1, totalFrames);
-        for (let i = start; i <= end; i++) {
-          loadSingleFrame(i);
-        }
-        // Yield to main thread
-        await new Promise((res) => setTimeout(res, 50));
-      }
-    };
-
-    const timer = setTimeout(() => {
-      loadRemainingInChunks();
-    }, 300);
-
-    return () => {
-      isCancelled = true;
-      clearTimeout(timer);
-    };
-  }, [renderCanvas, totalFrames]);
-
-  useImperativeHandle(ref, () => ({
-    renderFrame: (index: number) => {
-      renderCanvas(index);
-    }
-  }), [renderCanvas]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      renderCanvas(lastRequestedFrameRef.current);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [renderCanvas]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ${
-        isLoaded ? 'opacity-100' : 'opacity-0'
-      }`}
-      style={{ willChange: 'transform' }}
-    />
-  );
-});
+    return (
+      <div className="fixed inset-0 z-0 bg-black">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full object-cover"
+          style={{ willChange: 'transform' }}
+        />
+      </div>
+    );
+  }
+);
 
 CanvasRenderer.displayName = 'CanvasRenderer';
-
 export default CanvasRenderer;
