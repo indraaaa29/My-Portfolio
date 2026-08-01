@@ -1,18 +1,14 @@
-/* ──────────────────────────────────────────────
- * Cinematic Portfolio — Home Page
- * ──────────────────────────────────────────────
- *
- * Hero layout with Navbar, premium typography, CTA buttons,
- * and scroll indicator. Additional sections will be built
- * in subsequent sessions.
- */
+import CinematicSequence from '@/components/CinematicSequence';
+import PortfolioWrapper from '@/components/portfolio/PortfolioWrapper';
 
-import { Hero } from '@/components/hero';
-
-export default function HomePage() {
+export default function Home() {
   return (
-    <main>
-      <Hero />
+    <main className="bg-black min-h-screen text-white relative">
+      {/* Opening Scroll Experience */}
+      <CinematicSequence />
+
+      {/* Complete Redesigned Portfolio Experience */}
+      <PortfolioWrapper />
     </main>
   );
 }

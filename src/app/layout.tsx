@@ -1,90 +1,28 @@
-import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { MotionProvider } from '@/components/animations/MotionProvider';
-import './globals.css';
-
-/* ──────────────────────────────────────────────
- * Fonts
- * ────────────────────────────────────────────── */
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
-/* ──────────────────────────────────────────────
- * Metadata — Cinematic Portfolio
- * ────────────────────────────────────────────── */
-
 export const metadata: Metadata = {
-  title: {
-    default: 'Cinematic Portfolio',
-    template: '%s | Cinematic Portfolio',
-  },
-  description:
-    'A premium cinematic portfolio blending filmmaking, photography, and AI engineering. Himalayan valley — golden hour — glass UI.',
-  keywords: [
-    'portfolio',
-    'cinematic',
-    'photography',
-    'filmmaking',
-    'AI engineering',
-    'creative technology',
-  ],
-  authors: [{ name: 'Cinematic Portfolio' }],
-  creator: 'Cinematic Portfolio',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: '/',
-    siteName: 'Cinematic Portfolio',
-    title: 'Cinematic Portfolio',
-    description:
-      'A premium cinematic portfolio blending filmmaking, photography, and AI engineering.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1920,
-        height: 1080,
-        alt: 'Cinematic Portfolio',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Cinematic Portfolio',
-    description:
-      'A premium cinematic portfolio blending filmmaking, photography, and AI engineering.',
-    images: ['/og-image.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  title: "Alex Thorne | Cinematic Portfolio & Staff Creative Technologist",
+  description: "A world-class scroll-driven cinematic experience and high-performance digital portfolio showcasing 3D WebGL, AI platforms, and modern web applications.",
+  keywords: ["Creative Technologist", "Frontend Engineer", "WebGL", "GSAP", "Next.js", "TypeScript", "3D Web", "Portfolio"],
+  authors: [{ name: "Alex Thorne" }],
 };
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#080808' },
-  ],
 };
-
-/* ──────────────────────────────────────────────
- * Root Layout
- * ────────────────────────────────────────────── */
 
 export default function RootLayout({
   children,
@@ -94,10 +32,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark scroll-smooth`}
     >
-      <body className="min-h-screen bg-surface-dark text-neutral-100 font-sans antialiased">
-        <MotionProvider>{children}</MotionProvider>
+      <body className="min-h-full flex flex-col bg-black text-white font-sans selection:bg-amber-500 selection:text-zinc-950">
+        {children}
       </body>
     </html>
   );
