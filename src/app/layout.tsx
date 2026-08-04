@@ -13,8 +13,16 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: 'Premium Cinematic Portfolio',
-  description: 'A scroll-driven cinematic landing experience',
+  title: 'Indranil Paul | Full Stack Developer & AI Engineer',
+  description: 'Bridging the gap between intelligent systems, scalable web architecture, and secure infrastructure.',
+  authors: [{ name: 'Indranil Paul' }],
+  openGraph: {
+    title: 'Indranil Paul | Full Stack Developer & AI Engineer',
+    description: 'Bridging the gap between intelligent systems, scalable web architecture, and secure infrastructure.',
+    url: 'https://indranilpaul.dev', // TODO: update with real domain
+    siteName: 'Indranil Paul Portfolio',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

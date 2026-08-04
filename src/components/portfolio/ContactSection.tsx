@@ -6,6 +6,7 @@ import { PORTFOLIO_DATA } from '@/data/portfolioData';
 import { Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, TwitterIcon } from './SocialIcons';
 
+
 export default function ContactSection() {
   const { location } = PORTFOLIO_DATA.personal;
 
@@ -23,9 +24,10 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-28 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900 relative">
-      <div className="max-w-7xl mx-auto space-y-16">
-        
+    <section id="contact" className="py-28 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
+
+      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-amber-500 uppercase">
@@ -42,7 +44,7 @@ export default function ContactSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Contact Info Card */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -54,7 +56,7 @@ export default function ContactSection() {
             <h3 className="text-2xl font-bold text-zinc-100">
               Direct Channels
             </h3>
-            
+
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400">
@@ -63,10 +65,10 @@ export default function ContactSection() {
                 <div>
                   <div className="text-xs font-semibold uppercase text-zinc-400">Email</div>
                   <a
-                    href="mailto:alex.thorne.dev@example.com"
+                    href="mailto:your.email@example.com"
                     className="text-lg font-medium text-zinc-100 hover:text-amber-400 transition-colors"
                   >
-                    alex.thorne.dev@example.com
+                    your.email@example.com
                   </a>
                 </div>
               </div>

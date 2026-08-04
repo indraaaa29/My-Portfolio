@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { NarrativeManager } from '@/narrative/NarrativeManager';
 import { NarrativeContext } from '@/narrative/types';
+import { adaptTypographyLayout } from '@/adapters/cinematicAdapters';
+import { scenes } from '@/data/cinematicScenes';
 
 interface Props {
   manager: NarrativeManager;
@@ -109,86 +111,20 @@ export default function TypographyRenderer({ manager }: Props) {
 
   if (!content || content.sceneId === 'none') return null;
 
-  const config = SCENE_CONFIGS[content.sceneId] ?? SCENE_CONFIGS['scene-03'];
-  const words = content.message.split(' ');
+  const storyboardScene = scenes.find(s => s.id === content.sceneId);
+  let config = SCENE_CONFIGS[content.sceneId];
+  
+  if (storyboardScene) {
+    config = adaptTypographyLayout(storyboardScene);
+  } else if (!config) {
+    config = SCENE_CONFIGS['scene-03'];
+  }
+  
+  // Note: unused 'words' variable from legacy renderer removed.
 
   // ──────────────────────────────────────────────
   // TYPOGRAPHIC SYSTEM
-  //
-  // font-display = Bebas Neue (condensed, cinematic, film-title weight)
-  // font-sans    = Inter (light, delicate, precise)
-  //
-  // EPIC: full-width condensed uppercase — bleeds into the image
-  // STRONG: large condensed — scene-filling but contained  
-  // MEDIUM: Inter light — creates maximum contrast against display
-  // SOFT: Inter micro-label — cinematic index numbering
   // ──────────────────────────────────────────────
-
-  let primaryClasses = '';
-  let primaryShadow = '';
-  let useDisplayFont = false;
-  
-  switch (content.emphasis) {
-    case 'epic':
-      // Full-canvas condensed type — Bebas Neue at brutal scale
-      // Warm cream (#F0EBE1) reads as designed, not defaulted
-      primaryClasses = [
-        'font-display',
-        'text-[22vw] md:text-[20vw] lg:text-[18vw]', // viewport-relative sizing
-        'leading-[0.8]',
-        'tracking-normal',
-        'uppercase',
-        'text-[#F0EBE1]',
-        'select-none',
-      ].join(' ');
-      primaryShadow = '0 0 120px rgba(0,0,0,0.7), 0 4px 32px rgba(0,0,0,0.9)';
-      useDisplayFont = true;
-      break;
-
-    case 'strong':
-      // Scene-filling but disciplined — half the viewport height
-      primaryClasses = [
-        'font-display',
-        'text-[14vw] md:text-[12vw] lg:text-[10vw]',
-        'leading-[0.85]',
-        'tracking-normal',
-        'uppercase',
-        'text-white',
-        'select-none',
-      ].join(' ');
-      primaryShadow = '0 2px 64px rgba(0,0,0,0.8), 0 1px 16px rgba(0,0,0,0.6)';
-      useDisplayFont = true;
-      break;
-
-    case 'medium':
-      // Inter light — maximum contrast against Bebas scenes
-      // Slightly generous tracking creates editorial breathing room
-      primaryClasses = [
-        'font-sans',
-        'text-xl md:text-2xl lg:text-3xl',
-        'font-light',
-        'leading-[1.25]',
-        'tracking-[0.04em]',
-        'text-white/85',
-      ].join(' ');
-      primaryShadow = '0 4px 32px rgba(0,0,0,0.7)';
-      break;
-
-    case 'soft':
-    default:
-      // Micro-label — cinematic indexing / opening whisper
-      primaryClasses = [
-        'font-sans',
-        'text-[11px] md:text-xs',
-        'font-normal',
-        'leading-none',
-        'tracking-[0.5em]',
-        'uppercase',
-        'text-white/55',
-      ].join(' ');
-      primaryShadow = '0 2px 16px rgba(0,0,0,0.6)';
-      break;
-  }
 
   return (
     <div className={`${config.layout} pointer-events-none z-20`}>
@@ -200,43 +136,55 @@ export default function TypographyRenderer({ manager }: Props) {
           willChange: 'opacity, transform, filter',
         }}
       >
-        {/* Scene index — micro-label always appears above primary type */}
-        {config.label && content.emphasis !== 'soft' && (
+        {/* Scene index */}
+        {config.label && (
           <p
-            className={`${config.labelPosition} font-sans text-[10px] font-normal tracking-[0.55em] uppercase text-white/40`}
-            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}
+            className={`${config.labelPosition} font-sans text-xs md:text-[13px] font-normal tracking-[0.4em] uppercase text-white/50`}
+            style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
           >
             {config.label}
           </p>
         )}
 
         {/* Primary typographic element */}
-        {useDisplayFont ? (
-          // Bebas Neue: each line is a separate block for true architectural stacking
+        {storyboardScene ? (
           <h2
-            className={primaryClasses}
-            style={{ textShadow: primaryShadow }}
+            className="font-display uppercase select-none"
+            style={{
+              fontSize: storyboardScene.typography.fontSize,
+              fontWeight: storyboardScene.typography.fontWeight,
+              lineHeight: storyboardScene.typography.lineHeight,
+              color: storyboardScene.typography.color,
+              textShadow: storyboardScene.typography.textShadow,
+              letterSpacing: storyboardScene.letterSpacing || 'normal',
+              transformOrigin: storyboardScene.transformOrigin || 'center',
+            }}
           >
-            {/* For epic/strong — split into 2-word rows to fill width dramatically */}
-            {content.emphasis === 'epic'
-              ? words.reduce<string[][]>((acc, word, i) => {
-                  const rowIndex = Math.floor(i / 2);
-                  if (!acc[rowIndex]) acc[rowIndex] = [];
-                  acc[rowIndex].push(word);
-                  return acc;
-                }, []).map((row, i) => (
-                  <span key={i} className="block">{row.join(' ')}</span>
-                ))
-              : <span className="block">{content.message}</span>
-            }
+            {storyboardScene.lineStyles ? (
+              storyboardScene.message.split('\n').map((line, i) => (
+                <span 
+                  key={i} 
+                  className="block"
+                  style={{
+                    fontSize: storyboardScene.lineStyles![i]?.fontSize,
+                    fontWeight: storyboardScene.lineStyles![i]?.fontWeight,
+                    letterSpacing: storyboardScene.lineStyles![i]?.letterSpacing,
+                  }}
+                >
+                  {line}
+                </span>
+              ))
+            ) : (
+              <span className="block">{storyboardScene.message}</span>
+            )}
           </h2>
         ) : (
-          <p
-            className={`max-w-xl md:max-w-2xl ${primaryClasses}`}
-            style={{ textShadow: primaryShadow }}
+          <h2
+            className="font-display text-[12vw] leading-[0.85] uppercase text-white select-none"
+            style={{ textShadow: '0 2px 64px rgba(0,0,0,0.8)' }}
           >
-            {content.message}
-          </p>
+            <span className="block">{content.message}</span>
+          </h2>
         )}
       </div>
     </div>

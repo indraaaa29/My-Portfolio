@@ -7,8 +7,6 @@
  * @module animations
  */
 
-export { TextPressure } from './TextPressure';
-export type { TextPressureProps } from './TextPressure';
 
 export { MotionProvider, useMotion } from './MotionProvider';
 export type { MotionContextValue, MotionProviderProps } from './MotionProvider';

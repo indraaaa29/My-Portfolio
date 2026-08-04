@@ -37,12 +37,10 @@
   max-width: 1000px;
   max-height: 1000px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle at center,
-    rgba(228, 196, 141, 0.03) 0%,
-    rgba(215, 185, 135, 0.012) 35%,
-    transparent 70%
-  );
+  background: radial-gradient(circle at center,
+      rgba(228, 196, 141, 0.03) 0%,
+      rgba(215, 185, 135, 0.012) 35%,
+      transparent 70%);
   border-radius: 50%;
   filter: blur(40px);
 }
@@ -55,12 +53,10 @@
   right: -5%;
   width: 60vw;
   height: 70vh;
-  background: radial-gradient(
-    ellipse at 85% 15%,
-    rgba(228, 196, 141, 0.018) 0%,
-    rgba(200, 194, 184, 0.008) 40%,
-    transparent 65%
-  );
+  background: radial-gradient(ellipse at 85% 15%,
+      rgba(228, 196, 141, 0.018) 0%,
+      rgba(200, 194, 184, 0.008) 40%,
+      transparent 65%);
   pointer-events: none;
   filter: blur(30px);
 }
@@ -72,12 +68,10 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse at 50% 45%,
-    transparent 45%,
-    rgba(8, 8, 8, 0.3) 75%,
-    rgba(8, 8, 8, 0.58) 100%
-  );
+  background: radial-gradient(ellipse at 50% 45%,
+      transparent 45%,
+      rgba(8, 8, 8, 0.3) 75%,
+      rgba(8, 8, 8, 0.58) 100%);
 }
 
 /* ─── Inner Wrapper (Two-Column Layout) ─── */
@@ -94,7 +88,8 @@
   width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
-  padding-top: 64px; /* nav height */
+  padding-top: 64px;
+  /* nav height */
 }
 
 /* ─── Left Column: Text Content ─── */
@@ -129,6 +124,16 @@
   color: var(--color-neutral-50, #fafafa);
   margin: 0 0 1rem 0;
   text-wrap: balance;
+}
+
+.nameWrapper {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 1rem;
+  align-self: stretch; /* Breaks out of flex-start shrink-to-fit */
+  display: block;
+  position: relative;
+  z-index: 10;
 }
 
 /* ─── Title Row ─── */
@@ -281,12 +286,10 @@
   width: 160%;
   height: 160%;
   transform: translate(-50%, -40%);
-  background: radial-gradient(
-    ellipse at center,
-    rgba(228, 196, 141, 0.02) 0%,
-    rgba(215, 185, 135, 0.006) 50%,
-    transparent 70%
-  );
+  background: radial-gradient(ellipse at center,
+      rgba(228, 196, 141, 0.02) 0%,
+      rgba(215, 185, 135, 0.006) 50%,
+      transparent 70%);
   filter: blur(24px);
   pointer-events: none;
   z-index: 0;
@@ -297,11 +300,9 @@
   aspect-ratio: 3 / 4;
   border-radius: 1.25rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    rgba(255, 255, 255, 0.01) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.01) 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   user-select: none;
@@ -426,5 +427,3 @@
     font-size: clamp(1.8rem, 12vw, 2.5rem);
   }
 }
-
-

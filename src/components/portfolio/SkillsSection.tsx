@@ -12,13 +12,13 @@ export default function SkillsSection() {
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-amber-500 uppercase">
-            <span className="h-px w-6 bg-amber-500/50" />
+          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
+            <span className="h-px w-6 bg-zinc-500/50" />
             <span>Core Capabilities</span>
-            <span className="h-px w-6 bg-amber-500/50" />
+            <span className="h-px w-6 bg-zinc-500/50" />
           </div>
           <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Technical & Creative <span className="font-semibold text-amber-400">Mastery</span>
+            Technical <span className="font-semibold text-zinc-300">Expertise</span>
           </h2>
         </div>
 
@@ -31,10 +31,10 @@ export default function SkillsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: catIndex * 0.2 }}
-              className="p-8 rounded-3xl bg-zinc-900/50 border border-zinc-800/80 hover:border-amber-500/40 transition-all shadow-lg space-y-6 flex flex-col justify-between"
+              className="p-8 rounded-3xl bg-zinc-900/30 border border-zinc-800/60 hover:border-zinc-500/40 transition-all space-y-6 flex flex-col justify-between backdrop-blur-sm"
             >
               <div>
-                <h3 className="text-xl font-bold text-zinc-100 border-b border-zinc-800 pb-4 mb-6">
+                <h3 className="text-xl font-semibold text-zinc-100 border-b border-zinc-800 pb-4 mb-6 tracking-tight">
                   {cat.category}
                 </h3>
 
@@ -42,18 +42,18 @@ export default function SkillsSection() {
                   {cat.skills.map((s) => (
                     <div key={s.name} className="space-y-2">
                       <div className="flex justify-between text-sm font-medium">
-                        <span className="text-zinc-200">{s.name}</span>
-                        <span className="text-amber-400 font-mono text-xs">{s.level}%</span>
+                        <span className="text-zinc-300">{s.name}</span>
+                        <span className="text-zinc-500 font-mono text-xs">{s.level}%</span>
                       </div>
                       
                       {/* Animated Progress Meter */}
-                      <div className="h-2 w-full bg-zinc-800 rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           whileInView={{ width: `${s.level}%` }}
                           viewport={{ once: true }}
                           transition={{ duration: 1, ease: 'easeOut' }}
-                          className="h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full"
+                          className="h-full bg-zinc-400 rounded-full"
                         />
                       </div>
                     </div>

@@ -83,7 +83,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-left sky
   {
     id: 'curiosity-01',
-    message: 'Look closer.',
+    message: 'Technology changed how I think.',
     startFrame: 1,
     endFrame: 80,
     alignment: 'left',
@@ -112,7 +112,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-right sky, looking beyond
   {
     id: 'curiosity-02',
-    message: 'There is always more.',
+    message: 'It taught me to see systems.',
     startFrame: 81,
     endFrame: 165,
     alignment: 'right',
@@ -144,7 +144,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-left sky above mountains
   {
     id: 'perspective-01',
-    message: 'Nothing is accidental.',
+    message: 'Code is not just syntax.',
     startFrame: 166,
     endFrame: 245,
     alignment: 'left',
@@ -173,7 +173,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-center sky (photographer is in lower-center foreground)
   {
     id: 'perspective-02',
-    message: 'Everything is chosen.',
+    message: 'It is architecture.',
     startFrame: 246,
     endFrame: 325,
     alignment: 'center',
@@ -206,7 +206,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-left sky
   {
     id: 'creation-01',
-    message: 'To begin, forget everything.',
+    message: 'To solve a real problem,',
     startFrame: 326,
     endFrame: 405,
     alignment: 'left',
@@ -236,7 +236,7 @@ export const scenes: CinematicScene[] = [
   // Position: anchored 10% from bottom edge, text centered on that anchor
   {
     id: 'creation-02',
-    message: 'Then build from nothing.',
+    message: 'you must understand the whole.',
     startFrame: 406,
     endFrame: 485,
     alignment: 'right',
@@ -268,7 +268,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-right sky
   {
     id: 'innovation-01',
-    message: 'Strip everything away.\nWhat remains?',
+    message: 'Strip away the noise.\nWhat remains?',
     startFrame: 486,
     endFrame: 575,
     alignment: 'right',
@@ -302,7 +302,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-center sky (photographer is in lower foreground)
   {
     id: 'innovation-02',
-    message: 'That is where I begin.',
+    message: 'The core engineering.',
     startFrame: 576,
     endFrame: 655,
     alignment: 'center',
@@ -334,7 +334,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Lower-left corner (dark area, away from sun)
   {
     id: 'identity-01',
-    message: 'I don\'t follow the light.',
+    message: 'I don\'t just write software.',
     startFrame: 656,
     endFrame: 735,
     alignment: 'left',
@@ -364,7 +364,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Center, slightly above the horizon glow
   {
     id: 'identity-02',
-    message: 'I follow what burns.',
+    message: 'I build platforms.',
     startFrame: 736,
     endFrame: 815,
     alignment: 'center',
@@ -397,7 +397,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Upper-left sky
   {
     id: 'welcome-01',
-    message: 'Here is the work.',
+    message: 'This is my journey.',
     startFrame: 816,
     endFrame: 895,
     alignment: 'left',
@@ -427,7 +427,7 @@ export const scenes: CinematicScene[] = [
   // SAFE ZONE: Bottom-center
   {
     id: 'welcome-02',
-    message: 'Now, let\'s begin.',
+    message: 'Welcome to the architecture.',
     startFrame: 896,
     endFrame: 995,
     alignment: 'center',

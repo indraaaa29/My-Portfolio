@@ -1,7 +1,7 @@
 'use client';
 
 import { PROJECTS } from '@/data/projects';
-import Project from '@/components/portfolio/work/Project';
+import ProjectGallery from '@/components/portfolio/ProjectGallery';
 import { useReveal, revealStyle } from '@/components/portfolio/work/primitives';
 
 /**
@@ -61,7 +61,7 @@ function SectionHeader() {
             marginTop: '0.75rem',
           }}
         >
-          Four stories, one language — each told through a different editorial frame.
+          Six stories, one architectural standard — interact below.
         </p>
       </div>
     </div>
@@ -76,11 +76,8 @@ export default function SelectedWork() {
       <div style={{ paddingInline: 'var(--grid-margin)' }}>
         <div style={{ height: '1px', backgroundColor: 'var(--c-border)' }} />
       </div>
-
-      <div>
-        {PROJECTS.map((project) => (
-          <Project key={project.index} project={project} />
-        ))}
+      <div className="w-full relative mt-16 mb-8 border-y border-zinc-900">
+        <ProjectGallery />
       </div>
 
       <div style={{ paddingInline: 'var(--grid-margin)', paddingBottom: 'clamp(5rem, 10vw, 12rem)' }}>

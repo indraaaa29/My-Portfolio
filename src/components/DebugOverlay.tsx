@@ -14,6 +14,7 @@ export interface DebugOverlayHandle {
   updateSceneProgress: (progress: number) => void;
   updateOverlay: (id: string, lifecycle: string) => void;
   updateNarrative: (message: string) => void;
+  updateLoadedFrames: (count: number) => void;
 }
 
 const DebugOverlay = forwardRef<DebugOverlayHandle, DebugOverlayProps>(
@@ -27,6 +28,7 @@ const DebugOverlay = forwardRef<DebugOverlayHandle, DebugOverlayProps>(
     const overlayIdRef = useRef<HTMLSpanElement>(null);
     const overlayLifecycleRef = useRef<HTMLSpanElement>(null);
     const narrativeRef = useRef<HTMLSpanElement>(null);
+    const loadedFramesRef = useRef<HTMLSpanElement>(null);
 
     // Gate: only show when ?debug=1 is in the URL or NEXT_PUBLIC_DEBUG is true
     useEffect(() => {
@@ -53,6 +55,9 @@ const DebugOverlay = forwardRef<DebugOverlayHandle, DebugOverlayProps>(
       },
       updateNarrative: (message: string) => {
         if (narrativeRef.current) narrativeRef.current.innerText = message;
+      },
+      updateLoadedFrames: (count: number) => {
+        if (loadedFramesRef.current) loadedFramesRef.current.innerText = count.toString();
       }
     }));
 
@@ -87,7 +92,7 @@ const DebugOverlay = forwardRef<DebugOverlayHandle, DebugOverlayProps>(
         <div>LIFECYCLE: <span ref={overlayLifecycleRef} className="text-white">Inactive</span></div>
         <div>NARRATIVE: <span ref={narrativeRef} className="text-white truncate block">-</span></div>
         <div>FRAME: <span ref={frameSpanRef} className="text-white">1</span></div>
-        <div>LOADED: <span className="text-white">{loadedFrames}</span></div>
+        <div>LOADED: <span ref={loadedFramesRef} className="text-white">{loadedFrames}</span></div>
         <div>FPS: <span className="text-white">{fps}</span></div>
       </div>
     );

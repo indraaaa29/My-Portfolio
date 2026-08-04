@@ -17,7 +17,7 @@ export default function Footer() {
             <Sparkles className="w-3 h-3 text-zinc-950" />
           </div>
           <span className="text-white font-semibold tracking-wider text-sm">
-            THORNE<span className="text-amber-500">.</span>
+            INDRANIL PAUL<span className="text-amber-500">.</span>
           </span>
           <span className="text-xs text-zinc-500 ml-2">
             © {new Date().getFullYear()} All rights reserved.

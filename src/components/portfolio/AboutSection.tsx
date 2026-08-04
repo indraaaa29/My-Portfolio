@@ -9,35 +9,35 @@ export default function AboutSection() {
 
   const pillars = [
     {
-      icon: Compass,
-      title: "Storytelling & Motion",
-      desc: "Every interaction is crafted with purpose, timing, and cinematic flow."
-    },
-    {
       icon: Cpu,
-      title: "60 FPS Engineering",
-      desc: "GPU-accelerated rendering pipelines, zero frame drops, and sub-second load times."
+      title: "System Thinking",
+      desc: "I don't just write scripts. I architect platforms that scale securely and handle real-time demands."
     },
     {
       icon: Layers,
-      title: "Scalable Architecture",
-      desc: "Clean modular code built with Next.js, React 19, TypeScript, and modern design systems."
+      title: "Data-Driven AI",
+      desc: "Leveraging machine learning and computer vision to solve complex, real-world problems."
+    },
+    {
+      icon: Compass,
+      title: "Secure Architecture",
+      desc: "Applying ethical hacking and threat detection principles natively into the DevOps pipeline."
     }
   ];
 
   return (
-    <section id="about" className="py-28 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900 relative">
+    <section id="mindset" className="py-28 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900 relative">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-amber-500 uppercase">
-            <span className="h-px w-6 bg-amber-500/50" />
-            <span>About The Craftsman</span>
-            <span className="h-px w-6 bg-amber-500/50" />
+          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
+            <span className="h-px w-6 bg-zinc-500/50" />
+            <span>The Mindset</span>
+            <span className="h-px w-6 bg-zinc-500/50" />
           </div>
           <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Engineering Meets <span className="font-semibold text-amber-400">Cinematic Design</span>
+            Building Meaningful <span className="font-semibold text-zinc-300">Software</span>
           </h2>
         </div>
 
@@ -52,25 +52,25 @@ export default function AboutSection() {
             transition={{ duration: 0.8 }}
             className="lg:col-span-7 space-y-6"
           >
-            <div className="p-8 md:p-10 rounded-3xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-md space-y-6">
+            <div className="p-8 md:p-10 rounded-3xl bg-zinc-900/40 border border-zinc-800/80 backdrop-blur-md space-y-6">
               <h3 className="text-2xl font-semibold text-zinc-100">
-                Driven by curiosity, refined by detail.
+                Driven by curiosity. Grounded in logic.
               </h3>
               <p className="text-zinc-300 text-lg leading-relaxed">
                 {bio}
               </p>
               <p className="text-zinc-400 text-base leading-relaxed">
-                Whether orchestrating complex canvas scroll triggers, engineering WebGL shaders, or architecting enterprise-grade frontend applications, I bring a holistic focus on usability and technical excellence.
+                Whether architecting civic engagement platforms, engineering WebGL dashboards for crowd analytics, or securing cloud deployments, I focus on the holistic impact of the technology I build. I believe the best software disappears into the workflow.
               </p>
 
               <div className="pt-4 flex flex-wrap items-center gap-6 text-sm text-zinc-400 font-medium">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-amber-400" />
+                  <div className="w-2 h-2 rounded-full bg-zinc-300" />
                   <span>{location}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-400" />
-                  <span>10+ Global Design & Dev Awards</span>
+                  <Award className="w-4 h-4 text-zinc-300" />
+                  <span>Google Student Ambassador</span>
                 </div>
               </div>
             </div>
@@ -89,13 +89,13 @@ export default function AboutSection() {
               return (
                 <div
                   key={i}
-                  className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-amber-500/40 transition-all group flex items-start gap-4"
+                  className="p-6 rounded-2xl bg-zinc-900/20 border border-zinc-800/50 hover:border-zinc-500/40 transition-all group flex items-start gap-4"
                 >
-                  <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-zinc-950 transition-colors">
+                  <div className="p-3 rounded-xl bg-zinc-800/50 text-zinc-400 group-hover:bg-zinc-200 group-hover:text-zinc-900 transition-colors">
                     <Icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-zinc-100 group-hover:text-amber-400 transition-colors">
+                    <h4 className="text-lg font-semibold text-zinc-100 group-hover:text-white transition-colors">
                       {pillar.title}
                     </h4>
                     <p className="text-sm text-zinc-400 mt-1 leading-relaxed">

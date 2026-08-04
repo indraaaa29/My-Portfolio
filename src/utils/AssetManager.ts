@@ -23,11 +23,19 @@ export class AssetManager {
     // Evict frames outside the window
     for (const [key, img] of this.cache.entries()) {
       if (key < min || key > max) {
-        if (img.complete && img.src !== '') {
-          img.src = ''; // Release memory
+        const wasLoaded = (img as HTMLImageElement & { _isDecoded?: boolean })._isDecoded;
+        
+        img.onload = null;
+        img.onerror = null;
+        
+        if (img.src !== '') {
+          img.src = ''; // Release memory & abort pending requests
         }
         this.cache.delete(key);
-        this.loadedCount = Math.max(0, this.loadedCount - 1);
+        
+        if (wasLoaded) {
+          this.loadedCount = Math.max(0, this.loadedCount - 1);
+        }
       }
     }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import TextPressure from '@/components/reactbits/TextPressure';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -98,7 +99,7 @@ export default function Hero() {
       <div ref={revealTopRef} className="flex items-start justify-between">
         {/* Left: Disciplines */}
         <div className="flex flex-col gap-[3px]">
-          {['Frontend Architect', 'Creative Developer'].map((label) => (
+          {['Full Stack Developer', 'AI Engineer'].map((label) => (
             <span
               key={label}
               className="font-sans uppercase"
@@ -152,61 +153,41 @@ export default function Hero() {
       </div>
 
       {/* ── CENTER DISPLAY TYPE ─────────────────── */}
-      <div className="flex flex-col" style={{ marginTop: 'auto', marginBottom: 'auto', paddingBlock: '2vw' }}>
+      <div className="flex flex-col w-full relative" style={{ marginTop: 'auto', marginBottom: 'auto', paddingBlock: '2vw' }}>
 
-        {/* LINE 1: Solid fill — foreground */}
-        <div ref={revealLine1Ref}>
-          {/* Parallax wrapper — ONLY translateX/Y, never opacity/transform-Y */}
-          <div ref={parallaxLayer1Ref} style={{ willChange: 'transform' }}>
-            <h1
-              className="font-display uppercase block"
-              style={{
-                fontSize: 'clamp(5rem, 15.5vw, 17rem)',
-                lineHeight: 0.84,
-                letterSpacing: '-0.01em',
-                color: 'var(--c-text-primary)',
-                margin: 0,
-              }}
-            >
-              Indra
-            </h1>
+        {/* LINE 1: Interactive Name */}
+        <div ref={revealLine1Ref} className="w-full">
+          {/* Parallax wrapper */}
+          <div ref={parallaxLayer1Ref} style={{ willChange: 'transform', width: '100%', height: 'min(20vw, 240px)' }}>
+            <TextPressure
+              text="INDRANIL PAUL"
+              flex={true}
+              alpha={false}
+              stroke={false}
+              width={true}
+              weight={true}
+              italic={false}
+              textColor="#F5F5F5"
+              strokeColor="#F5F5F5"
+              minFontSize={96}
+            />
           </div>
         </div>
 
-        {/* LINE 2: Outlined ghost text — gives depth and editorial contrast */}
-        <div ref={revealLine2Ref}>
+        {/* LINE 2: Descriptor */}
+        <div ref={revealLine2Ref} className="w-full flex justify-end">
           <div
             ref={parallaxLayer2Ref}
             className="flex items-end"
             style={{
-              marginTop: '-0.06em',
               willChange: 'transform',
             }}
           >
-            {/* Ghost name */}
-            <h1
-              className="font-display uppercase block"
-              style={{
-                fontSize: 'clamp(5rem, 15.5vw, 17rem)',
-                lineHeight: 0.84,
-                letterSpacing: '-0.01em',
-                color: 'transparent',
-                // Stroke weight relative to font size — 2px at 17rem reads cleanly
-                WebkitTextStroke: '1.5px rgba(245,240,232,0.22)',
-                margin: 0,
-                flex: 1,
-              }}
-            >
-              Kumar
-            </h1>
-
-            {/* Descriptor — tucked into the right gap of the ghost letters */}
             <div
               className="hidden lg:flex flex-col gap-2"
               style={{
-                maxWidth: '200px',
-                paddingBottom: '0.5rem',
-                paddingLeft: '2rem',
+                maxWidth: '250px',
+                paddingTop: '2rem',
                 flexShrink: 0,
               }}
             >
@@ -223,7 +204,7 @@ export default function Hero() {
                   letterSpacing: '0.01em',
                 }}
               >
-                Designing and engineering cinematic digital experiences at the intersection of film and interface.
+                Bridging the gap between intelligent systems, scalable web architecture, and secure infrastructure.
               </p>
             </div>
           </div>

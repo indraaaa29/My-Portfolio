@@ -49,19 +49,24 @@ const CanvasRenderer = forwardRef<CanvasRendererHandle, CanvasRendererProps>(
         const dpr = Math.min(window.devicePixelRatio || 1, CINEMATIC_CONFIG.MAX_DEVICE_PIXEL_RATIO);
         const rect = canvas.getBoundingClientRect();
         
+        let resized = false;
         if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
             canvas.width = rect.width * dpr;
             canvas.height = rect.height * dpr;
+            resized = true;
+        }
+        
+        if (resized || !ctx.imageSmoothingEnabled) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
         }
         
         const scale = Math.max(canvas.width / frame.width, canvas.height / frame.height);
         const x = (canvas.width / 2) - (frame.width / 2) * scale;
         const y = (canvas.height / 2) - (frame.height / 2) * scale;
-        
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Note: clearRect is intentionally omitted as the object-cover math 
+        // guarantees 100% pixel coverage, saving GPU fill rate.
         ctx.drawImage(frame, x, y, frame.width * scale, frame.height * scale);
         
         lastDrawnFrameRef.current = currentFrameRef.current;

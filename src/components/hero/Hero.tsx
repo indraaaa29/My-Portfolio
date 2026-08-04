@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/navbar';
-import { TextPressure } from '@/components/animations';
+import TextPressure from '@/components/reactbits/TextPressure';
 import { cn } from '@/lib/utils';
 import styles from './Hero.module.css';
 
@@ -88,23 +88,25 @@ export default function Hero({ className }: HeroProps) {
           <p className={styles.topLabel}>Hi, I&rsquo;m</p>
 
           {/* Main heading */}
-          <h1 className={styles.name}>Indranil Paul</h1>
+          <div className={styles.nameWrapper}>
+            <TextPressure
+              text="INDRANIL PAUL"
+              className={styles.name}
+              flex={true}
+              alpha={false}
+              stroke={false}
+              width={true}
+              weight={true}
+              italic={false}
+              textColor="#F5F5F5"
+              strokeColor="#F5F5F5"
+              minFontSize={96}
+            />
+          </div>
 
           {/* Title row: Creative Developer + AI Engineer */}
           <div className={styles.titleRow}>
-            <TextPressure
-              text="Creative Developer"
-              width={false}
-              weight={true}
-              italic={false}
-              alpha={false}
-              flex={false}
-              stroke={false}
-              scale={false}
-              textColor="#fafafa"
-              minFontSize={16}
-              className={styles.titleText}
-            />
+            <span className={styles.titleText}>Creative Developer</span>
 
             <span className={styles.titleSeparator} aria-hidden="true" />
 

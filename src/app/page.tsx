@@ -16,11 +16,14 @@ import { NarrativeManager } from '@/narrative/NarrativeManager';
 import TypographyRenderer from '@/typography/TypographyRenderer';
 import Hero from '@/components/portfolio/Hero';
 import Navigation from '@/components/portfolio/Navigation';
+import GlobalGradualBlur from '@/components/portfolio/GlobalGradualBlur';
 import LoadingScreen from '@/components/LoadingScreen';
 import SelectedWork from '@/components/portfolio/SelectedWork';
 import AboutSection from '@/components/portfolio/AboutSection';
 import ExperienceSection from '@/components/portfolio/ExperienceSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
+import LeadershipSection from '@/components/portfolio/LeadershipSection';
+import LogoLoopSection from '@/components/portfolio/LogoLoopSection';
 import AchievementsSection from '@/components/portfolio/AchievementsSection';
 import ContactSection from '@/components/portfolio/ContactSection';
 import Footer from '@/components/portfolio/Footer';
@@ -34,8 +37,20 @@ export default function Home() {
   // AssetManager only preloads up to the cache window initially.
   // We use CACHE_WINDOW as the target for the loading screen so it reaches 100%.
   const targetLoadCount = CINEMATIC_CONFIG.CACHE_WINDOW;
+  const isLoadedRef = useRef(false);
+  
   const loadingProgress = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
   const isLoaded = loadedCount >= targetLoadCount || rendererState === 'Ready';
+  
+  const handleLoadedCountChange = (count: number) => {
+    if (!isLoadedRef.current) {
+      setLoadedCount(count);
+      if (count >= targetLoadCount) {
+        isLoadedRef.current = true;
+      }
+    }
+    debugOverlayRef.current?.updateLoadedFrames(count);
+  };
   
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -102,9 +117,10 @@ export default function Home() {
       onUpdate: (self) => {
         const newFrame = Math.max(1, Math.min(CINEMATIC_CONFIG.TOTAL_FRAMES, Math.round(self.progress * (CINEMATIC_CONFIG.TOTAL_FRAMES - 1) + 1)));
         
-        if (rendererState === 'Ready' || rendererState === 'Playing') {
-           if (rendererState !== 'Playing') setRendererState('Playing');
-        }
+        setRendererState(prev => {
+          if (prev === 'Ready') return 'Playing';
+          return prev;
+        });
         
         if (currentFrameRef.current !== newFrame) {
             currentFrameRef.current = newFrame;
@@ -168,10 +184,11 @@ export default function Home() {
         }
       },
     });
-  }, { scope: containerRef, dependencies: [rendererState] });
+  }, { scope: containerRef, dependencies: [] });
 
   return (
     <main className="relative w-full bg-zinc-950">
+      <GlobalGradualBlur />
       <Navigation ref={navigationRef} />
       
       <div 
@@ -195,7 +212,7 @@ export default function Home() {
             <CanvasRenderer 
               ref={canvasRendererRef} 
               onStateChange={setRendererState}
-              onLoadedCountChange={setLoadedCount}
+              onLoadedCountChange={handleLoadedCountChange}
             />
             <OverlayRenderer manager={overlayManager} />
             <TypographyRenderer manager={narrativeManager} />
@@ -203,12 +220,16 @@ export default function Home() {
         </div>
       </div>
 
-      <SelectedWork />
-
       <AboutSection />
       <ExperienceSection />
       <SkillsSection />
+
+      <SelectedWork />
+
+      <LeadershipSection />
+      <LogoLoopSection />
       <AchievementsSection />
+      
       <ContactSection />
       <Footer />
 

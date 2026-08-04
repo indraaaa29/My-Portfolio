@@ -35,16 +35,25 @@ const Navigation = forwardRef<HTMLElement>((_, ref) => {
     <nav
       ref={navRef}
       className="fixed top-0 left-0 w-full z-50 transition-none"
-      style={{ opacity: 0, pointerEvents: 'none', willChange: 'opacity' }}
+      style={{ 
+        opacity: 0, 
+        pointerEvents: 'none', 
+        willChange: 'opacity',
+        background: 'rgba(8, 8, 10, 0.72)',
+        backdropFilter: 'blur(18px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(18px) saturate(180%)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.28)'
+      }}
     >
-      {/* Progress line — replaces heavy navbar border */}
-      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/5">
+      {/* Progress line */}
+      <div className="absolute bottom-0 left-0 w-full h-[1px]">
         <div
           ref={progressRef}
           className="h-full transition-none"
           style={{
             width: '0%',
-            background: 'linear-gradient(90deg, transparent, rgba(245,240,232,0.6))',
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.85))',
           }}
         />
       </div>
@@ -59,20 +68,20 @@ const Navigation = forwardRef<HTMLElement>((_, ref) => {
         >
           <span
             className="block text-[11px] font-sans font-medium tracking-[0.35em] uppercase"
-            style={{ color: 'var(--c-text-primary)', letterSpacing: '0.35em' }}
+            style={{ color: '#ffffff', letterSpacing: '0.35em' }}
           >
-            Studio
+            Indranil Paul
           </span>
           {/* Underline that animates on hover */}
           <span
             className="absolute -bottom-1 left-0 w-0 h-px group-hover:w-full transition-all duration-500"
-            style={{ background: 'var(--c-text-primary)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+            style={{ background: '#ffffff', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
           />
         </a>
 
         {/* Nav links */}
         <div className="hidden md:flex items-center gap-12">
-          {['Work', 'Process', 'About', 'Contact'].map((item) => (
+          {['Mindset', 'Experience', 'Work', 'Contact'].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -82,15 +91,15 @@ const Navigation = forwardRef<HTMLElement>((_, ref) => {
             >
               <span
                 className="block text-[11px] font-sans font-medium tracking-[0.2em] uppercase transition-colors duration-300"
-                style={{ color: 'var(--c-text-tertiary)' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--c-text-primary)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--c-text-tertiary)'; }}
+                style={{ color: 'rgba(255,255,255,0.72)' }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#ffffff'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.72)'; }}
               >
                 {item}
               </span>
               <span
                 className="absolute -bottom-1 left-0 w-0 h-px group-hover:w-full transition-all duration-500"
-                style={{ background: 'var(--c-text-secondary)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                style={{ background: '#ffffff', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
               />
             </a>
           ))}
@@ -101,14 +110,14 @@ const Navigation = forwardRef<HTMLElement>((_, ref) => {
           <span
             ref={scrollRef}
             className="font-sans text-[10px] tabular-nums tracking-widest"
-            style={{ color: 'var(--c-text-tertiary)', fontVariantNumeric: 'tabular-nums' }}
+            style={{ color: 'rgba(255,255,255,0.72)', fontVariantNumeric: 'tabular-nums' }}
           >
             000
           </span>
-          <span className="text-[10px] tracking-widest" style={{ color: 'var(--c-text-tertiary)' }}>
+          <span className="text-[10px] tracking-widest" style={{ color: 'rgba(255,255,255,0.72)' }}>
             /
           </span>
-          <span className="text-[10px] tracking-widest" style={{ color: 'var(--c-text-tertiary)' }}>
+          <span className="text-[10px] tracking-widest" style={{ color: 'rgba(255,255,255,0.72)' }}>
             100
           </span>
         </div>

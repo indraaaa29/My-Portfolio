@@ -451,10 +451,10 @@ export function StoryBlock({ project }: { project: Project }) {
   const { ref, visible } = useReveal<HTMLDivElement>();
 
   const chapters = [
-    { label: 'Context', text: project.context },
-    { label: 'Thinking', text: project.thinking },
-    { label: 'Execution', text: project.execution },
-    { label: 'Outcome', text: project.outcome },
+    { label: 'Problem', text: project.context },
+    { label: 'Architecture', text: project.thinking },
+    { label: 'Implementation', text: project.execution },
+    { label: 'Impact', text: project.outcome },
   ];
 
   return (

@@ -45,7 +45,7 @@ export default function Navbar() {
             <Sparkles className="w-4 h-4 text-zinc-950" />
           </div>
           <span className="font-semibold tracking-wider text-zinc-100">
-            THORNE<span className="text-amber-500">.</span>
+            INDRANIL PAUL<span className="text-amber-500">.</span>
           </span>
         </a>
 

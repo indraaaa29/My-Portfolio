@@ -13,13 +13,13 @@ export default function ExperienceSection() {
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-amber-500 uppercase">
-            <span className="h-px w-6 bg-amber-500/50" />
+          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
+            <span className="h-px w-6 bg-zinc-500/50" />
             <span>Track Record</span>
-            <span className="h-px w-6 bg-amber-500/50" />
+            <span className="h-px w-6 bg-zinc-500/50" />
           </div>
           <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Professional <span className="font-semibold text-amber-400">Experience</span>
+            Professional <span className="font-semibold text-zinc-300">Experience</span>
           </h2>
         </div>
 
@@ -35,53 +35,53 @@ export default function ExperienceSection() {
               className="relative pl-8 md:pl-12"
             >
               {/* Timeline Marker Icon */}
-              <div className="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-zinc-900 border-2 border-amber-500 flex items-center justify-center text-amber-400 shadow-md shadow-amber-500/20">
+              <div className="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-zinc-950 border-2 border-zinc-500 flex items-center justify-center text-zinc-300 shadow-md shadow-zinc-500/10">
                 <Briefcase className="w-3.5 h-3.5" />
               </div>
 
-              {/* Date Header for desktop view (left side absolute alignment) */}
-              <div className="hidden md:block absolute -left-36 top-2 text-right w-28 text-xs font-semibold text-amber-400 tracking-wider">
+              {/* Date Header for desktop view */}
+              <div className="hidden md:block absolute -left-36 top-2 text-right w-28 text-xs font-semibold text-zinc-400 tracking-wider">
                 {exp.period}
               </div>
 
               {/* Card Box */}
-              <div className="p-8 rounded-3xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 transition-colors space-y-4">
+              <div className="p-8 rounded-3xl bg-zinc-900/30 border border-zinc-800/60 hover:border-zinc-600 transition-colors space-y-4 backdrop-blur-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-xl md:text-2xl font-bold text-zinc-100">
+                    <h3 className="text-xl md:text-2xl font-semibold text-zinc-100 tracking-tight">
                       {exp.role}
                     </h3>
-                    <div className="text-amber-400 font-medium text-base">
+                    <div className="text-zinc-400 font-medium text-sm tracking-wide mt-1">
                       {exp.company}
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400 font-medium md:hidden">
+                  <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-500 font-medium md:hidden mt-2">
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                      <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                       {exp.period}
                     </span>
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                      <MapPin className="w-3.5 h-3.5 text-zinc-400" />
                       {exp.location}
                     </span>
                   </div>
                 </div>
 
-                <ul className="space-y-2 text-zinc-300 text-sm leading-relaxed list-disc list-inside">
+                <ul className="space-y-2 text-zinc-300 text-sm leading-relaxed list-disc list-inside mt-4">
                   {exp.description.map((item, i) => (
-                    <li key={i} className="text-zinc-300">
+                    <li key={i} className="text-zinc-400">
                       {item}
                     </li>
                   ))}
                 </ul>
 
                 {/* Tech Pills */}
-                <div className="pt-4 flex flex-wrap gap-2 border-t border-zinc-800/50">
+                <div className="pt-5 flex flex-wrap gap-2 border-t border-zinc-800/50 mt-4">
                   {exp.technologies.map((tech, i) => (
                     <span
                       key={i}
-                      className="px-2.5 py-1 rounded-md bg-zinc-800/80 text-xs font-mono text-amber-200/90 border border-amber-500/20"
+                      className="px-2.5 py-1 rounded-md bg-zinc-800/40 text-[10px] uppercase tracking-widest font-sans text-zinc-300 border border-zinc-700/50"
                     >
                       {tech}
                     </span>
