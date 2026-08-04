@@ -18,6 +18,12 @@ import Hero from '@/components/portfolio/Hero';
 import Navigation from '@/components/portfolio/Navigation';
 import LoadingScreen from '@/components/LoadingScreen';
 import SelectedWork from '@/components/portfolio/SelectedWork';
+import AboutSection from '@/components/portfolio/AboutSection';
+import ExperienceSection from '@/components/portfolio/ExperienceSection';
+import SkillsSection from '@/components/portfolio/SkillsSection';
+import AchievementsSection from '@/components/portfolio/AchievementsSection';
+import ContactSection from '@/components/portfolio/ContactSection';
+import Footer from '@/components/portfolio/Footer';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -198,6 +204,13 @@ export default function Home() {
       </div>
 
       <SelectedWork />
+
+      <AboutSection />
+      <ExperienceSection />
+      <SkillsSection />
+      <AchievementsSection />
+      <ContactSection />
+      <Footer />
 
       <LoadingScreen 
         isLoaded={isLoaded} 
