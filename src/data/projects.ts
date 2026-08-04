@@ -1,5 +1,6 @@
 export interface Project {
   index: string;     // "01", "02", ...
+  variant: 'immersive' | 'editorial' | 'typography' | 'fullscreen';
   title: string;
   category: string;
   year: string;
@@ -11,12 +12,14 @@ export interface Project {
   stack: string[];
   color: string;     // accent hue for hover state
   imageHue: string;  // CSS gradient for placeholder image
+  image: string;     // image path
   link?: string;
 }
 
 export const PROJECTS: Project[] = [
   {
     index: '01',
+    variant: 'immersive',
     title: 'Cinematic Canvas',
     category: 'Interaction Design',
     year: '2025',
@@ -28,9 +31,11 @@ export const PROJECTS: Project[] = [
     stack: ['Next.js', 'TypeScript', 'GSAP', 'Canvas API', 'Lenis'],
     color: '#D4C5A9',
     imageHue: 'linear-gradient(135deg, #0F0E0C 0%, #1A1714 40%, #2C2419 100%)',
+    image: '/project-01.png',
   },
   {
     index: '02',
+    variant: 'editorial',
     title: 'Signal Dashboard',
     category: 'Data Visualisation',
     year: '2024',
@@ -42,9 +47,11 @@ export const PROJECTS: Project[] = [
     stack: ['React', 'D3.js', 'WebSocket', 'WebGL', 'Rust backend'],
     color: '#B8C9D4',
     imageHue: 'linear-gradient(135deg, #080C10 0%, #101820 40%, #141F2A 100%)',
+    image: '/project-02.png',
   },
   {
     index: '03',
+    variant: 'typography',
     title: 'Arc Design System',
     category: 'Design Engineering',
     year: '2024',
@@ -56,9 +63,11 @@ export const PROJECTS: Project[] = [
     stack: ['React', 'Storybook', 'Style Dictionary', 'Chromatic', 'Turborepo'],
     color: '#C9C2D4',
     imageHue: 'linear-gradient(135deg, #0C080F 0%, #180F1E 40%, #1E1528 100%)',
+    image: '/project-03.png',
   },
   {
     index: '04',
+    variant: 'fullscreen',
     title: 'Parallax Narrative',
     category: 'Creative Technology',
     year: '2023',
@@ -70,5 +79,6 @@ export const PROJECTS: Project[] = [
     stack: ['Three.js', 'GSAP', 'Howler.js', 'Next.js', 'Framer Motion'],
     color: '#C9D4C2',
     imageHue: 'linear-gradient(135deg, #080F08 0%, #0F1A0E 40%, #141F14 100%)',
+    image: '/project-04.png',
   },
 ];

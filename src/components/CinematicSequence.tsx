@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 import CanvasRenderer, { CanvasRendererHandle } from './CanvasRenderer';
 import CinematicTextOverlay, {
   CinematicTextOverlayHandle,
@@ -57,7 +57,7 @@ export default function CinematicSequence() {
       onUpdate: () => {
         const frame = scrollObj.frame;
         if (canvasRef.current) {
-          canvasRef.current.renderFrame(frame);
+          canvasRef.current.drawFrame(frame);
         }
         if (overlayRef.current) {
           overlayRef.current.updateFrame(Math.round(frame));
@@ -76,7 +76,11 @@ export default function CinematicSequence() {
   return (
     <div ref={containerRef} className="relative w-full h-screen bg-black">
       <div className="canvas-container absolute top-0 left-0 w-full h-screen z-0">
-        <CanvasRenderer ref={canvasRef} />
+        <CanvasRenderer
+          ref={canvasRef}
+          onStateChange={() => {}}
+          onLoadedCountChange={() => {}}
+        />
       </div>
       <div className="text-overlay-container absolute top-0 left-0 w-full h-screen z-10 pointer-events-none">
         <CinematicTextOverlay ref={overlayRef} />
