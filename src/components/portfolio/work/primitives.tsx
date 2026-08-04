@@ -354,10 +354,10 @@ export function ProjectVisual({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Image surface */}
+      {/* Image surface — relative + resolved height so next/image fill has a valid parent */}
       <div
         ref={innerRef}
-        className="absolute inset-0"
+        className="relative w-full h-full"
         style={{ transform: 'scale(1.06)', willChange: 'transform' }}
       >
         <Image
