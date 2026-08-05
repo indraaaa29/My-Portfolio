@@ -136,7 +136,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
 
       if (titleRef.current) {
         const titleRect = titleRef.current.getBoundingClientRect();
-        const maxDist = titleRect.width / 2;
+        const maxDist = titleRect.width / 1.7;
 
         spansRef.current.forEach(span => {
           if (!span) return;

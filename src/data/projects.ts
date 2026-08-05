@@ -10,6 +10,10 @@ export interface Project {
   execution: string;
   outcome: string;
   stack: string[];
+  /** Key product/engineering features — shown in the project drawer */
+  features?: string[];
+  /** Engineering challenges overcome — shown in the project drawer */
+  challenges?: string[];
   color: string;     // accent hue for hover state
   imageHue: string;  // CSS gradient for placeholder image
   image: string;     // primary image path
@@ -38,6 +42,17 @@ export const PROJECTS: Project[] = [
     imageHue: 'linear-gradient(135deg, #0F0E0C 0%, #1A1714 40%, #2C2419 100%)',
     image: '/project-01.png',
     status: 'Production',
+    features: [
+      'Secure registration and verification workflow for citizens',
+      'Real-time constituency dashboards with live updates',
+      'Accessible, responsive civic interface across devices',
+      'Modular codebase with a scalable data layer'
+    ],
+    challenges: [
+      'Balancing compliance-grade security with frictionless UX',
+      'Streaming real-time election data without latency spikes',
+      'Keeping the flow simple enough for non-technical voters'
+    ],
     links: {
       live: 'https://vote-setu.vercel.app'
     }
@@ -58,6 +73,17 @@ export const PROJECTS: Project[] = [
     imageHue: 'linear-gradient(135deg, #080C10 0%, #101820 40%, #141F2A 100%)',
     image: '/project-02.png',
     status: 'Production',
+    features: [
+      'Live crowd-density heatmaps across gates and restrooms',
+      'WebGL spatial visualization of venue occupancy',
+      'Predictive bottleneck alerts before queues form',
+      'Sentiment analysis feed layered over operations data'
+    ],
+    challenges: [
+      'Streaming high-frequency sensor data into the UI',
+      'Keeping WebGL rendering smooth on mid-tier devices',
+      'Turning noisy positional data into actionable dispatch cues'
+    ],
     links: {
       live: 'https://flow-sync-kohl.vercel.app'
     }
@@ -78,6 +104,17 @@ export const PROJECTS: Project[] = [
     imageHue: 'linear-gradient(135deg, #0C080F 0%, #180F1E 40%, #1E1528 100%)',
     image: '/project-03.png',
     status: 'Hackathon',
+    features: [
+      'Dynamic carbon footprint analytics per activity',
+      'Personal hotspot identification for reduction targets',
+      'What-if scenario simulations for behavior change',
+      'AI-tailored sustainability recommendations'
+    ],
+    challenges: [
+      'Translating abstract emissions math into intuitive visuals',
+      'Keeping AI recommendations fast on large datasets',
+      'Engineering for a 95.8/100 audit under strict test coverage'
+    ],
     links: {
       live: 'https://carbwiser-phi.vercel.app'
     }
@@ -98,6 +135,17 @@ export const PROJECTS: Project[] = [
     imageHue: 'linear-gradient(135deg, #080F08 0%, #0F1A0E 40%, #141F14 100%)',
     image: '/project-04.png',
     status: 'Production',
+    features: [
+      'Interactive digital map of hostel blocks and rooms',
+      'AI-powered energy recommendation engine',
+      'Occupancy-aware monitoring per room',
+      'Live savings analytics with impact visualization'
+    ],
+    challenges: [
+      'Modeling per-room occupancy in real time',
+      'Maintaining map responsiveness while streaming metrics',
+      'Making wastage visible enough to drive actual behavior change'
+    ],
     links: {
       live: 'https://drompulse.vercel.app'
     }
@@ -117,7 +165,18 @@ export const PROJECTS: Project[] = [
     color: '#D4B8B8',
     imageHue: 'linear-gradient(135deg, #1A0A0A 0%, #2A1010 40%, #3A1515 100%)',
     image: '/project-01.png',
-    status: 'Internship'
+    status: 'Internship',
+    features: [
+      'Threat-detection workflow baked into the pipeline',
+      'Continuous system monitoring and alerting',
+      'Secure DevOps with automated GitHub Actions',
+      'Version-controlled security hardening'
+    ],
+    challenges: [
+      'Treating security as an architectural foundation, not an afterthought',
+      'Applying real-world detection flows inside a production internship context',
+      'Keeping the pipeline auditable and reproducible'
+    ]
   },
   {
     index: '06',
@@ -134,7 +193,18 @@ export const PROJECTS: Project[] = [
     color: '#D4C5A9',
     imageHue: 'linear-gradient(135deg, #101010 0%, #1A1A1A 40%, #2A2A2A 100%)',
     image: '/project-02.png',
-    status: 'Research'
+    status: 'Research',
+    features: [
+      'Real-time facial detection and tracking pipeline',
+      'Automated identity verification workflow',
+      'Low-latency inference optimized with OpenCV',
+      'Low false-positive rate across varied lighting'
+    ],
+    challenges: [
+      'Balancing detection accuracy against real-time inference speed',
+      'Reducing false positives in uncontrolled lighting conditions',
+      'Building a robust verification loop from raw frames'
+    ]
   },
   {
     index: '07',
@@ -151,6 +221,15 @@ export const PROJECTS: Project[] = [
     color: '#B8C9D4',
     imageHue: 'linear-gradient(135deg, #0A101A 0%, #101A2A 40%, #152A3A 100%)',
     image: '/project-03.png',
-    status: 'Production'
+    status: 'Production',
+    features: [
+      'Responsive delivery and takeaway ordering flow',
+      'Clean order state machine for the full checkout path',
+      'Client-deployed site on GitHub Pages'
+    ],
+    challenges: [
+      'Keeping order state reliable across delivery and takeaway paths',
+      'Delivering smooth interactions with zero-framework vanilla JS'
+    ]
   }
 ];

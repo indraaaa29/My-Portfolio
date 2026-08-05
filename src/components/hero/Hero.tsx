@@ -4,6 +4,8 @@ import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/navbar';
 import TextPressure from '@/components/reactbits/TextPressure';
+import HalftoneReveal from '@/components/reactbits/HalftoneReveal';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import styles from './Hero.module.css';
 
@@ -48,13 +50,31 @@ function ScrollIndicator() {
 }
 
 /* ──────────────────────────────────────────────
- * PortraitPlaceholder — Minimal Reserved Area
+ * Portrait — Halftone Reveal + Base Image
  * ────────────────────────────────────────────── */
 
-function PortraitPlaceholder() {
+function Portrait() {
   return (
     <div className={styles.portraitContainer}>
-      <div className={styles.portraitPlaceholder} />
+      <div className={styles.portraitWrapper}>
+        {/* Permanent base layer */}
+        <Image
+          src="/images/hero/portrait.jpg"
+          alt="Indranil Paul"
+          fill
+          priority
+          sizes="(max-width:768px) 100vw, 40vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center 25%",
+          }}
+        />
+        {/* Temporary halftone layer — constrained to the portrait box via .portraitReveal */}
+        <HalftoneReveal
+          src="/images/hero/portrait.jpg"
+          className={styles.portraitReveal}
+        />
+      </div>
     </div>
   );
 }
@@ -190,7 +210,7 @@ export default function Hero({ className }: HeroProps) {
         </div>
 
         {/* Right Column: Reserved Portrait Area */}
-        <PortraitPlaceholder />
+        <Portrait />
       </div>
 
       {/* ─── Scroll Indicator ─── */}
@@ -198,5 +218,3 @@ export default function Hero({ className }: HeroProps) {
     </section>
   );
 }
-
-

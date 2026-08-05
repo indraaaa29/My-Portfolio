@@ -14,7 +14,7 @@ import { OverlayManager } from '@/overlays/OverlayManager';
 import OverlayRenderer from '@/overlays/OverlayRenderer';
 import { NarrativeManager } from '@/narrative/NarrativeManager';
 import TypographyRenderer from '@/typography/TypographyRenderer';
-import Hero from '@/components/portfolio/Hero';
+import Hero from '@/components/hero/Hero';
 import Navigation from '@/components/portfolio/Navigation';
 import GlobalGradualBlur from '@/components/portfolio/GlobalGradualBlur';
 import LoadingScreen from '@/components/LoadingScreen';
@@ -33,15 +33,15 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 export default function Home() {
   const [rendererState, setRendererState] = useState<RendererState>('Boot');
   const [loadedCount, setLoadedCount] = useState(0);
-  
+
   // AssetManager only preloads up to the cache window initially.
   // We use CACHE_WINDOW as the target for the loading screen so it reaches 100%.
   const targetLoadCount = CINEMATIC_CONFIG.CACHE_WINDOW;
   const isLoadedRef = useRef(false);
-  
+
   const loadingProgress = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
   const isLoaded = loadedCount >= targetLoadCount || rendererState === 'Ready';
-  
+
   const handleLoadedCountChange = (count: number) => {
     if (!isLoadedRef.current) {
       setLoadedCount(count);
@@ -51,7 +51,7 @@ export default function Home() {
     }
     debugOverlayRef.current?.updateLoadedFrames(count);
   };
-  
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRendererRef = useRef<CanvasRendererHandle>(null);
@@ -83,24 +83,24 @@ export default function Home() {
     const unsubscribeNarrative = narrativeManager.onContextChange((context) => {
       debugOverlayRef.current?.updateNarrative(context?.message || 'none');
     });
-    
+
     // Initialize the debug overlay with the starting scene
     const initialScene = sceneManager.getCurrentScene(currentFrameRef.current);
     if (initialScene) {
       debugOverlayRef.current?.updateScene(initialScene.id, initialScene.name);
-      
+
       const initialProgress = sceneManager.getSceneProgress(currentFrameRef.current);
-      
+
       overlayManager.updateContext({
         frame: currentFrameRef.current,
         sceneId: initialScene.overlayEnabled ? initialScene.id : 'none',
         sceneName: initialScene.name,
         progress: initialProgress
       });
-      
+
       narrativeManager.updateProgress(initialScene.id, initialProgress);
     }
-    
+
     return () => {
       unsubscribeScene();
       unsubscribeOverlay();
@@ -116,71 +116,71 @@ export default function Home() {
       scrub: 0,
       onUpdate: (self) => {
         const newFrame = Math.max(1, Math.min(CINEMATIC_CONFIG.TOTAL_FRAMES, Math.round(self.progress * (CINEMATIC_CONFIG.TOTAL_FRAMES - 1) + 1)));
-        
+
         setRendererState(prev => {
           if (prev === 'Ready') return 'Playing';
           return prev;
         });
-        
+
         if (currentFrameRef.current !== newFrame) {
-            currentFrameRef.current = newFrame;
-            
-            // Advance the scene manager state machine
-            sceneManager.updateFrame(newFrame);
-            
-            // Get current scene and progress
-            const currentScene = sceneManager.getCurrentScene(newFrame);
-            const progress = sceneManager.getSceneProgress(newFrame);
-            
-            // Update scene progress debug UI
-            debugOverlayRef.current?.updateSceneProgress(progress);
-            
-            // Feed strict OverlayContext to the OverlayManager
-            if (currentScene) {
-               overlayManager.updateContext({
-                 frame: newFrame,
-                 sceneId: currentScene.overlayEnabled ? currentScene.id : 'none',
-                 sceneName: currentScene.name,
-                 progress: progress
-               });
-               
+          currentFrameRef.current = newFrame;
+
+          // Advance the scene manager state machine
+          sceneManager.updateFrame(newFrame);
+
+          // Get current scene and progress
+          const currentScene = sceneManager.getCurrentScene(newFrame);
+          const progress = sceneManager.getSceneProgress(newFrame);
+
+          // Update scene progress debug UI
+          debugOverlayRef.current?.updateSceneProgress(progress);
+
+          // Feed strict OverlayContext to the OverlayManager
+          if (currentScene) {
+            overlayManager.updateContext({
+              frame: newFrame,
+              sceneId: currentScene.overlayEnabled ? currentScene.id : 'none',
+              sceneName: currentScene.name,
+              progress: progress
+            });
+
             // Update narrative system
             narrativeManager.updateProgress(currentScene.id, progress);
-            }
+          }
 
-            // Calculate Cinematic to Portfolio Transition (Scene 5: 901-995)
-            if (cinematicLayerRef.current) {
-              if (newFrame >= 901) {
-                const fadeProgress = (newFrame - 901) / (995 - 901);
-                // Ease out the cinematic layer
-                cinematicLayerRef.current.style.opacity = (1 - fadeProgress).toFixed(3);
-                
-                // Fade in the Navigation
-                if (navigationRef.current) {
-                  navigationRef.current.style.opacity = fadeProgress.toFixed(3);
-                  navigationRef.current.style.pointerEvents = fadeProgress > 0.5 ? 'auto' : 'none';
-                }
+          // Calculate Cinematic to Portfolio Transition (Scene 5: 901-995)
+          if (cinematicLayerRef.current) {
+            if (newFrame >= 901) {
+              const fadeProgress = (newFrame - 901) / (995 - 901);
+              // Ease out the cinematic layer
+              cinematicLayerRef.current.style.opacity = (1 - fadeProgress).toFixed(3);
 
-                // Disable pointer events so the user can click the portfolio CTA
-                if (fadeProgress > 0.5) {
-                  cinematicLayerRef.current.style.pointerEvents = 'none';
-                } else {
-                  cinematicLayerRef.current.style.pointerEvents = 'auto';
-                }
+              // Fade in the Navigation
+              if (navigationRef.current) {
+                navigationRef.current.style.opacity = fadeProgress.toFixed(3);
+                navigationRef.current.style.pointerEvents = fadeProgress > 0.5 ? 'auto' : 'none';
+              }
+
+              // Disable pointer events so the user can click the portfolio CTA
+              if (fadeProgress > 0.5) {
+                cinematicLayerRef.current.style.pointerEvents = 'none';
               } else {
-                cinematicLayerRef.current.style.opacity = '1';
                 cinematicLayerRef.current.style.pointerEvents = 'auto';
-                
-                if (navigationRef.current) {
-                  navigationRef.current.style.opacity = '0';
-                  navigationRef.current.style.pointerEvents = 'none';
-                }
+              }
+            } else {
+              cinematicLayerRef.current.style.opacity = '1';
+              cinematicLayerRef.current.style.pointerEvents = 'auto';
+
+              if (navigationRef.current) {
+                navigationRef.current.style.opacity = '0';
+                navigationRef.current.style.pointerEvents = 'none';
               }
             }
+          }
 
-            // Imperatively update the canvas and the debug DOM node
-            canvasRendererRef.current?.drawFrame(newFrame);
-            debugOverlayRef.current?.updateFrame(newFrame);
+          // Imperatively update the canvas and the debug DOM node
+          canvasRendererRef.current?.drawFrame(newFrame);
+          debugOverlayRef.current?.updateFrame(newFrame);
         }
       },
     });
@@ -190,27 +190,27 @@ export default function Home() {
     <main className="relative w-full bg-zinc-950">
       <GlobalGradualBlur />
       <Navigation ref={navigationRef} />
-      
-      <div 
+
+      <div
         ref={scrollContainerRef}
         className="w-full"
         style={{ height: `${CINEMATIC_CONFIG.SCROLL_DISTANCE_VH}vh` }}
       >
-        <div 
-          ref={containerRef} 
+        <div
+          ref={containerRef}
           className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-zinc-950"
         >
           <div className="absolute inset-0 w-full h-full z-0">
-             <Hero />
+            <Hero />
           </div>
 
-          <div 
+          <div
             ref={cinematicLayerRef}
             className="absolute inset-0 w-full h-full z-10 bg-black"
             style={{ willChange: 'opacity' }}
           >
-            <CanvasRenderer 
-              ref={canvasRendererRef} 
+            <CanvasRenderer
+              ref={canvasRendererRef}
               onStateChange={setRendererState}
               onLoadedCountChange={handleLoadedCountChange}
             />
@@ -229,19 +229,19 @@ export default function Home() {
       <LeadershipSection />
       <LogoLoopSection />
       <AchievementsSection />
-      
+
       <ContactSection />
       <Footer />
 
-      <LoadingScreen 
-        isLoaded={isLoaded} 
+      <LoadingScreen
+        isLoaded={isLoaded}
         progress={loadingProgress}
       />
-      
-      <DebugOverlay 
+
+      <DebugOverlay
         ref={debugOverlayRef}
         loadedFrames={loadedCount}
-        rendererState={rendererState} 
+        rendererState={rendererState}
       />
     </main>
   );
