@@ -10,13 +10,14 @@ const hexToRgb = (hex: string): [number, number, number] => {
   return m ? [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255] : [0, 0, 0];
 };
 
+
 type Mode = 'mono' | 'duotone' | 'color';
 type Shape = 'circle' | 'square' | 'diamond' | 'line';
-type Trigger = 'off' | 'hover' | 'always' | 'mount';
+type Trigger = 'off' | 'hover' | 'always';
 
 const MODES: Record<Mode, number> = { mono: 0, duotone: 1, color: 2 };
 const SHAPES: Record<Shape, number> = { circle: 0, square: 1, diamond: 2, line: 3 };
-const TRIGGERS: Record<Trigger, number> = { off: 0, hover: 1, always: 2, mount: 3 };
+const TRIGGERS: Record<Trigger, number> = { off: 0, hover: 1, always: 2 };
 
 export interface HalftoneRevealProps {
   src?: string;
@@ -34,10 +35,6 @@ export interface HalftoneRevealProps {
   follow?: number;
   idleReveal?: number;
   trigger?: Trigger;
-  /** One-shot reveal duration (ms) used by trigger="mount" */
-  duration?: number;
-  /** Called once when a trigger="mount" reveal finishes and the shader begins to fade out */
-  onRevealFinished?: () => void;
   borderRadius?: string;
   className?: string;
   style?: CSSProperties;
@@ -204,18 +201,16 @@ const HalftoneReveal = ({
   paperColor = '#fff7e6',
   mode = 'mono',
   dotSize = 1,
-  dotDensity = 71,
+  dotDensity = 90,
   angle = 45,
   shape = 'circle',
   contrast = 1.15,
   invert = false,
-  revealRadius = 0.4,
-  edge = 0.8,
+  revealRadius = 0.3,
+  edge = 0.65,
   follow = 0.37,
   idleReveal = 0,
   trigger = 'hover',
-  duration = 1400,
-  onRevealFinished,
   borderRadius = '16px',
   className = '',
   style
@@ -226,45 +221,19 @@ const HalftoneReveal = ({
   const rafRef = useRef<number | null>(null);
   const followRef = useRef<number>(follow);
   const mouseRef = useRef({ x: 0.5, y: 0.5, sx: 0.5, sy: 0.5, active: 0, target: 0 });
-  // One-shot "mount" mode bookkeeping
-  const triggerRef = useRef<Trigger>(trigger);
-  const durationRef = useRef<number>(duration);
-  const onRevealFinishedRef = useRef(onRevealFinished);
-  const mountStartRef = useRef<number | null>(null);
-  const mountPlayedRef = useRef(false);
 
   useEffect(() => {
     followRef.current = follow;
   }, [follow]);
 
   useEffect(() => {
-    triggerRef.current = trigger;
-    durationRef.current = duration;
-    onRevealFinishedRef.current = onRevealFinished;
-  });
-
-  useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-
-    // Restore visibility in case a previous setup's teardown hid the container
-    // (React StrictMode runs setup -> cleanup -> setup in dev).
-    container.style.display = '';
 
     const reduced =
       typeof window !== 'undefined' &&
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const isMountMode = triggerRef.current === 'mount';
-
-    // Reduced motion: skip the shader entirely, show the static image immediately.
-    if (reduced && isMountMode) {
-      mountPlayedRef.current = true;
-      onRevealFinishedRef.current?.();
-      container.style.display = 'none';
-      return;
-    }
 
     const renderer = new Renderer({
       dpr: Math.min(window.devicePixelRatio || 1, 2),
@@ -312,21 +281,6 @@ const HalftoneReveal = ({
     img.onload = () => {
       texture.image = img;
       uniforms.uImageSize.value = [img.naturalWidth, img.naturalHeight];
-      if (isMountMode && !mountPlayedRef.current) {
-        // Begin the one-shot reveal from the portrait center.
-        uniforms.uMouse.value[0] = 0.5;
-        uniforms.uMouse.value[1] = 0.5;
-        uniforms.uActivity.value = 1;
-        uniforms.uRevealRadius.value = 0.02;
-        mountStartRef.current = performance.now();
-      }
-    };
-    img.onerror = () => {
-      if (isMountMode && !mountPlayedRef.current) {
-        mountPlayedRef.current = true;
-        onRevealFinishedRef.current?.();
-        teardown();
-      }
     };
 
     const resize = () => {
@@ -348,58 +302,15 @@ const HalftoneReveal = ({
     const onLeave = () => {
       mouseRef.current.target = 0;
     };
-    if (!isMountMode) {
-      container.addEventListener('pointermove', onMove, { passive: true });
-      container.addEventListener('pointerenter', onMove, { passive: true });
-      container.addEventListener('pointerleave', onLeave, { passive: true });
-    }
-
-    const teardown = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-      ro.disconnect();
-      if (!isMountMode) {
-        container.removeEventListener('pointermove', onMove);
-        container.removeEventListener('pointerenter', onMove);
-        container.removeEventListener('pointerleave', onLeave);
-      }
-      const ext = gl.getExtension('WEBGL_lose_context');
-      if (ext) ext.loseContext();
-      if (gl.canvas.parentNode) gl.canvas.parentNode.removeChild(gl.canvas);
-      if (isMountMode) container.style.display = 'none';
-      rendererRef.current = null;
-      uniformsRef.current = null;
-    };
-
-    let swapTimer: ReturnType<typeof setTimeout> | null = null;
+    container.addEventListener('pointermove', onMove, { passive: true });
+    container.addEventListener('pointerenter', onMove, { passive: true });
+    container.addEventListener('pointerleave', onLeave, { passive: true });
 
     let prev = performance.now();
     const loop = (now: number) => {
       rafRef.current = requestAnimationFrame(loop);
       const dt = Math.min(0.05, Math.max(0.001, (now - prev) / 1000));
       prev = now;
-
-      if (isMountMode) {
-        // One-shot reveal: expand the sharp region from the center, then fade the
-        // canvas out and hand over to the static image. Never replays.
-        if (!mountPlayedRef.current) {
-          if (mountStartRef.current !== null) {
-            const p = Math.min(1, (now - mountStartRef.current) / durationRef.current);
-            // Ease-in-out: slow start, steady middle, soft finish — a gradual develop.
-            const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-            uniforms.uRevealRadius.value = 0.02 + (0.95 - 0.02) * eased;
-            if (p >= 1) {
-              mountPlayedRef.current = true;
-              gl.canvas.style.transition = 'opacity 160ms ease';
-              gl.canvas.style.opacity = '0';
-              onRevealFinishedRef.current?.();
-              swapTimer = setTimeout(teardown, 220);
-            }
-          }
-        }
-        renderer.render({ scene: mesh });
-        return;
-      }
 
       const m = mouseRef.current;
       const a = 1 - Math.exp(-dt / Math.max(0.001, followRef.current));
@@ -417,8 +328,16 @@ const HalftoneReveal = ({
     rafRef.current = requestAnimationFrame(loop);
 
     return () => {
-      if (swapTimer) clearTimeout(swapTimer);
-      teardown();
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      ro.disconnect();
+      container.removeEventListener('pointermove', onMove);
+      container.removeEventListener('pointerenter', onMove);
+      container.removeEventListener('pointerleave', onLeave);
+      const ext = gl.getExtension('WEBGL_lose_context');
+      if (ext) ext.loseContext();
+      if (gl.canvas.parentNode) gl.canvas.parentNode.removeChild(gl.canvas);
+      rendererRef.current = null;
+      uniformsRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);

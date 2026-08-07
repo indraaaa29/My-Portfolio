@@ -65,12 +65,12 @@ export default function Hero() {
       // Layer 1 moves slightly — name line
       if (parallaxLayer1Ref.current) {
         parallaxLayer1Ref.current.style.transform =
-          `translateX(${current.x * -6}px) translateY(${current.y * -5}px)`;
+          `translateX(${current.x * -10}px) translateY(${current.y * -8}px)`;
       }
       // Layer 2 moves more — creates depth separation
       if (parallaxLayer2Ref.current) {
         parallaxLayer2Ref.current.style.transform =
-          `translateX(${current.x * -12}px) translateY(${current.y * -10}px)`;
+          `translateX(${current.x * -10}px) translateY(${current.y * -8}px)`;
       }
 
       rafId = requestAnimationFrame(tick);
@@ -131,8 +131,8 @@ export default function Hero() {
             {/* Warm availability dot — not saturated green */}
             <div
               style={{
-                width: '5px',
-                height: '5px',
+                width: '3px',
+                height: '3px',
                 borderRadius: '50%',
                 backgroundColor: '#A8C4A2',
                 opacity: 0.9,
