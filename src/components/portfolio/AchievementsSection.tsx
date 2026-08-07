@@ -1,76 +1,146 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { PORTFOLIO_DATA } from '@/data/portfolioData';
-import { Trophy } from 'lucide-react';
+import { useState, useEffect, MouseEvent } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import DriftWall, { DriftWallItem } from '@/components/reactbits/DriftWall';
+import { ACHIEVEMENTS } from '@/data/achievements';
+import AchievementModal from './AchievementModal';
 
 export default function AchievementsSection() {
-  const { achievements } = PORTFOLIO_DATA;
+  const [columns, setColumns] = useState(5);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [originRect, setOriginRect] = useState<DOMRect | null>(null);
+  const [originEl, setOriginEl] = useState<HTMLElement | null>(null);
+
+  // Responsive columns
+  useEffect(() => {
+    const handleResize = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setColumns(5);
+      else if (w >= 768) setColumns(4);
+      else if (w >= 640) setColumns(3);
+      else setColumns(2);
+    };
+    handleResize(); // initial
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Map to DriftWallItem format, embedding the ID in the href
+  const items: DriftWallItem[] = ACHIEVEMENTS.map((ach) => ({
+    image: ach.thumbnail,
+    title: ach.title,
+    href: `#ach-${ach.id}`
+  }));
+
+  const handleWallClick = (e: MouseEvent<HTMLDivElement>) => {
+    // Only plain left-clicks open the experience — middle/ctrl/cmd clicks keep
+    // their browser default so users can open the certificate in a new tab.
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const target = e.target as HTMLElement;
+    const tile = target.closest('[data-tile-id]') as HTMLAnchorElement | null;
+    if (tile && tile.tagName === 'A') {
+      const href = tile.getAttribute('href');
+      if (href && href.startsWith('#ach-')) {
+        e.preventDefault();
+        const achId = href.replace('#ach-', '');
+        const rect = tile.getBoundingClientRect();
+        setOriginEl(tile);
+        setOriginRect(rect);
+        setSelectedId(achId);
+      }
+    }
+  };
+
+  const selectedAchievement = ACHIEVEMENTS.find((a) => a.id === selectedId) || null;
 
   return (
-    <section className="pt-16 pb-32 px-6 md:px-12 bg-zinc-950 relative overflow-hidden">
+    <section
+      aria-labelledby="hall-of-fame-headline"
+      className="bg-zinc-950 relative overflow-hidden h-screen min-h-[800px] flex flex-col justify-start"
+    >
       
-      {/* Editorial Container */}
-      <div className="max-w-6xl mx-auto flex flex-col items-center">
-        
-        {/* Header Block */}
-        <div className="w-full flex flex-col items-center justify-center mb-24 text-center">
-          <div className="inline-flex items-center gap-4 text-[10px] font-bold tracking-[0.3em] text-zinc-500 uppercase mb-8">
-            <span className="h-px w-12 bg-zinc-800" />
-            <span>Milestones</span>
-            <span className="h-px w-12 bg-zinc-800" />
-          </div>
-          <h2 className="text-4xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Engineering <span className="font-medium text-zinc-400">Certifications</span>
-          </h2>
-        </div>
-
-        {/* Cohesive Cards Block */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {achievements.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="p-8 rounded-[2rem] bg-zinc-900/20 border border-zinc-800/40 hover:border-zinc-700/80 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col justify-between space-y-10 group"
-            >
-              <div className="space-y-6">
-                
-                {/* Header Row */}
-                <div className="flex items-center justify-between">
-                  <div className="text-zinc-600 group-hover:text-zinc-300 transition-colors duration-300">
-                    <Trophy className="w-5 h-5" />
-                  </div>
-                  {item.badge && (
-                    <span className="px-3 py-1 rounded-full bg-zinc-900 text-[10px] uppercase font-semibold tracking-widest text-zinc-500 border border-zinc-800/80 group-hover:border-zinc-700/50 group-hover:text-zinc-400 transition-colors duration-300">
-                      {item.badge}
-                    </span>
-                  )}
-                </div>
-
-                {/* Title & Meta */}
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-zinc-100 group-hover:text-white transition-colors duration-300 tracking-tight leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-[0.15em]">
-                    {item.organization}
-                  </p>
-                </div>
-                
-                {/* Description */}
-                <p className="text-sm text-zinc-400 leading-relaxed font-light">
-                  {item.description}
-                </p>
-                
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
+      {/* Background layer for the DriftWall */}
+      <div 
+        className={`absolute inset-0 transition-all duration-700 ease-out ${
+          selectedId 
+            ? 'opacity-30 blur-sm scale-[0.98] pointer-events-none' 
+            : 'opacity-100 blur-0 scale-100 pointer-events-auto'
+        }`}
+        onClickCapture={handleWallClick}
+      >
+        <DriftWall
+          items={items}
+          columns={columns}
+          tileWidth={220}
+          tileHeight={150}
+          gap={20}
+          tilt={14}
+          turn={-10}
+          perspective={1400}
+          depth={140}
+          speed={selectedId ? 0 : 20}
+          direction="up"
+          variance={0.40}
+          parallax={0.50}
+          lift={70}
+          fade={0.55}
+          dim={0.50}
+          overlayColor="#05050A"
+        />
       </div>
+
+      {/* Editorial introduction — restrained, top-anchored above the wall */}
+      <div
+        className={`relative z-10 w-full px-6 md:px-12 lg:px-16 pt-16 md:pt-20 pb-12 pointer-events-none transition-opacity duration-500 ${selectedId ? 'opacity-0' : 'opacity-100'}`}
+      >
+        {/* Subtle top scrim keeps the copy legible over the drifting tiles */}
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-950/60 to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+
+        <div className="relative max-w-xl">
+          {/* Eyebrow */}
+          <div className="flex items-center gap-4 mb-5">
+            <span className="h-px w-10 bg-zinc-700" aria-hidden="true" />
+            <span className="text-[11px] font-semibold tracking-[0.32em] text-zinc-500 uppercase">
+              Hall of Fame
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h2
+            id="hall-of-fame-headline"
+            className="text-[1.75rem] md:text-4xl lg:text-5xl font-light text-zinc-100 tracking-tight leading-[1.15] mb-5"
+          >
+            Recognition earned through continuous learning and building.
+          </h2>
+
+          {/* Supporting text */}
+          <p className="text-sm md:text-base text-zinc-400 font-light max-w-lg leading-relaxed">
+            Every certificate marks a milestone — a problem solved, a skill sharpened, or a challenge taken seriously.
+          </p>
+        </div>
+      </div>
+
+      {/* Cinematic Modal wrapped in AnimatePresence for exit animations */}
+      <AnimatePresence mode="wait">
+        {selectedAchievement && (
+          <AchievementModal
+            key="achievement-modal"
+            achievement={selectedAchievement}
+            originRect={originRect}
+            originEl={originEl}
+            onClose={() => {
+              setSelectedId(null);
+              setOriginRect(null);
+              setOriginEl(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
     </section>
   );
 }

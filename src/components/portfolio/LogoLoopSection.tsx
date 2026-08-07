@@ -2,6 +2,7 @@
 
 import React from 'react';
 import LogoLoop from '@/components/reactbits/LogoLoop';
+import FadeUp from './FadeUp';
 import { 
   SiReact, 
   SiNextdotjs, 
@@ -45,6 +46,7 @@ export default function LogoLoopSection() {
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col items-center">
         
         {/* Section Header */}
+        <FadeUp>
         <div className="text-center mb-24">
           <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4">
             Engineering Ecosystem
@@ -53,6 +55,7 @@ export default function LogoLoopSection() {
             Core technologies and trusted ecosystems that power my software architecture.
           </p>
         </div>
+        </FadeUp>
 
         {/* Logo Loop */}
         <div className="w-full">

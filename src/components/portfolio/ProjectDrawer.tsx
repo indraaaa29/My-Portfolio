@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Project } from '@/data/projects';
+import { CASE_STUDIES } from '@/data/projectCaseStudies';
 import { ArrowUpRight, X, ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface ProjectDrawerProps {
@@ -150,6 +151,7 @@ export default function ProjectDrawer({
 
   if (!project) return null;
 
+  const caseStudy = CASE_STUDIES[project.index];
   const images = project.images?.length ? project.images : [project.image];
   const hasLinks = Boolean(project.links?.live || project.links?.github);
 
@@ -291,89 +293,221 @@ export default function ProjectDrawer({
             )}
           </Reveal>
 
-          {/* 5 — Project Overview */}
-          <Reveal isOpen={isOpen} delay={260}>
-            <section>
-              <SectionLabel>Project Overview</SectionLabel>
-              <p id="project-overview" className="text-zinc-300 font-light text-base leading-relaxed">
-                {project.context || 'Project details coming soon.'}
-              </p>
-            </section>
-          </Reveal>
-
-          {/* 6 — Architecture */}
-          <Reveal isOpen={isOpen} delay={320}>
-            <section>
-              <SectionLabel>Architecture</SectionLabel>
-              <p className="text-zinc-300 font-light text-base leading-relaxed">
-                {project.thinking}
-              </p>
-            </section>
-          </Reveal>
-
-          {/* 7 — Tech Stack */}
-          {project.stack && project.stack.length > 0 && (
-            <Reveal isOpen={isOpen} delay={380}>
-              <section>
-                <SectionLabel>Tech Stack</SectionLabel>
-                <ul className="flex flex-wrap gap-2.5">
-                  {project.stack.map((tech) => (
-                    <li
-                      key={tech}
-                      className="px-4 py-2 bg-white/[0.04] border border-white/[0.08] rounded-[12px] text-[13px] text-zinc-200 font-medium tracking-wide shadow-sm"
-                    >
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </Reveal>
-          )}
-
-          {/* 8 — Key Features */}
-          {project.features && project.features.length > 0 && (
-            <Reveal isOpen={isOpen} delay={440}>
-              <section>
-                <SectionLabel>Key Features</SectionLabel>
-                <ul className="flex flex-col gap-3">
-                  {project.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-zinc-300 font-light text-[15px] leading-relaxed">
-                      <span className="mt-[7px] shrink-0 w-1.5 h-1.5 rotate-45 bg-amber-500/60 rounded-[2px]" aria-hidden="true" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </Reveal>
-          )}
-
-          {/* 9 — Engineering Challenges */}
-          {project.challenges && project.challenges.length > 0 && (
-            <Reveal isOpen={isOpen} delay={500}>
-              <section>
-                <SectionLabel>Engineering Challenges</SectionLabel>
-                <ul className="flex flex-col gap-3">
-                  {project.challenges.map((challenge) => (
-                    <li key={challenge} className="flex items-start gap-3 text-zinc-300 font-light text-[15px] leading-relaxed">
-                      <span className="mt-[7px] shrink-0 w-1.5 h-1.5 rounded-full border border-amber-500/50" aria-hidden="true" />
-                      {challenge}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </Reveal>
-          )}
-
-          {/* 10 — Results & Impact */}
-          {project.outcome && (
-            <Reveal isOpen={isOpen} delay={560}>
-              <section>
-                <SectionLabel>Results &amp; Impact</SectionLabel>
-                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 backdrop-blur-md shadow-inner">
-                  <p className="text-xl md:text-2xl font-display tracking-wide text-zinc-100 leading-snug">
-                    {project.outcome}
+          {/* Case Study Content */}
+          {caseStudy ? (
+            <>
+              {/* Project Overview */}
+              <Reveal isOpen={isOpen} delay={260}>
+                <section>
+                  <SectionLabel>Project Overview</SectionLabel>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-[13px] font-medium text-amber-500/90 tracking-wide uppercase">
+                      {caseStudy.role}
+                    </span>
+                    <span className="w-1 h-1 rounded-full bg-white/20" aria-hidden="true" />
+                    <span className="text-[13px] text-zinc-400 tracking-wide">
+                      {caseStudy.status}
+                    </span>
+                  </div>
+                  <p id="project-overview" className="text-zinc-300 font-light text-[15px] leading-relaxed">
+                    {caseStudy.overview}
                   </p>
-                </div>
+                </section>
+              </Reveal>
+
+              {/* Problem */}
+              <Reveal isOpen={isOpen} delay={320}>
+                <section>
+                  <SectionLabel>The Problem</SectionLabel>
+                  <p className="text-zinc-300 font-light text-[15px] leading-relaxed">
+                    {caseStudy.problem}
+                  </p>
+                </section>
+              </Reveal>
+
+              {/* Engineering Challenge */}
+              <Reveal isOpen={isOpen} delay={380}>
+                <section>
+                  <SectionLabel>Engineering Challenge</SectionLabel>
+                  <ul className="flex flex-col gap-4">
+                    {caseStudy.challenges.map((challenge, i) => (
+                      <li key={i} className="bg-white/[0.02] border border-white/5 rounded-2xl p-5 backdrop-blur-sm">
+                        <h4 className="text-zinc-200 font-medium text-[14px] mb-2">{challenge.title}</h4>
+                        <p className="text-zinc-400 font-light text-[14px] leading-relaxed">{challenge.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+
+              {/* Solution */}
+              <Reveal isOpen={isOpen} delay={440}>
+                <section>
+                  <SectionLabel>Solution</SectionLabel>
+                  <p className="text-zinc-300 font-light text-[15px] leading-relaxed">
+                    {caseStudy.solution}
+                  </p>
+                </section>
+              </Reveal>
+
+              {/* Architecture */}
+              <Reveal isOpen={isOpen} delay={500}>
+                <section>
+                  <SectionLabel>Architecture</SectionLabel>
+                  <p className="text-zinc-300 font-light text-[15px] leading-relaxed mb-6">
+                    {caseStudy.architecture.overview}
+                  </p>
+                  
+                  {/* Architecture Flow */}
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-8 bg-black/20 p-6 rounded-2xl border border-white/5 overflow-hidden">
+                    {caseStudy.architecture.flow.map((node, i) => (
+                      <div key={i} className="flex flex-col sm:flex-row items-center gap-2 flex-1">
+                        <div className="w-full sm:w-auto flex-1 bg-white/[0.04] border border-white/10 rounded-xl p-3 text-center text-zinc-300 text-[13px] font-medium tracking-wide shadow-inner break-words">
+                          {node}
+                        </div>
+                        {i < caseStudy.architecture.flow.length - 1 && (
+                          <div className="text-zinc-600 rotate-90 sm:rotate-0 my-2 sm:my-0">
+                            <ArrowRight size={16} />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Decisions & Tradeoffs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+                    <div>
+                      <h4 className="text-[12px] uppercase tracking-widest text-zinc-500 font-semibold mb-4">Decisions</h4>
+                      <ul className="flex flex-col gap-4">
+                        {caseStudy.architecture.decisions.map((decision, i) => (
+                          <li key={i} className="text-zinc-300 font-light text-[14px] leading-relaxed">
+                            <strong className="text-zinc-200 font-medium block mb-1">{decision.title}</strong>
+                            <span className="text-zinc-400">{decision.description}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="text-[12px] uppercase tracking-widest text-zinc-500 font-semibold mb-4">Tradeoffs</h4>
+                      <ul className="flex flex-col gap-4">
+                        {caseStudy.architecture.tradeoffs.map((tradeoff, i) => (
+                          <li key={i} className="text-zinc-300 font-light text-[14px] leading-relaxed">
+                            <strong className="text-zinc-200 font-medium block mb-1">{tradeoff.title}</strong>
+                            <span className="text-zinc-400">{tradeoff.description}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              </Reveal>
+
+              {/* Engineering Highlights */}
+              <Reveal isOpen={isOpen} delay={560}>
+                <section>
+                  <SectionLabel>Engineering Highlights</SectionLabel>
+                  <ul className="flex flex-col gap-4">
+                    {caseStudy.engineeringHighlights.map((highlight, i) => (
+                      <li key={i} className="flex items-start gap-3 text-zinc-300 font-light text-[15px] leading-relaxed">
+                        <span className="mt-[7px] shrink-0 w-1.5 h-1.5 rotate-45 bg-amber-500/60 rounded-[2px]" aria-hidden="true" />
+                        <div>
+                          <strong className="text-zinc-200 font-medium mr-2">{highlight.title}:</strong>
+                          <span className="text-zinc-400">{highlight.description}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+
+              {/* Tech Stack */}
+              <Reveal isOpen={isOpen} delay={620}>
+                <section>
+                  <SectionLabel>Tech Stack</SectionLabel>
+                  <div className="flex flex-col gap-5">
+                    {caseStudy.techStack.map((group, i) => (
+                      <div key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+                        <span className="text-[12px] uppercase tracking-widest text-zinc-500 font-semibold sm:w-24 shrink-0">
+                          {group.category}
+                        </span>
+                        <ul className="flex flex-wrap gap-2">
+                          {group.items.map((tech) => (
+                            <li
+                              key={tech}
+                              className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.08] rounded-[10px] text-[12px] text-zinc-300 font-medium tracking-wide shadow-sm"
+                            >
+                              {tech}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </Reveal>
+
+              {/* Key Features */}
+              <Reveal isOpen={isOpen} delay={680}>
+                <section>
+                  <SectionLabel>Key Features</SectionLabel>
+                  <ul className="flex flex-col gap-4">
+                    {caseStudy.keyFeatures.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3 text-zinc-300 font-light text-[15px] leading-relaxed">
+                        <span className="mt-[7px] shrink-0 w-1.5 h-1.5 rounded-full border border-amber-500/50" aria-hidden="true" />
+                        <div>
+                          <strong className="text-zinc-200 font-medium mr-2">{feature.title}:</strong>
+                          <span className="text-zinc-400">{feature.description}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
+
+              {/* Results & Impact */}
+              <Reveal isOpen={isOpen} delay={740}>
+                <section>
+                  <SectionLabel>Results &amp; Impact</SectionLabel>
+                  <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 backdrop-blur-md">
+                    <p className="text-[15px] font-light text-zinc-300 leading-relaxed mb-6">
+                      {caseStudy.results.description}
+                    </p>
+                    {caseStudy.results.metrics && (
+                      <div className="grid grid-cols-2 gap-4">
+                        {caseStudy.results.metrics.map((metric, i) => (
+                          <div key={i} className="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col gap-1">
+                            <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-semibold">{metric.label}</span>
+                            <span className="text-xl md:text-2xl font-display text-amber-500/90">{metric.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              </Reveal>
+
+              {/* Engineering Reflection */}
+              <Reveal isOpen={isOpen} delay={800}>
+                <section>
+                  <SectionLabel>Engineering Reflection</SectionLabel>
+                  <div className="flex flex-col gap-4 relative">
+                    <div className="absolute left-[3px] top-2 bottom-2 w-px bg-gradient-to-b from-amber-500/50 to-transparent" aria-hidden="true" />
+                    {caseStudy.engineeringReflection.map((reflection, i) => (
+                      <p key={i} className="text-zinc-300 font-light text-[15px] leading-relaxed pl-6">
+                        {reflection}
+                      </p>
+                    ))}
+                  </div>
+                </section>
+              </Reveal>
+            </>
+          ) : (
+            <Reveal isOpen={isOpen} delay={260}>
+              <section>
+                <SectionLabel>Project Overview</SectionLabel>
+                <p className="text-zinc-300 font-light text-base leading-relaxed">
+                  Engineering case study currently unavailable.
+                </p>
               </section>
             </Reveal>
           )}

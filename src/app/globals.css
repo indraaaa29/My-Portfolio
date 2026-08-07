@@ -106,7 +106,6 @@ body {
   background: var(--c-bg);
   color: var(--c-text-primary);
   font-family: var(--font-inter, 'Inter', sans-serif);
-  overflow-x: hidden;
 }
 
 /* Hide cursor on all interactive elements — custom cursor handles it */

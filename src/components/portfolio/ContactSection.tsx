@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
 import { Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, TwitterIcon } from './SocialIcons';
+import SectionSeam from './SectionSeam';
+import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
 
 
 export default function ContactSection() {
@@ -24,11 +26,13 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-28 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
+    <section id="contact" className="py-28 px-6 md:px-12 bg-zinc-950 relative overflow-hidden">
+      <SectionSeam />
 
       <div className="max-w-7xl mx-auto space-y-16 relative z-10">
 
         {/* Header */}
+        <FadeUp>
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-amber-500 uppercase">
             <span className="h-px w-6 bg-amber-500/50" />
@@ -42,15 +46,16 @@ export default function ContactSection() {
             Have a project in mind, an open role, or just want to connect? Reach out below.
           </p>
         </div>
+        </FadeUp>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
           {/* Contact Info Card */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE }}
             className="lg:col-span-5 p-8 md:p-10 rounded-3xl bg-zinc-900/50 border border-zinc-800 space-y-8"
           >
             <h3 className="text-2xl font-bold text-zinc-100">
@@ -125,10 +130,10 @@ export default function ContactSection() {
 
           {/* Interactive Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.08 }}
             className="lg:col-span-7 p-8 md:p-10 rounded-3xl bg-zinc-900/50 border border-zinc-800"
           >
             {submitted ? (

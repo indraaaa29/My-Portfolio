@@ -115,7 +115,10 @@ export default function Home() {
       end: 'bottom bottom',
       scrub: 0,
       onUpdate: (self) => {
-        const newFrame = Math.max(1, Math.min(CINEMATIC_CONFIG.TOTAL_FRAMES, Math.round(self.progress * (CINEMATIC_CONFIG.TOTAL_FRAMES - 1) + 1)));
+        // Map scroll progress so the cinematic sequence finishes at 85% of the total scroll container height.
+        // This leaves the remaining 15% for the Hero to be fully visibly pinned before Mindset scrolls in.
+        const cinematicProgress = Math.min(1, self.progress / 0.85);
+        const newFrame = Math.max(1, Math.min(CINEMATIC_CONFIG.TOTAL_FRAMES, Math.round(cinematicProgress * (CINEMATIC_CONFIG.TOTAL_FRAMES - 1) + 1)));
 
         setRendererState(prev => {
           if (prev === 'Ready') return 'Playing';

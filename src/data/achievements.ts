@@ -1,0 +1,396 @@
+export interface Achievement {
+  id: string;
+  title: string;
+  issuer: string;
+  issueDate: string;
+  credentialId?: string;
+  skills: string[];
+  description: string;
+  thumbnail: string;
+  /** Natural pixel dimensions of `thumbnail` — lets the modal reserve exact
+   *  layout space without waiting for the image to load. */
+  thumbnailWidth: number;
+  thumbnailHeight: number;
+  pdf: string;
+  category: string;
+}
+
+export const ACHIEVEMENTS: Achievement[] = [
+  {
+    id: 'anthropic-fluency',
+    title: 'AI Fluency Framework Foundations',
+    issuer: 'Anthropic',
+    issueDate: 'March 2026',
+    skills: ['Generative AI', 'Prompt Engineering', 'Claude API'],
+    description: 'Mastered the foundational concepts of Anthropic\'s AI Fluency Framework, demonstrating a strong understanding of how to build and evaluate AI-powered applications securely and effectively.',
+    thumbnail: '/achivements/thumbnails/AI Fluency Framework Foundations - Anthropic.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/AI Fluency Framework Foundations - Anthropic.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'anthropic-claude-action',
+    title: 'Claude in Action',
+    issuer: 'Anthropic',
+    issueDate: 'March 2026',
+    skills: ['Claude 3', 'LLM Integration', 'System Prompts'],
+    description: 'Advanced application of Claude\'s capabilities for complex reasoning tasks, long-context analysis, and agentic workflows within production environments.',
+    thumbnail: '/achivements/thumbnails/Claude in action - Anthropic.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/Claude in action - Anthropic.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'google-vertex',
+    title: 'Claude with Google Cloud\'s Vertex AI',
+    issuer: 'Anthropic & Google Cloud',
+    issueDate: 'March 2026',
+    skills: ['Vertex AI', 'Cloud Infrastructure', 'Model Deployment'],
+    description: 'Deployed and fine-tuned Claude models using Google Cloud Vertex AI, emphasizing scalable architecture and enterprise-grade security.',
+    thumbnail: '/achivements/thumbnails/Claude with Google Clouds Vertex AI - Anthropic.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/Claude with Google Cloud\'s Vertex AI - Anthropic.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'microsoft-gen-ai',
+    title: 'Career Essentials in Generative AI',
+    issuer: 'Microsoft & LinkedIn',
+    issueDate: 'March 2026',
+    skills: ['AI Ethics', 'Generative AI', 'Productivity'],
+    description: 'Comprehensive overview of generative AI tools and their ethical implications, co-developed by Microsoft and LinkedIn.',
+    thumbnail: '/achivements/thumbnails/CertificateOfCompletion_Career Essentials in Generative AI by Microsoft and LinkedIn.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/CertificateOfCompletion_Career Essentials in Generative AI by Microsoft and LinkedIn.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'microsoft-what-is-gen-ai',
+    title: 'What Is Generative AI?',
+    issuer: 'LinkedIn Learning',
+    issueDate: 'March 2026',
+    skills: ['Artificial Intelligence', 'Machine Learning Basics'],
+    description: 'Foundational course exploring the underlying architecture and capabilities of generative AI models.',
+    thumbnail: '/achivements/thumbnails/CertificateOfCompletion_What Is Generative AI.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/CertificateOfCompletion_What Is Generative AI.pdf',
+    category: 'Coursework'
+  },
+  {
+    id: 'ai-internship',
+    title: 'Artificial Intelligence Internship',
+    issuer: 'Tech Company',
+    issueDate: 'February 2025',
+    skills: ['Machine Learning', 'Python', 'Data Analytics'],
+    description: 'Completed a comprehensive internship focusing on applied machine learning, data processing, and predictive modeling.',
+    thumbnail: '/achivements/thumbnails/Indranil Paul - Artificial Intelligence Internship.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/Indranil Paul - Artificial Intelligence Internship.pdf',
+    category: 'Experience'
+  },
+  {
+    id: 'advanced-security',
+    title: 'Advanced Cloud Security',
+    issuer: 'Security Institute',
+    issueDate: 'November 2024',
+    skills: ['Cybersecurity', 'Network Security', 'Threat Detection'],
+    description: 'Rigorous certification covering advanced principles of network defense, secure architecture, and threat mitigation strategies.',
+    thumbnail: '/achivements/thumbnails/advanced security.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/advanced security.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'cloud-computing-security',
+    title: 'Cloud Computing Security',
+    issuer: 'Security Institute',
+    issueDate: 'November 2024',
+    skills: ['Cloud Infrastructure', 'DevSecOps', 'IAM'],
+    description: 'Specialized training in securing cloud environments, managing identity, and implementing zero-trust architectures.',
+    thumbnail: '/achivements/thumbnails/cloud computing security.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/cloud computing security.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'vois-internship',
+    title: 'VOIS Engineering Internship',
+    issuer: 'VOIS',
+    issueDate: 'April 2026',
+    skills: ['Software Engineering', 'DevOps', 'System Architecture'],
+    description: 'Contributed to enterprise-scale software projects, implementing secure DevOps pipelines and robust application architecture.',
+    thumbnail: '/achivements/thumbnails/INDRANIL PAUL_VOIs.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/INDRANIL PAUL_VOIs.pdf',
+    category: 'Experience'
+  },
+  {
+    id: 'tcs-certification',
+    title: 'TCS IT Certification',
+    issuer: 'Tata Consultancy Services',
+    issueDate: 'January 2025',
+    skills: ['IT Infrastructure', 'Programming', 'Software Development'],
+    description: 'Professional certification from TCS validating core competencies in software development and IT best practices.',
+    thumbnail: '/achivements/thumbnails/Indranil_Paul_4240566_tcs.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/Indranil_Paul_4240566_tcs.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'google-certification',
+    title: 'Google Developer Certification',
+    issuer: 'Google',
+    issueDate: 'November 2024',
+    skills: ['Google Cloud', 'Web Development', 'Performance'],
+    description: 'Official Google certification demonstrating proficiency in building scalable and performant web applications.',
+    thumbnail: '/achivements/thumbnails/google.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/google.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'ibm-certification',
+    title: 'IBM Professional Certificate',
+    issuer: 'IBM',
+    issueDate: 'January 2025',
+    skills: ['Data Science', 'Enterprise Architecture', 'Cloud'],
+    description: 'Comprehensive IBM certification covering enterprise-grade cloud architecture and data processing methodologies.',
+    thumbnail: '/achivements/thumbnails/IBM.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/IBM.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'nvidia-certification',
+    title: 'NVIDIA Deep Learning Institute',
+    issuer: 'NVIDIA',
+    issueDate: 'January 2025',
+    skills: ['Deep Learning', 'GPU Computing', 'CUDA'],
+    description: 'Advanced training in accelerating deep learning workflows using NVIDIA GPUs and the CUDA framework.',
+    thumbnail: '/achivements/thumbnails/nvidia.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/nvidia.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'gfg-potd',
+    title: 'GeeksForGeeks Problem of the Day',
+    issuer: 'GeeksForGeeks',
+    issueDate: 'May 2026',
+    skills: ['Data Structures', 'Algorithms', 'Competitive Programming'],
+    description: 'Recognition for consistent problem-solving and mastery of complex algorithmic challenges.',
+    thumbnail: '/achivements/thumbnails/gfg potd challange.png',
+    thumbnailWidth: 1753,
+    thumbnailHeight: 1240,
+    pdf: '/achivements/pdf/gfg potd challange.pdf',
+    category: 'Competition'
+  },
+  {
+    id: 'promptwars',
+    title: 'Prompt Wars Hackathon',
+    issuer: 'Hack2Skill x Google',
+    issueDate: 'August 2026',
+    skills: ['Prompt Engineering', 'AI Development', 'Hackathon'],
+    description: 'Top-tier performance in a highly competitive AI hackathon, focusing on innovative applications of LLMs.',
+    thumbnail: '/achivements/thumbnails/promptwars.jpg',
+    thumbnailWidth: 1667,
+    thumbnailHeight: 1250,
+    pdf: '/achivements/pdf/promptwars.pdf',
+    category: 'Hackathon'
+  },
+  {
+    id: 'iem-hackosis',
+    title: 'IEM Hackosis 1.0',
+    issuer: 'Institute of Engineering & Management',
+    issueDate: 'April 2025',
+    skills: ['Full Stack Development', 'Team Leadership', 'Rapid Prototyping'],
+    description: 'Participation and achievement in the Hackosis 1.0 hackathon, building scalable solutions under intense time constraints.',
+    thumbnail: '/achivements/thumbnails/IEM hackosis 1.0.jpg',
+    thumbnailWidth: 1600,
+    thumbnailHeight: 1200,
+    pdf: '/achivements/pdf/IEM hackosis 1.0.pdf',
+    category: 'Hackathon'
+  },
+  {
+    id: 'python-bootcamp',
+    title: 'Python Bootcamp Completion',
+    issuer: 'LetsUpgrade',
+    issueDate: 'January 2025',
+    skills: ['Python', 'Automation', 'Scripting'],
+    description: 'Intensive bootcamp covering Python programming from basics to advanced automation and data handling.',
+    thumbnail: '/achivements/thumbnails/LU_python_bootcamp.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/LU_python_bootcamp.pdf',
+    category: 'Coursework'
+  },
+  {
+    id: 'cit-exam',
+    title: 'CIT Examination',
+    issuer: 'CIT',
+    issueDate: 'November 2024',
+    skills: ['Information Technology', 'Systems Analysis'],
+    description: 'Successful completion of the comprehensive CIT examination assessing core IT competencies.',
+    thumbnail: '/achivements/thumbnails/Indranil Paul - CIT exam.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/Indranil Paul - CIT exam.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'unstop-excellence',
+    title: 'Unstop Excellence Award',
+    issuer: 'Unstop',
+    issueDate: 'February 2025',
+    skills: ['Problem Solving', 'Innovation'],
+    description: 'Awarded for demonstrating exceptional problem-solving skills and innovative thinking on the Unstop platform.',
+    thumbnail: '/achivements/thumbnails/unstop excellence.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1653,
+    pdf: '/achivements/pdf/unstop excellence.pdf',
+    category: 'Award'
+  },
+  {
+    id: 'unstop-participation',
+    title: 'Unstop Participation',
+    issuer: 'Unstop',
+    issueDate: 'February 2025',
+    skills: ['Competitive Programming', 'Events'],
+    description: 'Active engagement and participation in various coding and innovation challenges hosted by Unstop.',
+    thumbnail: '/achivements/thumbnails/unstop_participation.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1653,
+    pdf: '/achivements/pdf/unstop_participation.pdf',
+    category: 'Competition'
+  },
+  {
+    id: 'esd',
+    title: 'Entrepreneurship Skill Development',
+    issuer: 'Govt. Initiative',
+    issueDate: 'June 2026',
+    skills: ['Entrepreneurship', 'Business Strategy', 'Leadership'],
+    description: 'Completed a rigorous skill development program focused on modern entrepreneurship and business strategy.',
+    thumbnail: '/achivements/thumbnails/Entrepreneurship Skill Development (ESD).jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/Entrepreneurship Skill Development (ESD).pdf',
+    category: 'Coursework'
+  },
+  {
+    id: 'gen-ai-chatgpt',
+    title: 'Generative AI with ChatGPT',
+    issuer: 'Online Platform',
+    issueDate: 'March 2026',
+    skills: ['ChatGPT', 'Prompt Optimization', 'Workflow Automation'],
+    description: 'Deep dive into utilizing ChatGPT for automating complex engineering workflows and enhancing productivity.',
+    thumbnail: '/achivements/thumbnails/Generative AI chatgpt.jpg',
+    thumbnailWidth: 3308,
+    thumbnailHeight: 2339,
+    pdf: '/achivements/pdf/Generative AI chatgpt.pdf',
+    category: 'Coursework'
+  },
+  {
+    id: 'gen-ai-mastermind',
+    title: 'Generative AI Mastermind',
+    issuer: 'AI Institute',
+    issueDate: 'March 2026',
+    skills: ['AI Architecture', 'LLM Deployment', 'Fine-tuning'],
+    description: 'Advanced mastermind program focused on deploying, fine-tuning, and architecting systems around Large Language Models.',
+    thumbnail: '/achivements/thumbnails/generative AI mastermind.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/generative AI mastermind.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'bring-ai-to-workshop',
+    title: 'Bring AI to Workshop',
+    issuer: 'Tech Community',
+    issueDate: 'June 2025',
+    skills: ['AI Tools', 'Integration', 'Rapid Prototyping'],
+    description: 'Hands-on workshop demonstrating practical methods for integrating AI into existing software products.',
+    thumbnail: '/achivements/thumbnails/bring ai to workshop.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1654,
+    pdf: '/achivements/pdf/bring ai to workshop.pdf',
+    category: 'Workshop'
+  },
+  {
+    id: 'instagram-clone',
+    title: 'Instagram Clone Workshop',
+    issuer: 'Dev Community',
+    issueDate: 'February 2026',
+    skills: ['React', 'Node.js', 'System Design'],
+    description: 'Intensive workshop focused on architecting and building a full-stack, scalable clone of a major social media platform.',
+    thumbnail: '/achivements/thumbnails/Instagram clone workshop.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1653,
+    pdf: '/achivements/pdf/Instagram clone workshop.pdf',
+    category: 'Workshop'
+  },
+  {
+    id: 'ice-breaker',
+    title: 'Ice Breaker Challenge',
+    issuer: 'Tech Event',
+    issueDate: 'March 2026',
+    skills: ['Networking', 'Team Building', 'Communication'],
+    description: 'Successfully navigated team building and rapid problem-solving scenarios in a competitive environment.',
+    thumbnail: '/achivements/thumbnails/ice breaker.jpg',
+    thumbnailWidth: 2339,
+    thumbnailHeight: 1653,
+    pdf: '/achivements/pdf/ice breaker.pdf',
+    category: 'Event'
+  },
+  {
+    id: 'be10x',
+    title: 'be10x Workshop',
+    issuer: 'be10x',
+    issueDate: 'November 2024',
+    skills: ['Productivity', 'AI Tools', 'Efficiency'],
+    description: 'Workshop focused on leveraging modern AI tools to dramatically increase engineering and operational efficiency.',
+    thumbnail: '/achivements/thumbnails/be10x.jpg',
+    thumbnailWidth: 2500,
+    thumbnailHeight: 1667,
+    pdf: '/achivements/pdf/be10x.pdf',
+    category: 'Workshop'
+  },
+  {
+    id: 'ai-fluency-anthropic',
+    title: 'AI Fluency',
+    issuer: 'Anthropic',
+    issueDate: 'March 2026',
+    skills: ['Artificial Intelligence', 'Ethics', 'Claude'],
+    description: 'Baseline certification demonstrating fluency in modern AI concepts, safety, and operational principles.',
+    thumbnail: '/achivements/thumbnails/AI fluency-Anthropic.jpg',
+    thumbnailWidth: 2200,
+    thumbnailHeight: 1700,
+    pdf: '/achivements/pdf/AI fluency-Anthropic.pdf',
+    category: 'Certification'
+  },
+  {
+    id: 'ai-internship-2',
+    title: 'AI Engineering Internship',
+    issuer: 'Tech Firm',
+    issueDate: 'February 2025',
+    skills: ['Machine Learning', 'Data Pipelines'],
+    description: 'Second certificate recognizing contributions during an intensive artificial intelligence internship program.',
+    thumbnail: '/achivements/thumbnails/Artificial Intelligence Internship.jpg',
+    thumbnailWidth: 1654,
+    thumbnailHeight: 2339,
+    pdf: '/achivements/pdf/Artificial Intelligence Internship.pdf',
+    category: 'Experience'
+  }
+];

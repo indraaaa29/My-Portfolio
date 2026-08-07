@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowUp, Sparkles } from 'lucide-react';
+import SectionSeam from './SectionSeam';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -8,7 +9,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-12 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900 text-zinc-400">
+    <footer className="relative py-12 px-6 md:px-12 bg-zinc-950 text-zinc-400">
+      <SectionSeam compact />
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         
         {/* Brand */}

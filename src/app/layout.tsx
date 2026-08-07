@@ -3,6 +3,8 @@ import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import CustomCursor from '@/components/CustomCursor';
+import CinematicMotion from '@/components/CinematicMotion';
+import ScrollReset from '@/components/ScrollReset';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const bebasNeue = Bebas_Neue({
@@ -32,10 +34,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Disable browser scroll restoration before first paint — the cinematic intro must always start at the top. */}
+        <script dangerouslySetInnerHTML={{ __html: "if ('scrollRestoration' in history) history.scrollRestoration = 'manual';" }} />
+      </head>
       <body className={`${inter.variable} ${bebasNeue.variable} font-sans antialiased`}>
         <CustomCursor />
         <SmoothScroll>
-          {children}
+          <CinematicMotion>
+            <ScrollReset />
+            {children}
+          </CinematicMotion>
         </SmoothScroll>
       </body>
     </html>

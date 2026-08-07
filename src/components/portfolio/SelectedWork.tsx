@@ -3,6 +3,7 @@
 import { PROJECTS } from '@/data/projects';
 import ProjectGallery from '@/components/portfolio/ProjectGallery';
 import { useReveal, revealStyle } from '@/components/portfolio/work/primitives';
+import SectionSeam from './SectionSeam';
 
 /**
  * Selected Work — editorial index of projects.
@@ -71,6 +72,7 @@ function SectionHeader() {
 export default function SelectedWork() {
   return (
     <section id="work" className="relative w-full" style={{ backgroundColor: 'var(--c-bg)' }}>
+      <SectionSeam />
       <SectionHeader />
 
       <div style={{ paddingInline: 'var(--grid-margin)' }}>
