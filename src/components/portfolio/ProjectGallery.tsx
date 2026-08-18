@@ -49,7 +49,7 @@ export default function ProjectGallery() {
   }, []);
 
   return (
-    <div className="relative w-full h-[600px] md:h-[800px] bg-zinc-950">
+    <div className="relative w-full h-[600px] md:h-[800px] bg-transparent">
       
       {/* Screen Reader & Keyboard Accessibility Layer */}
       <div className="sr-only">

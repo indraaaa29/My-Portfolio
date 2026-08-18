@@ -1,0 +1,11 @@
+✅ Phase 0   Architecture
+✅ Phase 0.5 Renderer Validation
+✅ Phase 1   Frame Playback
+✅ Phase 1.5 Imperative Rendering
+✅ Phase 2   Lenis Integration
+
+🔄 Phase 2.1 Image Decode Optimization (Current)
+⬜ Phase 2.2 Final Performance Validation
+⬜ Phase 3   Scene Management
+⬜ Phase 4   Storytelling
+⬜ Phase 5   Portfolio Transition 

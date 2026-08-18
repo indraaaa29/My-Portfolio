@@ -27,6 +27,7 @@ import LogoLoopSection from '@/components/portfolio/LogoLoopSection';
 import AchievementsSection from '@/components/portfolio/AchievementsSection';
 import ContactSection from '@/components/portfolio/ContactSection';
 import Footer from '@/components/portfolio/Footer';
+import LineWavesBackground from '@/components/background/LineWavesBackground';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -191,8 +192,12 @@ export default function Home() {
 
   return (
     <main className="relative w-full bg-zinc-950">
-      <GlobalGradualBlur />
-      <Navigation ref={navigationRef} />
+      <LineWavesBackground />
+
+      {/* PORTFOLIO CONTENT STACKING CONTEXT */}
+      <div className="relative z-10 flex flex-col">
+        <GlobalGradualBlur />
+        <Navigation ref={navigationRef} />
 
       <div
         ref={scrollContainerRef}
@@ -201,7 +206,7 @@ export default function Home() {
       >
         <div
           ref={containerRef}
-          className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-zinc-950"
+          className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-transparent"
         >
           <div className="absolute inset-0 w-full h-full z-0">
             <Hero />
@@ -241,11 +246,12 @@ export default function Home() {
         progress={loadingProgress}
       />
 
-      <DebugOverlay
-        ref={debugOverlayRef}
-        loadedFrames={loadedCount}
-        rendererState={rendererState}
-      />
+        <DebugOverlay
+          ref={debugOverlayRef}
+          loadedFrames={loadedCount}
+          rendererState={rendererState}
+        />
+      </div>
     </main>
   );
 }

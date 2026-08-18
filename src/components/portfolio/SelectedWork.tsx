@@ -71,7 +71,7 @@ function SectionHeader() {
 
 export default function SelectedWork() {
   return (
-    <section id="work" className="relative w-full" style={{ backgroundColor: 'var(--c-bg)' }}>
+    <section id="work" className="relative w-full" style={{ backgroundColor: 'transparent' }}>
       <SectionSeam />
       <SectionHeader />
 

@@ -11,7 +11,7 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--color-surface-dark, #080808);
+  background: transparent;
   overflow: hidden;
   isolation: isolate;
 }

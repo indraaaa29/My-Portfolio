@@ -26,7 +26,7 @@ export default function LeadershipSection() {
   ];
 
   return (
-    <section id="leadership" className="py-28 px-6 md:px-12 bg-zinc-950 relative overflow-hidden">
+    <section id="leadership" className="py-28 px-6 md:px-12 bg-transparent relative overflow-hidden">
       <SectionSeam />
       <div className="max-w-7xl mx-auto space-y-16">
         

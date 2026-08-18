@@ -57,7 +57,7 @@ export default function AchievementsSection() {
   return (
     <section
       aria-labelledby="hall-of-fame-headline"
-      className="bg-zinc-950 relative overflow-hidden h-screen min-h-[800px] flex flex-col justify-start"
+      className="bg-transparent relative overflow-hidden h-screen min-h-[800px] flex flex-col justify-start"
     >
       
       {/* Background layer for the DriftWall */}

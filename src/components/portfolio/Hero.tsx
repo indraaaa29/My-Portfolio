@@ -65,12 +65,12 @@ export default function Hero() {
       // Layer 1 moves slightly — name line
       if (parallaxLayer1Ref.current) {
         parallaxLayer1Ref.current.style.transform =
-          `translateX(${current.x * -10}px) translateY(${current.y * -8}px)`;
+          `translateX(${current.x * -6}px) translateY(${current.y * -5}px)`;
       }
       // Layer 2 moves more — creates depth separation
       if (parallaxLayer2Ref.current) {
         parallaxLayer2Ref.current.style.transform =
-          `translateX(${current.x * -10}px) translateY(${current.y * -8}px)`;
+          `translateX(${current.x * -12}px) translateY(${current.y * -10}px)`;
       }
 
       rafId = requestAnimationFrame(tick);

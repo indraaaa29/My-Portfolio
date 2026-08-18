@@ -9,7 +9,7 @@ export default function SkillsSection() {
   const { skills } = PORTFOLIO_DATA;
 
   return (
-    <section id="skills" className="py-28 px-6 md:px-12 bg-zinc-950 relative">
+    <section id="skills" className="py-28 px-6 md:px-12 bg-transparent relative">
       <SectionSeam />
       <div className="max-w-7xl mx-auto space-y-16">
         

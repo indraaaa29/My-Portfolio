@@ -10,7 +10,7 @@ export default function ExperienceSection() {
   const { experiences } = PORTFOLIO_DATA;
 
   return (
-    <section id="experience" className="py-28 px-6 md:px-12 bg-zinc-950 relative">
+    <section id="experience" className="py-28 px-6 md:px-12 bg-transparent relative">
       <SectionSeam />
       <div className="max-w-5xl mx-auto space-y-16">
         

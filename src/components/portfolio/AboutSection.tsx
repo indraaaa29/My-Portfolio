@@ -28,7 +28,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section id="mindset" className="py-28 px-6 md:px-12 bg-zinc-950 relative">
+    <section id="mindset" className="py-28 px-6 md:px-12 bg-transparent relative">
       <SectionSeam />
       <div className="max-w-7xl mx-auto space-y-16">
         
