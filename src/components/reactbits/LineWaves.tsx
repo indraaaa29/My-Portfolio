@@ -190,13 +190,19 @@ export default function LineWaves({
       targetMouse = [0.5, 0.5];
     }
 
+    let resizeTimeout: ReturnType<typeof setTimeout>;
     function resize() {
       renderer.setSize(container.offsetWidth, container.offsetHeight);
       if (program) {
         program.uniforms.uResolution.value = [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height];
       }
     }
-    window.addEventListener('resize', resize);
+    
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resize, 150);
+    }
+    window.addEventListener('resize', handleResize);
 
     resize();
 
@@ -229,14 +235,42 @@ export default function LineWaves({
     container.appendChild(gl.canvas);
 
     if (enableMouseInteraction) {
-      gl.canvas.addEventListener('mousemove', handleMouseMove);
-      gl.canvas.addEventListener('mouseleave', handleMouseLeave);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseleave', handleMouseLeave);
     }
 
     let animationFrameId: number;
+    let isVisible = document.visibilityState === 'visible';
+    let lastRenderTime = 0;
+    // 1000ms / 60fps ~ 16.6ms. We use 16ms to give a slight tolerance margin.
+    const frameInterval = 16; 
+    
+    // Only run the animation loop if we don't prefer reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function handleVisibilityChange() {
+      isVisible = document.visibilityState === 'visible';
+      if (isVisible && !prefersReducedMotion) {
+        // Resume rendering
+        lastRenderTime = performance.now();
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(update);
+      } else {
+        // Pause rendering to save resources
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     function update(time: number) {
+      if (!isVisible) return;
+      
       animationFrameId = requestAnimationFrame(update);
+
+      const deltaTime = time - lastRenderTime;
+      if (deltaTime < frameInterval) return;
+      lastRenderTime = time;
+
       program.uniforms.uTime.value = time * 0.001;
 
       if (enableMouseInteraction) {
@@ -251,9 +285,6 @@ export default function LineWaves({
 
       renderer.render({ scene: mesh });
     }
-    
-    // Only run the animation loop if we don't prefer reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
     if (prefersReducedMotion) {
       // Render once and stop
@@ -271,10 +302,12 @@ export default function LineWaves({
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      window.removeEventListener('resize', resize);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (enableMouseInteraction) {
-        gl.canvas.removeEventListener('mousemove', handleMouseMove);
-        gl.canvas.removeEventListener('mouseleave', handleMouseLeave);
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseleave', handleMouseLeave);
       }
       if (container.contains(gl.canvas)) {
         container.removeChild(gl.canvas);

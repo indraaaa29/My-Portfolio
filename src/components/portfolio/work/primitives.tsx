@@ -7,8 +7,8 @@ import type { Project } from '@/data/projects';
 /* ─────────────────────────────────────────────
    DESIGN TOKEN ALIASES — one source of truth
    ───────────────────────────────────────────── */
-export const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
-export const REVEAL_DURATION = '1100ms';
+export const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+export const REVEAL_DURATION = '800ms';
 
 /* ─────────────────────────────────────────────
    Reveal — self-observing wrapper so content animates
@@ -58,7 +58,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(threshold = 0.
 }
 
 /** Staggered editorial reveal style — single shared easing across the whole portfolio. */
-export function revealStyle(visible: boolean, delayMs = 0, distance = 36): CSSProperties {
+export function revealStyle(visible: boolean, delayMs = 0, distance = 24): CSSProperties {
   return {
     opacity: visible ? 1 : 0,
     transform: visible ? 'translateY(0)' : `translateY(${distance}px)`,
@@ -125,35 +125,41 @@ export function IndexNumber({ children, size = 'clamp(3.5rem, 7vw, 8rem)' }: { c
    Tech stack chips — quiet, hairline, no glow
    ───────────────────────────────────────────── */
 export function StackChips({ stack }: { stack: string[] }) {
+  if (!stack || stack.length === 0) return null;
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-      {stack.map((tech) => (
-        <span
-          key={tech}
-          data-cursor="hover"
-          className="font-sans"
-          style={{
-            fontSize: '8px',
-            letterSpacing: '0.2em',
-            color: 'var(--c-text-tertiary)',
-            border: '1px solid var(--c-border)',
-            padding: '0.28rem 0.65rem',
-            whiteSpace: 'nowrap',
-            cursor: 'none',
-            transition: 'border-color 350ms var(--ease-cinematic), color 350ms var(--ease-cinematic)',
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,240,232,0.3)';
-            (e.currentTarget as HTMLElement).style.color = 'var(--c-text-secondary)';
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = 'var(--c-border)';
-            (e.currentTarget as HTMLElement).style.color = 'var(--c-text-tertiary)';
-          }}
-        >
-          {tech}
-        </span>
-      ))}
+    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <span className="font-sans uppercase" style={{ fontSize: '9px', letterSpacing: '0.2em', color: 'var(--c-text-tertiary)' }}>
+        ENGINEERING STACK
+      </span>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+        {stack.map((tech) => (
+          <span
+            key={tech}
+            data-cursor="hover"
+            className="font-sans"
+            style={{
+              fontSize: '8px',
+              letterSpacing: '0.2em',
+              color: 'var(--c-text-tertiary)',
+              border: '1px solid var(--c-border)',
+              padding: '0.28rem 0.65rem',
+              whiteSpace: 'nowrap',
+              cursor: 'none',
+              transition: 'border-color 350ms var(--ease-cinematic), color 350ms var(--ease-cinematic)',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,240,232,0.3)';
+              (e.currentTarget as HTMLElement).style.color = 'var(--c-text-secondary)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = 'var(--c-border)';
+              (e.currentTarget as HTMLElement).style.color = 'var(--c-text-tertiary)';
+            }}
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -307,14 +313,14 @@ export function ProjectVisual({
 
     const onMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      target.x = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
-      target.y = ((e.clientY - rect.top) / rect.height - 0.5) * 9;
+      target.x = ((e.clientX - rect.left) / rect.width - 0.5) * 6;
+      target.y = ((e.clientY - rect.top) / rect.height - 0.5) * 4;
     };
 
     const tick = () => {
       current.x += (target.x - current.x) * 0.06;
       current.y += (target.y - current.y) * 0.06;
-      inner.style.transform = `scale(1.06) translate(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px)`;
+      inner.style.transform = `scale(1.02) translate(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px)`;
       rafId = requestAnimationFrame(tick);
     };
 
@@ -324,7 +330,7 @@ export function ProjectVisual({
     const stop = () => {
       cancelAnimationFrame(rafId);
       inner.style.transition = `transform 1000ms ${EASE}`;
-      inner.style.transform = 'scale(1.06) translate(0, 0)';
+      inner.style.transform = 'scale(1.02) translate(0, 0)';
       setTimeout(() => {
         if (inner) inner.style.transition = '';
       }, 1000);
@@ -358,7 +364,7 @@ export function ProjectVisual({
       <div
         ref={innerRef}
         className="relative w-full h-full"
-        style={{ transform: 'scale(1.06)', willChange: 'transform' }}
+        style={{ transform: 'scale(1.02)', willChange: 'transform' }}
       >
         <Image
           src={project.image}
@@ -367,6 +373,7 @@ export function ProjectVisual({
           className="object-cover"
           sizes={sizes}
           priority={project.index === '01'}
+          loading={project.index === '01' ? undefined : 'lazy'}
         />
       </div>
 
@@ -472,7 +479,7 @@ export function StoryBlock({ project }: { project: Project }) {
           style={{
             borderTop: '1px solid var(--c-border)',
             paddingTop: '1.25rem',
-            ...revealStyle(visible, i * 120),
+            ...revealStyle(visible, i * 100),
           }}
         >
           <div

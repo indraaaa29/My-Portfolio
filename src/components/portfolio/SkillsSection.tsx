@@ -43,25 +43,14 @@ export default function SkillsSection() {
                   {cat.category}
                 </h3>
 
-                <div className="space-y-5">
+                <div className="flex flex-wrap gap-2 pt-2">
                   {cat.skills.map((s) => (
-                    <div key={s.name} className="space-y-2">
-                      <div className="flex justify-between text-sm font-medium">
-                        <span className="text-zinc-300">{s.name}</span>
-                        <span className="text-zinc-500 font-mono text-xs">{s.level}%</span>
-                      </div>
-                      
-                      {/* Animated Progress Meter */}
-                      <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${s.level}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, ease: 'easeOut' }}
-                          className="h-full bg-zinc-400 rounded-full"
-                        />
-                      </div>
-                    </div>
+                    <span
+                      key={s.name}
+                      className="px-2.5 py-1.5 rounded-md bg-zinc-800/40 text-[10px] uppercase tracking-widest font-sans text-zinc-300 border border-zinc-700/50 hover:border-zinc-500/50 hover:text-zinc-200 transition-colors cursor-default"
+                    >
+                      {s.name}
+                    </span>
                   ))}
                 </div>
               </div>

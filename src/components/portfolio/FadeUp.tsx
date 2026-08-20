@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 export const CINEMATIC_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 /** Reveal duration (seconds) for the shared fade-up treatment. */
-export const REVEAL_SECONDS = 0.7;
+export const REVEAL_SECONDS = 0.8;
 
 interface FadeUpProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ export default function FadeUp({ children, delay = 0, className }: FadeUpProps) 
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -8% 0px' }}
       transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay }}

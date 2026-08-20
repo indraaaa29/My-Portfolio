@@ -8,6 +8,7 @@ import HalftoneReveal from '@/components/reactbits/HalftoneReveal';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import styles from './Hero.module.css';
+import { CINEMATIC_EASE, REVEAL_SECONDS } from '@/components/portfolio/FadeUp';
 
 /* ──────────────────────────────────────────────
  * Types
@@ -17,6 +18,33 @@ export interface HeroProps {
   /** Additional class name */
   className?: string;
 }
+
+/* ──────────────────────────────────────────────
+ * Animation Variants
+ * ────────────────────────────────────────────── */
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: REVEAL_SECONDS,
+      ease: CINEMATIC_EASE,
+    },
+  },
+};
 
 /* ──────────────────────────────────────────────
  * ScrollIndicator
@@ -55,7 +83,12 @@ function ScrollIndicator() {
 
 function Portrait() {
   return (
-    <div className={styles.portraitContainer}>
+    <motion.div
+      className={styles.portraitContainer}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.3 }}
+    >
       <div className={styles.portraitWrapper}>
         {/* Permanent base layer */}
         <Image
@@ -75,7 +108,7 @@ function Portrait() {
           className={styles.portraitReveal}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -103,12 +136,19 @@ export default function Hero({ className }: HeroProps) {
       {/* ─── Hero Content ─── */}
       <div className={styles.inner}>
         {/* Left Column: Existing Content */}
-        <div className={styles.textContent}>
+        <motion.div
+          className={styles.textContent}
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
           {/* Top label */}
-          <p className={styles.topLabel}>Hi, I&rsquo;m</p>
+          <motion.p className={styles.topLabel} variants={itemVariants}>
+            Hi, I&rsquo;m
+          </motion.p>
 
           {/* Main heading */}
-          <div className={styles.nameWrapper}>
+          <motion.div className={styles.nameWrapper} variants={itemVariants}>
             <TextPressure
               text="INDRANIL PAUL"
               className={styles.name}
@@ -122,25 +162,25 @@ export default function Hero({ className }: HeroProps) {
               strokeColor="#F5F5F5"
               minFontSize={96}
             />
-          </div>
+          </motion.div>
 
           {/* Title row: Creative Developer + AI Engineer */}
-          <div className={styles.titleRow}>
+          <motion.div className={styles.titleRow} variants={itemVariants}>
             <span className={styles.titleText}>Creative Developer</span>
 
             <span className={styles.titleSeparator} aria-hidden="true" />
 
             <span className={styles.titleText}>AI Engineer</span>
-          </div>
+          </motion.div>
 
           {/* Description */}
-          <p className={styles.description}>
+          <motion.p className={styles.description} variants={itemVariants}>
             Crafting intelligent web experiences with AI, creative interfaces,
             and thoughtful problem-solving. Every detail serves a purpose.
-          </p>
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className={styles.ctaGroup}>
+          <motion.div className={styles.ctaGroup} variants={itemVariants}>
             <a href="#projects" className={styles.ctaPrimary} aria-label="View Projects">
               View Projects
               <svg
@@ -206,15 +246,21 @@ export default function Hero({ className }: HeroProps) {
                 />
               </svg>
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Right Column: Reserved Portrait Area */}
         <Portrait />
       </div>
 
       {/* ─── Scroll Indicator ─── */}
-      <ScrollIndicator />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+      >
+        <ScrollIndicator />
+      </motion.div>
     </section>
   );
 }

@@ -82,16 +82,23 @@ export default function ExperienceSection() {
                 </ul>
 
                 {/* Tech Pills */}
-                <div className="pt-5 flex flex-wrap gap-2 border-t border-zinc-800/50 mt-4">
-                  {exp.technologies.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="px-2.5 py-1 rounded-md bg-zinc-800/40 text-[10px] uppercase tracking-widest font-sans text-zinc-300 border border-zinc-700/50"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+                {exp.technologies && exp.technologies.length > 0 && (
+                  <div className="pt-5 border-t border-zinc-800/50 mt-4">
+                    <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-500 mb-3">
+                      Tech Stack
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {exp.technologies.map((tech, i) => (
+                        <span
+                          key={i}
+                          className="px-2.5 py-1 rounded-md bg-zinc-800/40 text-[10px] uppercase tracking-widest font-sans text-zinc-300 border border-zinc-700/50 cursor-default hover:border-zinc-500/50 transition-colors"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}

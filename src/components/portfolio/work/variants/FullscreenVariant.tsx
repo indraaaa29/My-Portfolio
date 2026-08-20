@@ -39,6 +39,7 @@ export default function FullscreenVariant({ project }: { project: Project }) {
             fill
             className="object-cover"
             sizes="100vw"
+            loading="lazy"
           />
           {/* Cinematic scrim */}
           <div
