@@ -7,10 +7,10 @@ export default function GlobalGradualBlur() {
     <GradualBlur
       target="page"
       position="top"
-      height="14rem"
-      strength={1}
+      height="6rem"
+      strength={0.8}
       divCount={10}
-      curve="bezier"
+      curve="ease-out"
       exponential
       opacity={1}
       zIndex={-60}
