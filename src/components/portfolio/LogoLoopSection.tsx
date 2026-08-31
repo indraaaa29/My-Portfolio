@@ -51,7 +51,7 @@ export default function LogoLoopSection() {
           <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4">
             Engineering Ecosystem
           </h2>
-          <p className="text-zinc-500 font-light text-base md:text-lg max-w-[700px] mx-auto">
+          <p className="text-zinc-500 font-serif italic text-base md:text-lg max-w-[700px] mx-auto">
             Core technologies and trusted ecosystems that power my software architecture.
           </p>
         </div>

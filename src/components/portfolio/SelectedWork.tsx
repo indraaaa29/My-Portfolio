@@ -2,69 +2,33 @@
 
 import { PROJECTS } from '@/data/projects';
 import ProjectGallery from '@/components/portfolio/ProjectGallery';
-import { useReveal, revealStyle } from '@/components/portfolio/work/primitives';
 import SectionSeam from './SectionSeam';
+import FadeUp from './FadeUp';
 
 /**
  * Selected Work — editorial index of projects.
  * Each project renders through the reusable <Project /> architecture
  * with its own editorial layout variant, sharing one design system.
  */
+
 function SectionHeader() {
-  const { ref, visible } = useReveal(0.15);
-
-  const reveal = (delay: number) => revealStyle(visible, delay);
-
   return (
-    <div
-      ref={ref}
-      style={{
-        paddingInline: 'var(--grid-margin)',
-        paddingTop: 'clamp(6rem, 12vw, 14rem)',
-        paddingBottom: 'clamp(2rem, 4vw, 4rem)',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        gap: '2rem',
-      }}
-    >
-      <div>
-        <p
-          className="font-sans uppercase"
-          style={{ fontSize: '9px', letterSpacing: '0.5em', color: 'var(--c-text-tertiary)', marginBottom: '1.25rem', ...reveal(0) }}
-        >
-          Selected Work
-        </p>
-        <h2
-          className="font-display uppercase"
-          style={{
-            fontSize: 'clamp(4rem, 10vw, 11rem)',
-            lineHeight: 0.84,
-            letterSpacing: '-0.01em',
-            color: 'var(--c-text-primary)',
-            ...reveal(100),
-          }}
-        >
-          Work
-        </h2>
-      </div>
-      <div style={{ ...reveal(200), textAlign: 'right' }}>
-        <span className="font-sans" style={{ fontSize: '9px', letterSpacing: '0.4em', color: 'var(--c-text-tertiary)' }}>
-          {PROJECTS.length.toString().padStart(2, '0')} Projects
-        </span>
-        <p
-          className="font-sans font-light"
-          style={{
-            fontSize: '0.75rem',
-            lineHeight: 1.7,
-            color: 'var(--c-text-secondary)',
-            maxWidth: '260px',
-            marginTop: '0.75rem',
-          }}
-        >
-          Six stories, one architectural standard — interact below.
-        </p>
-      </div>
+    <div className="max-w-5xl mx-auto pt-28 pb-6 px-6 md:px-12">
+      <FadeUp>
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
+            <span className="h-px w-6 bg-zinc-500/50" />
+            <span>Selected Work</span>
+            <span className="h-px w-6 bg-zinc-500/50" />
+          </div>
+          <h2 className="font-display uppercase text-3xl md:text-5xl text-zinc-100 tracking-tight">
+            Work
+          </h2>
+          <p className="text-sm md:text-base text-zinc-400 font-light max-w-lg mx-auto leading-relaxed mt-4">
+            {PROJECTS.length.toString().padStart(2, '0')} stories, one architectural standard — interact below.
+          </p>
+        </div>
+      </FadeUp>
     </div>
   );
 }
@@ -78,7 +42,8 @@ export default function SelectedWork() {
       <div style={{ paddingInline: 'var(--grid-margin)' }}>
         <div style={{ height: '1px', backgroundColor: 'var(--c-border)' }} />
       </div>
-      <div className="w-full relative mt-16 mb-8 border-y border-zinc-900">
+      
+      <div className="w-full relative mt-4 mb-4">
         <ProjectGallery />
       </div>
 

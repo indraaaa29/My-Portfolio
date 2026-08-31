@@ -262,7 +262,8 @@ export default function ProjectDrawer({
           {/* 4 — Action buttons */}
           <Reveal isOpen={isOpen} delay={200}>
             {hasLinks ? (
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col">
+                <div className="flex flex-col sm:flex-row gap-3">
                 {project.links?.live && (
                   <a
                     href={project.links.live}
@@ -286,6 +287,12 @@ export default function ProjectDrawer({
                   </a>
                 )}
               </div>
+              {project.links?.live && (
+                <p className="text-[11px] text-zinc-500 text-center tracking-wide mt-3 animate-pulse opacity-70">
+                  Opens live demo — may take a few seconds to load on first visit
+                </p>
+              )}
+            </div>
             ) : (
               <div className="flex items-center justify-center py-3.5 px-4 bg-white/[0.03] rounded-[14px] border border-white/5 text-sm text-zinc-400 font-medium tracking-wide">
                 Private project — details available on request.

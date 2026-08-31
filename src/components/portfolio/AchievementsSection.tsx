@@ -56,17 +56,17 @@ export default function AchievementsSection() {
 
   return (
     <section
+      id="achievements"
       aria-labelledby="hall-of-fame-headline"
       className="bg-transparent relative overflow-hidden h-screen min-h-[800px] flex flex-col justify-start"
     >
-      
+
       {/* Background layer for the DriftWall */}
-      <div 
-        className={`absolute inset-0 transition-all duration-700 ease-out ${
-          selectedId 
-            ? 'opacity-30 blur-sm scale-[0.98] pointer-events-none' 
+      <div
+        className={`absolute inset-0 transition-all duration-700 ease-out ${selectedId
+            ? 'opacity-30 blur-sm scale-[0.98] pointer-events-none'
             : 'opacity-100 blur-0 scale-100 pointer-events-auto'
-        }`}
+          }`}
         onClickCapture={handleWallClick}
       >
         <DriftWall

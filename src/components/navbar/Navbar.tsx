@@ -19,8 +19,8 @@ export interface NavbarProps {
  * ────────────────────────────────────────────── */
 
 const NAV_LINKS = [
-  { label: 'About', href: '#about' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'About', href: '#mindset' },
+  { label: 'Projects', href: '#work' },
   { label: 'Experience', href: '#experience' },
   { label: 'Achievements', href: '#achievements' },
   { label: 'Contact', href: '#contact' },

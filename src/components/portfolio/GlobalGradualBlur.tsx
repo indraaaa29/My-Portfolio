@@ -12,8 +12,8 @@ export default function GlobalGradualBlur() {
       divCount={10}
       curve="bezier"
       exponential
-      opacity={0.45}
-      zIndex={0}
+      opacity={1}
+      zIndex={-60}
     />
   );
 }

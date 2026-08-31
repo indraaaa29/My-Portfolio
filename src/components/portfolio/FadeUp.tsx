@@ -36,7 +36,7 @@ export default function FadeUp({ children, delay = 0, className }: FadeUpProps) 
       className={className}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+      viewport={{ once: true, margin: '0px 0px -20% 0px' }}
       transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay }}
     >
       {children}

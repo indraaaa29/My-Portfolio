@@ -17,15 +17,16 @@ const PROJECT_ORDER = [
 
 export default function ProjectGallery() {
   const [selectedProjectIndex, setSelectedProjectIndex] = useState<number | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
   const handleNext = () => {
     if (selectedProjectIndex === null) return;
-    setSelectedProjectIndex((selectedProjectIndex + 1) % PROJECT_ORDER.length);
+    setSelectedProjectIndex((selectedProjectIndex + 1) % PROJECTS.length);
   };
 
   const handlePrev = () => {
     if (selectedProjectIndex === null) return;
-    setSelectedProjectIndex((selectedProjectIndex - 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length);
+    setSelectedProjectIndex((selectedProjectIndex - 1 + PROJECTS.length) % PROJECTS.length);
   };
 
   const mappedProjects = useMemo(() => {
@@ -38,8 +39,14 @@ export default function ProjectGallery() {
       return proj;
     });
 
+    const remainingProjects = PROJECTS.filter(
+      (p) => !PROJECT_ORDER.some((title) => p.title === title || p.title.includes(title))
+    );
+
+    const allProjects = [...orderedProjects, ...remainingProjects];
+
     // Map to CircularGallery data structure
-    return orderedProjects.map((proj): GalleryItem => {
+    return allProjects.map((proj): GalleryItem => {
       return {
         image: proj.image,
         title: proj.title,
@@ -49,8 +56,8 @@ export default function ProjectGallery() {
   }, []);
 
   return (
-    <div className="relative w-full h-[600px] md:h-[800px] bg-transparent">
-      
+    <div className="relative w-full h-[450px] md:h-[500px] bg-transparent">
+
       {/* Screen Reader & Keyboard Accessibility Layer */}
       <div className="sr-only">
         <h2>Selected Engineering Projects</h2>
@@ -60,7 +67,11 @@ export default function ProjectGallery() {
             if (!proj) return null;
             return (
               <li key={proj.index}>
-                <button onClick={() => setSelectedProjectIndex(index)}>
+                <button
+                  onClick={() => setSelectedProjectIndex(index)}
+                  onFocus={() => setFocusedIndex(index)}
+                  onBlur={() => setFocusedIndex(null)}
+                >
                   {proj.title} - {proj.tagline}. Built with {proj.stack.join(', ')}.
                 </button>
               </li>
@@ -73,25 +84,27 @@ export default function ProjectGallery() {
       <div className={`absolute inset-0 z-0 ${selectedProjectIndex !== null ? 'pointer-events-none' : ''}`}>
         <CircularGallery
           items={mappedProjects}
-          bend={3}
+          bend={1.5}
           textColor="#ffffff"      // zinc-100
           borderRadius={0.05}
           scrollSpeed={2}
           scrollEase={0.05}
           paused={selectedProjectIndex !== null}
+          selectedIndex={selectedProjectIndex}
+          focusedIndex={focusedIndex}
           onItemClick={(index) => setSelectedProjectIndex(index)}
         />
       </div>
 
       {/* Editorial Drawer */}
-      <ProjectDrawer 
-        project={selectedProjectIndex !== null ? PROJECTS.find(p => p.title.includes(PROJECT_ORDER[selectedProjectIndex])) || null : null}
+      <ProjectDrawer
+        project={selectedProjectIndex !== null ? (PROJECTS.find(p => p.title.includes(PROJECT_ORDER[selectedProjectIndex])) || PROJECTS.filter(p => !PROJECT_ORDER.some(title => p.title.includes(title)))[selectedProjectIndex - PROJECT_ORDER.length] || null) : null}
         isOpen={selectedProjectIndex !== null}
         onClose={() => setSelectedProjectIndex(null)}
         onNext={handleNext}
         onPrev={handlePrev}
         currentIndex={selectedProjectIndex}
-        totalCount={PROJECT_ORDER.length}
+        totalCount={PROJECTS.length}
       />
 
     </div>

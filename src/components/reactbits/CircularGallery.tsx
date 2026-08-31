@@ -52,7 +52,7 @@ function createTextTexture(
   // We align text to the bottom of the canvas, pushing it upwards
   context.textAlign = 'center';
   context.textBaseline = 'bottom';
-  
+
   const centerX = canvas.width / 2;
   let currentY = canvas.height - 40; // Start near the bottom
 
@@ -134,7 +134,7 @@ class Title {
           gl_FragColor = vec4(color.rgb + (uHover * 0.1), color.a);
         }
       `,
-      uniforms: { 
+      uniforms: {
         tMap: { value: texture },
         uHover: { value: 0 }
       },
@@ -142,14 +142,14 @@ class Title {
     });
     this.mesh = new Mesh(this.gl, { geometry, program });
     const aspect = width / height;
-    
+
     // Size relative to the plane
-    const textHeightScaled = this.plane.scale.y * 1.0; 
+    const textHeightScaled = this.plane.scale.y * 1.0;
     const textWidthScaled = textHeightScaled * aspect;
     this.mesh.scale.set(textWidthScaled, textHeightScaled, 1);
-    
+
     // Position overlapping the bottom of the image
-    this.mesh.position.y = 0; 
+    this.mesh.position.y = 0;
     this.mesh.position.z = 0.1; // slightly in front
     this.mesh.setParent(this.plane);
   }
@@ -205,10 +205,11 @@ class Media {
   speed = 0;
   isBefore = false;
   isAfter = false;
-  
+
   // Hover tracking
-  hoverState = 0; 
+  hoverState = 0;
   targetHover = 0;
+  focusedIndex?: number | null;
 
   constructor({
     geometry,
@@ -385,7 +386,7 @@ class Media {
     const normalizedPlaneX = this.plane.position.x / (this.viewport.width / 2);
     // Width of plane in normalized coordinates
     const normalizedHalfWidth = (this.plane.scale.x / 2) / (this.viewport.width / 2);
-    
+
     let isHovered = false;
     if (isMobile) {
       // On mobile, the center item is "hovered"
@@ -400,13 +401,13 @@ class Media {
 
     this.targetHover = isHovered ? 1 : 0;
     this.hoverState = lerp(this.hoverState, this.targetHover, 0.1);
-    
+
     // Apply hover uniforms
     this.program.uniforms.uHover.value = this.hoverState;
     if (this.title && this.title.mesh) {
       this.title.mesh.program.uniforms.uHover.value = this.hoverState;
     }
-    
+
     // Scale up on hover natively
     const baseScaleY = (this.viewport.height * (900 * this.scale)) / this.screen.height;
     const baseScaleX = (this.viewport.width * (700 * this.scale)) / this.screen.width;
@@ -435,10 +436,10 @@ class Media {
         this.plane.program.uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height];
       }
     }
-    
+
     // Adjust base scale for mobile
     this.scale = isMobile ? (this.screen.height / 1000) : (this.screen.height / 1500);
-    
+
     this.plane.scale.y = (this.viewport.height * (900 * this.scale)) / this.screen.height;
     this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
@@ -481,13 +482,14 @@ class App {
   screen!: { width: number; height: number };
   viewport!: { width: number; height: number };
   raf: number = 0;
-  
+
   isVisible = false;
   paused = false;
   onItemClick?: (index: number) => void;
   observer!: IntersectionObserver;
   pointer = { x: -2, y: -2 }; // -2 is offscreen
   isMobile = false;
+  focusedIndex?: number | null;
 
   boundOnResize!: () => void;
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
@@ -573,7 +575,7 @@ class App {
     borderRadius: number
   ) {
     if (!items || items.length === 0) return;
-    
+
     // Duplicate to ensure smooth infinite scroll
     this.mediasImages = [...items, ...items];
     this.medias = this.mediasImages.map((data, index) => {
@@ -605,14 +607,14 @@ class App {
     // Update pointer for hover detection
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-    
+
     // Normalize to -1 -> 1 based on container
     const rect = this.container.getBoundingClientRect();
     this.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
     this.pointer.y = -(((clientY - rect.top) / rect.height) * 2 - 1);
 
     if (!this.isDown) return;
-    
+
     const distance = (this.start - clientX) * (this.scrollSpeed * 0.025);
     this.scroll.target = (this.scroll.position ?? 0) + distance;
   }
@@ -620,7 +622,7 @@ class App {
   onTouchUp(e: MouseEvent | TouchEvent) {
     this.isDown = false;
     this.container.style.cursor = 'grab';
-    
+
     // Check if this was a click rather than a drag
     const clientX = 'changedTouches' in e ? e.changedTouches[0].clientX : (e as MouseEvent).clientX;
     if (Math.abs(clientX - this.start) < 5) {
@@ -635,7 +637,7 @@ class App {
         }
       }
     }
-    
+
     this.onCheck();
   }
 
@@ -676,19 +678,19 @@ class App {
       this.raf = 0; // Stop loop
       return;
     }
-    
+
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
     const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
-    
+
     if (this.medias) {
-      this.medias.forEach((media) => 
+      this.medias.forEach((media) =>
         media.update(this.scroll, direction, this.pointer.x, this.pointer.y, this.isMobile)
       );
     }
-    
+
     this.renderer.render({ scene: this.scene, camera: this.camera });
     this.scroll.last = this.scroll.current;
-    
+
     this.raf = window.requestAnimationFrame(this.update.bind(this));
   }
 
@@ -699,7 +701,7 @@ class App {
     this.boundOnTouchUp = this.onTouchUp.bind(this);
 
     window.addEventListener('resize', this.boundOnResize);
-    
+
     // Bind interaction exclusively to the container, protecting global scroll
     this.container.addEventListener('mousedown', this.boundOnTouchDown);
     this.container.addEventListener('mousemove', this.boundOnTouchMove);
@@ -714,7 +716,7 @@ class App {
     this.isVisible = false;
     window.cancelAnimationFrame(this.raf);
     this.observer?.disconnect();
-    
+
     window.removeEventListener('resize', this.boundOnResize);
     if (this.container) {
       this.container.removeEventListener('mousedown', this.boundOnTouchDown);
@@ -740,6 +742,8 @@ interface CircularGalleryProps {
   scrollEase?: number;
   onItemClick?: (index: number) => void;
   paused?: boolean;
+  selectedIndex?: number | null;
+  focusedIndex?: number | null;
 }
 
 export default function CircularGallery({
@@ -751,6 +755,8 @@ export default function CircularGallery({
   scrollEase = 0.05,
   onItemClick,
   paused = false,
+  selectedIndex = null,
+  focusedIndex = null,
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<App | undefined>(undefined);
@@ -770,13 +776,49 @@ export default function CircularGallery({
       }
     }
   }, [paused]);
-  
+
+  // Handle focused state
+  useEffect(() => {
+    if (appRef.current) {
+      appRef.current.focusedIndex = focusedIndex;
+      if (appRef.current.medias) {
+        appRef.current.medias.forEach(media => {
+          media.focusedIndex = focusedIndex;
+        });
+      }
+    }
+  }, [focusedIndex]);
+
+  // Handle selectedIndex changes from external navigation
+  useEffect(() => {
+    if (appRef.current && selectedIndex !== null && selectedIndex !== undefined) {
+      if (appRef.current.medias && appRef.current.medias.length > 0) {
+        const mediaWidth = appRef.current.medias[0].width;
+        const originalLength = appRef.current.medias.length / 2;
+        const targetOriginalIndex = selectedIndex % originalLength;
+        let closestDistance = Infinity;
+        let currentIndex = appRef.current.scroll.target / mediaWidth;
+        let targetIndex = Math.round(currentIndex);
+        for (let i = 0; i < appRef.current.medias.length; i++) {
+          if (i % originalLength === targetOriginalIndex) {
+            const distance = Math.abs(i - currentIndex);
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              targetIndex = i;
+            }
+          }
+        }
+        appRef.current.scroll.target = targetIndex * mediaWidth;
+      }
+    }
+  }, [selectedIndex]);
+
   useEffect(() => {
     if (!containerRef.current || !items || items.length === 0) return;
-    
+
     // Only animate if user prefers motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
+
     const app = new App(containerRef.current, {
       items,
       bend,
@@ -787,9 +829,9 @@ export default function CircularGallery({
       paused,
       onItemClick: (idx) => onItemClickRef.current?.(idx)
     });
-    
+
     appRef.current = app;
-    
+
     return () => {
       app.destroy();
       appRef.current = undefined;

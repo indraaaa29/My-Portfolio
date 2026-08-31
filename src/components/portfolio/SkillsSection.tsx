@@ -12,19 +12,19 @@ export default function SkillsSection() {
     <section id="skills" className="py-28 px-6 md:px-12 bg-transparent relative">
       <SectionSeam />
       <div className="max-w-7xl mx-auto space-y-16">
-        
+
         {/* Header */}
         <FadeUp>
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
-            <span className="h-px w-6 bg-zinc-500/50" />
-            <span>Core Capabilities</span>
-            <span className="h-px w-6 bg-zinc-500/50" />
+          <div className="text-center space-y-4">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
+              <span className="h-px w-6 bg-zinc-500/50" />
+              <span>Core Capabilities</span>
+              <span className="h-px w-6 bg-zinc-500/50" />
+            </div>
+            <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
+              Technical <span className="font-semibold text-zinc-300">Expertise</span>
+            </h2>
           </div>
-          <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Technical <span className="font-semibold text-zinc-300">Expertise</span>
-          </h2>
-        </div>
         </FadeUp>
 
         {/* Skill Category Cards */}

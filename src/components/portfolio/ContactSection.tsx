@@ -22,6 +22,11 @@ export default function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
+    
+    const subject = encodeURIComponent(`Portfolio Inquiry from ${formState.name}`);
+    const body = encodeURIComponent(`Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`);
+    window.location.href = `mailto:indranil7001@gmail.com?subject=${subject}&body=${body}`;
+    
     setSubmitted(true);
   };
 
@@ -40,7 +45,7 @@ export default function ContactSection() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '0px 0px -20% 0px' }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE }}
             className="lg:col-span-5 space-y-12 py-4 contact-intro"
           >
@@ -64,10 +69,10 @@ export default function ContactSection() {
               <div className="group">
                 <div className="text-[10px] font-semibold text-zinc-500 mb-2 tracking-[0.15em] uppercase">Email</div>
                 <a
-                  href="mailto:your.email@example.com"
+                  href="mailto:indranil7001@gmail.com"
                   className="text-base font-light text-zinc-200 hover:text-amber-400 transition-colors"
                 >
-                  your.email@example.com
+                  indranil7001@gmail.com
                 </a>
               </div>
 
@@ -120,7 +125,7 @@ export default function ContactSection() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '0px 0px -20% 0px' }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.1 }}
             className="lg:col-span-7 relative contact-form"
           >

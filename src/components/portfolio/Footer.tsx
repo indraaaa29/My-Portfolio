@@ -21,9 +21,6 @@ export default function Footer() {
           <span className="text-white font-semibold tracking-wider text-sm">
             INDRANIL PAUL<span className="text-amber-500">.</span>
           </span>
-          <span className="text-xs text-zinc-500 ml-2">
-            © {new Date().getFullYear()} All rights reserved.
-          </span>
         </div>
 
         {/* Back to Top */}

@@ -2,7 +2,6 @@
 
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Navbar } from '@/components/navbar';
 import TextPressure from '@/components/reactbits/TextPressure';
 import HalftoneReveal from '@/components/reactbits/HalftoneReveal';
 import Image from 'next/image';
@@ -130,8 +129,7 @@ export default function Hero({ className }: HeroProps) {
       <div className={styles.background} aria-hidden="true" />
       <div className={styles.vignette} aria-hidden="true" />
 
-      {/* ─── Navigation ─── */}
-      <Navbar />
+
 
       {/* ─── Hero Content ─── */}
       <div className={styles.inner}>

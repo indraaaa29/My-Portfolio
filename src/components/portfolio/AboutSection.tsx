@@ -53,7 +53,7 @@ export default function AboutSection() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '0px 0px -20% 0px' }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE }}
             className="lg:col-span-7 space-y-6"
           >
@@ -85,7 +85,7 @@ export default function AboutSection() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '0px 0px -20% 0px' }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.08 }}
             className="lg:col-span-5 space-y-4"
           >
