@@ -1,0 +1,462 @@
+/* ExperienceSection.module.css */
+
+.section {
+  position: relative;
+  z-index: 10;
+  padding: 8rem 0;
+  overflow: hidden;
+}
+
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 6rem);
+  position: relative;
+}
+
+/* ── SIDE LABELS ── */
+.sideLabelLeft,
+.sideLabelRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.25);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.sideLabelLeft {
+  left: 2rem;
+}
+
+.sideLabelRight {
+  right: 2rem;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.sideLabelLine {
+  width: 1px;
+  height: 32px;
+  background: var(--gold);
+  opacity: 0.4;
+  margin-bottom: 0.5rem;
+}
+
+/* ── HEADER ── */
+.headerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 6rem;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.eyebrowLine {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.3;
+}
+
+.mainHeading {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.mainHeadingBold {
+  font-weight: 600;
+}
+
+.subtitle {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.subtitle span {
+  color: var(--gold);
+  margin: 0 0.75rem;
+  opacity: 0.5;
+}
+
+/* ── TIMELINE CONTAINER ── */
+.timelineContainer {
+  position: relative;
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ── TIMELINE ROW ── */
+.timelineRow {
+  display: grid;
+  grid-template-columns: 140px 64px 1fr;
+  align-items: stretch;
+  position: relative;
+}
+
+/* ── DATE COLUMN ── */
+.dateColumn {
+  text-align: right;
+  padding-top: 2.5rem;
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dateSecondary {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+/* ── TRACK COLUMN ── */
+.trackColumn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.trackLine {
+  position: absolute;
+  top: 0;
+  bottom: -2.5rem; /* Connects down to the next row's gap */
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.timelineRow:last-child .trackLine {
+  bottom: 0;
+}
+
+.trackNode {
+  position: absolute;
+  top: 2.75rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 2;
+}
+
+.trackNodeCurrent {
+  position: absolute;
+  top: 2.5rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid rgba(10, 10, 10, 0.9);
+  box-shadow: 0 0 15px rgba(201, 168, 76, 0.4);
+  z-index: 2;
+}
+
+/* ── CARD COLUMN ── */
+.cardColumn {
+  position: relative;
+}
+
+.card {
+  background: rgba(10, 10, 10, 0.60);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2.5rem 3rem;
+  position: relative;
+  box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.01), 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(15, 15, 15, 0.7);
+}
+
+.cardCurrent {
+  border-color: rgba(201, 168, 76, 0.3);
+  background: rgba(15, 15, 15, 0.7);
+  box-shadow: inset 0 0 60px rgba(201, 168, 76, 0.04), 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cardCurrent:hover {
+  border-color: rgba(201, 168, 76, 0.5);
+  box-shadow: inset 0 0 60px rgba(201, 168, 76, 0.08), 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Corner Accents */
+.cornerAccentTopRight, .cornerAccentBottomRight {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.cornerAccentTopRight {
+  top: 1.25rem;
+  right: 1.25rem;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    var(--gold) 4px,
+    var(--gold) 5px
+  );
+}
+
+.cornerAccentBottomRight {
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    var(--gold) 4px,
+    var(--gold) 5px
+  );
+}
+
+/* ── CARD INNER STYLES ── */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+
+.roleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.roleTitle {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.companyName {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.metaIcon {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.currentBadge {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.descriptionList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.descriptionItem {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.descriptionItem::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.techStackContainer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 1.75rem;
+}
+
+.techStackLabel {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.techStackList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.techPill {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.2s ease;
+}
+
+.techPill:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1400px) {
+  .sideLabelLeft { left: 1rem; }
+  .sideLabelRight { right: 1rem; }
+}
+
+@media (max-width: 1280px) {
+  .sideLabelLeft, .sideLabelRight { display: none; }
+}
+
+@media (max-width: 1024px) {
+  .timelineRow {
+    grid-template-columns: 120px 48px 1fr;
+  }
+  .card {
+    padding: 2rem 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .timelineRow {
+    grid-template-columns: 32px 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+      "node date"
+      "line card";
+    gap: 1rem 0;
+  }
+
+  .dateColumn {
+    grid-area: date;
+    text-align: left;
+    padding-top: 0;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .dateSecondary::before {
+    content: "—";
+    margin-right: 0.5rem;
+  }
+
+  .trackColumn {
+    grid-area: node;
+    justify-content: flex-start;
+  }
+
+  .trackNode, .trackNodeCurrent {
+    top: 4px; /* Align with date text */
+    left: 8px; /* Center in 32px column */
+  }
+
+  .trackLine {
+    top: 24px;
+    bottom: -1rem;
+    left: 14px; /* Center in 32px column */
+  }
+
+  .cardColumn {
+    grid-area: card;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .headerMeta {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}

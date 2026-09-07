@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import TextPressure from '@/components/reactbits/TextPressure';
 import HalftoneReveal from '@/components/reactbits/HalftoneReveal';
@@ -14,7 +14,6 @@ import { CINEMATIC_EASE, REVEAL_SECONDS } from '@/components/portfolio/FadeUp';
  * ────────────────────────────────────────────── */
 
 export interface HeroProps {
-  /** Additional class name */
   className?: string;
 }
 
@@ -26,22 +25,16 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: REVEAL_SECONDS,
-      ease: CINEMATIC_EASE,
-    },
+    transition: { duration: REVEAL_SECONDS, ease: CINEMATIC_EASE },
   },
 };
 
@@ -54,21 +47,13 @@ function ScrollIndicator() {
     <div className={styles.scrollIndicator} aria-hidden="true">
       <motion.div
         className={styles.scrollMouse}
-        animate={{ y: [0, 4, 0] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
+        animate={{ y: [0, 3, 0] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
       >
         <motion.div
           className={styles.scrollDot}
-          animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={{ y: [0, 11, 0], opacity: [1, 0.3, 1] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
         />
       </motion.div>
       <span>Scroll</span>
@@ -77,46 +62,175 @@ function ScrollIndicator() {
 }
 
 /* ──────────────────────────────────────────────
- * Portrait — Halftone Reveal + Base Image
+ * Portrait — Architectural Frame System
  * ────────────────────────────────────────────── */
 
-function Portrait() {
+function Portrait({ parallaxX, parallaxY }: { parallaxX: number; parallaxY: number }) {
   return (
     <motion.div
       className={styles.portraitContainer}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.3 }}
+      transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.35 }}
     >
-      <div className={styles.portraitWrapper}>
-        {/* Permanent base layer */}
-        <Image
-          src="/images/hero/portrait.jpg"
-          alt="Indranil Paul"
-          fill
-          priority
-          sizes="(max-width:768px) 100vw, 40vw"
-          style={{
-            objectFit: "cover",
-            objectPosition: "center 25%",
-          }}
-        />
-        {/* Temporary halftone layer — constrained to the portrait box via .portraitReveal */}
-        <HalftoneReveal
-          src="/images/hero/portrait.jpg"
-          className={styles.portraitReveal}
-        />
-      </div>
+      {/* Restrained gold atmosphere */}
+      <div className={styles.portraitGlow} aria-hidden="true" />
+
+      {/* Primary architectural frame — wraps everything, parallaxes as one unit */}
+      <motion.div
+        className={styles.portraitFrameOuter}
+        style={{ transform: `translate(${parallaxX * 0.45}px, ${parallaxY * 0.35}px)` }}
+      >
+        {/* Offset secondary frame — inside, behind the portrait */}
+        <div className={styles.portraitOffsetFrame} aria-hidden="true" />
+
+        {/* L-shaped corner accents */}
+        <span className={cn(styles.cornerAccent, styles.cornerTL)} aria-hidden="true" />
+        <span className={cn(styles.cornerAccent, styles.cornerTR)} aria-hidden="true" />
+        <span className={cn(styles.cornerAccent, styles.cornerBL)} aria-hidden="true" />
+        <span className={cn(styles.cornerAccent, styles.cornerBR)} aria-hidden="true" />
+
+        {/* IDEAS / CODE / IMPACT — left vertical editorial label */}
+        <div className={styles.verticalLabel} aria-hidden="true">
+          <div className={styles.verticalLabelLine} />
+          <span>IDEAS</span>
+          <span>CODE</span>
+          <span>IMPACT</span>
+          <div className={styles.verticalLabelLine} />
+        </div>
+
+        {/* BUILDING A BETTER TOMORROW — right vertical faint text */}
+        <div className={styles.verticalLabelRight} aria-hidden="true">
+          BUILDING A BETTER TOMORROW
+        </div>
+
+        {/* Portrait image */}
+        <div className={styles.portraitWrapper}>
+          <Image
+            src="/images/hero/portrait.jpg"
+            alt="Indranil Paul — Creative Developer and AI Engineer"
+            fill
+            priority
+            sizes="(max-width:768px) 100vw, 40vw"
+            style={{ objectFit: 'cover', objectPosition: 'center 18%' }}
+          />
+          <HalftoneReveal
+            src="/images/hero/portrait.jpg"
+            className={styles.portraitReveal}
+          />
+        </div>
+
+        {/* Thin gold gradient line below the frame */}
+        <div className={styles.frameBottomLine} aria-hidden="true" />
+
+        {/* Gold anchor dot */}
+        <span className={styles.bottomDot} aria-hidden="true" />
+      </motion.div>
     </motion.div>
   );
 }
 
 /* ──────────────────────────────────────────────
- * Component
+ * Social Links
+ * ────────────────────────────────────────────── */
+
+const SOCIALS = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/indranilpaul26/',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'GitHub',
+    href: 'https://github.com/indranilpaul26',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/indranil_paul26/',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'X / Twitter',
+    href: 'https://x.com/indranilpaul26',
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    ),
+  },
+] as const;
+
+function SocialLinks() {
+  return (
+    <div className={styles.socialArea}>
+      <p className={styles.socialLabel}>Let&rsquo;s Connect</p>
+      <div className={styles.socialLinks}>
+        {SOCIALS.map((s) => (
+          <a
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialLink}
+            aria-label={s.label}
+            data-cursor="hover"
+          >
+            {s.icon}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────
+ * Hero — Main Component
  * ────────────────────────────────────────────── */
 
 export default function Hero({ className }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [prefersReduced, setPrefersReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mq.matches);
+    const h = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReduced) return;
+    const hero = heroRef.current;
+    if (!hero) return;
+    const onMouseMove = (e: MouseEvent) => {
+      const r = hero.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      setParallax({ x: dx * 5, y: dy * 3.5 });
+    };
+    const onMouseLeave = () => setParallax({ x: 0, y: 0 });
+    hero.addEventListener('mousemove', onMouseMove, { passive: true });
+    hero.addEventListener('mouseleave', onMouseLeave, { passive: true });
+    return () => {
+      hero.removeEventListener('mousemove', onMouseMove);
+      hero.removeEventListener('mouseleave', onMouseLeave);
+    };
+  }, [prefersReduced]);
 
   return (
     <section
@@ -125,49 +239,62 @@ export default function Hero({ className }: HeroProps) {
       className={cn(styles.hero, className)}
       aria-label="Hero"
     >
-      {/* ─── Background Ambience ─── */}
       <div className={styles.background} aria-hidden="true" />
       <div className={styles.vignette} aria-hidden="true" />
 
-
-
-      {/* ─── Hero Content ─── */}
       <div className={styles.inner}>
-        {/* Left Column: Existing Content */}
+
+        {/* ── LEFT: Text Column ── */}
         <motion.div
           className={styles.textContent}
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
-          {/* Top label */}
-          <motion.p className={styles.topLabel} variants={itemVariants}>
-            Hi, I&rsquo;m
-          </motion.p>
-
-          {/* Main heading */}
-          <motion.div className={styles.nameWrapper} variants={itemVariants}>
-            <TextPressure
-              text="INDRANIL PAUL"
-              className={styles.name}
-              flex={true}
-              alpha={false}
-              stroke={false}
-              width={true}
-              weight={true}
-              italic={false}
-              textColor="#F5F5F5"
-              strokeColor="#F5F5F5"
-              minFontSize={96}
-            />
+          {/* HI, I'M label */}
+          <motion.div className={styles.topLabelRow} variants={itemVariants}>
+            <span className={styles.topLabelLine} aria-hidden="true" />
+            <p className={styles.topLabel}>Hi, I&rsquo;m</p>
           </motion.div>
 
-          {/* Title row: Creative Developer + AI Engineer */}
+          {/* ── Name: INDRANIL PAUL — horizontal flex row ── */}
+          <motion.h1 className={styles.nameBlock} variants={itemVariants}>
+            <span className={styles.nameRow}>
+              <TextPressure
+                text="INDRANIL"
+                className={styles.nameLine}
+                flex={true}
+                alpha={false}
+                stroke={false}
+                width={true}
+                weight={true}
+                italic={false}
+                textColor="#F5F0E8"
+                strokeColor="#F5F0E8"
+                minFontSize={28}
+              />
+            </span>
+            <span className={styles.nameRowSecond}>
+              <TextPressure
+                text="PAUL"
+                className={styles.nameLineSecond}
+                flex={true}
+                alpha={false}
+                stroke={false}
+                width={true}
+                weight={true}
+                italic={false}
+                textColor="rgba(245,240,232,0.72)"
+                strokeColor="#F5F0E8"
+                minFontSize={28}
+              />
+            </span>
+          </motion.h1>
+
+          {/* Role */}
           <motion.div className={styles.titleRow} variants={itemVariants}>
             <span className={styles.titleText}>Creative Developer</span>
-
             <span className={styles.titleSeparator} aria-hidden="true" />
-
             <span className={styles.titleText}>AI Engineer</span>
           </motion.div>
 
@@ -177,85 +304,40 @@ export default function Hero({ className }: HeroProps) {
             and thoughtful problem-solving. Every detail serves a purpose.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTAs */}
           <motion.div className={styles.ctaGroup} variants={itemVariants}>
-            <a href="#projects" className={styles.ctaPrimary} aria-label="View Projects">
-              View Projects
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M7 1L13 7L7 13"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M1 7H13"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
+            <a href="#work" className={styles.ctaPrimary} data-cursor="hover">
+              <span>View My Work</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
-
-            <a
-              href="/resume.pdf"
-              className={styles.ctaSecondary}
-              aria-label="Download Resume"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Download Resume
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M7 1V10"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M3 6L7 10L11 6"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M1 11V12.5C1 12.7761 1.22386 13 1.5 13H12.5C12.7761 13 13 12.7761 13 12.5V11"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className={styles.ctaSecondary} data-cursor="hover">
+              <span>Download Resume</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
               </svg>
             </a>
           </motion.div>
+
+          {/* Social links */}
+          <motion.div variants={itemVariants}>
+            <SocialLinks />
+          </motion.div>
         </motion.div>
 
-        {/* Right Column: Reserved Portrait Area */}
-        <Portrait />
+        {/* ── RIGHT: Portrait Column ── */}
+        <Portrait
+          parallaxX={prefersReduced ? 0 : parallax.x}
+          parallaxY={prefersReduced ? 0 : parallax.y}
+        />
       </div>
 
-      {/* ─── Scroll Indicator ─── */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
+        transition={{ duration: 1, delay: 1.4 }}
       >
         <ScrollIndicator />
       </motion.div>

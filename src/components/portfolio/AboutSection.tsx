@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
-import { Award, Compass, Cpu, Layers } from 'lucide-react';
+import { Award, Compass, Cpu, Layers, MapPin, ArrowRight } from 'lucide-react';
 import SectionSeam from './SectionSeam';
 import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
+import styles from './AboutSection.module.css';
+import { cn } from '@/lib/utils';
 
 export default function AboutSection() {
   const { bio, location } = PORTFOLIO_DATA.personal;
@@ -13,41 +15,66 @@ export default function AboutSection() {
     {
       icon: Cpu,
       title: "System Thinking",
-      desc: "I don't just write scripts. I architect platforms that scale securely and handle real-time demands."
+      desc: "I don't just write scripts. I architect platforms that scale securely and handle real-time demands.",
+      num: "02"
     },
     {
       icon: Layers,
       title: "Data-Driven AI",
-      desc: "Leveraging machine learning and computer vision to solve complex, real-world problems."
+      desc: "Leveraging machine learning and computer vision to solve complex, real-world problems.",
+      num: "03"
     },
     {
       icon: Compass,
       title: "Secure Architecture",
-      desc: "Applying ethical hacking and threat detection principles natively into the DevOps pipeline."
+      desc: "Applying ethical hacking and threat detection principles natively into the DevOps pipeline.",
+      num: "04"
     }
   ];
 
   return (
-    <section id="mindset" className="py-28 px-6 md:px-12 bg-transparent relative">
+    <section id="mindset" className={styles.section}>
       <SectionSeam />
-      <div className="max-w-7xl mx-auto space-y-16">
+      
+      <div className={styles.inner}>
         
+        {/* Decorative Side Labels */}
+        <div className={styles.sideLabelLeft}>
+          <div className={styles.sideLabelLine} />
+          <span>LEARN</span>
+          <span>BUILD</span>
+          <span>SOLVE</span>
+          <span>REPEAT</span>
+        </div>
+        <div className={styles.sideLabelRight}>
+          <div className={styles.sideLabelLine} />
+          <span>BETTER</span>
+          <span>IDEAS</span>
+          <span>BRIGHTER</span>
+          <span>TOMORROW</span>
+        </div>
+
         {/* Header */}
         <FadeUp>
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
-            <span className="h-px w-6 bg-zinc-500/50" />
-            <span>The Mindset</span>
-            <span className="h-px w-6 bg-zinc-500/50" />
+          <div className={styles.headerWrapper}>
+            <div className={styles.eyebrow}>
+              <span className={styles.eyebrowLine} />
+              <span>The Mindset</span>
+              <span className={styles.eyebrowLine} />
+            </div>
+            
+            <h2 className={styles.mainHeading}>
+              Building Meaningful <span className={styles.goldHighlight}>Software</span>
+            </h2>
+
+            <div className={styles.subtitle}>
+              IDEAS <span>•</span> SYSTEMS <span>•</span> PEOPLE <span>•</span> IMPACT
+            </div>
           </div>
-          <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Building Meaningful <span className="font-semibold text-zinc-300">Software</span>
-          </h2>
-        </div>
         </FadeUp>
 
         {/* Grid Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className={styles.grid}>
           
           {/* Left: Bio card */}
           <motion.div
@@ -55,26 +82,36 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px 0px -20% 0px' }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE }}
-            className="lg:col-span-7 space-y-6"
           >
-            <div className="p-8 md:p-10 rounded-3xl bg-zinc-900/40 border border-zinc-800/80 backdrop-blur-md space-y-6">
-              <h3 className="text-2xl font-semibold text-zinc-100">
+            <div className={styles.mainCard}>
+              <div className={styles.cornerAccent} />
+              
+              <div className={styles.cardNumber}>
+                <span>01</span>
+                <div className={styles.cardNumberLine} />
+              </div>
+
+              <h3 className={styles.mainCardHeading}>
                 Driven by curiosity. Grounded in logic.
               </h3>
-              <p className="text-zinc-300 text-lg leading-relaxed">
-                {bio}
-              </p>
-              <p className="text-zinc-400 text-base leading-relaxed">
-                Whether architecting civic engagement platforms, engineering WebGL dashboards for crowd analytics, or securing cloud deployments, I focus on the holistic impact of the technology I build. I believe the best software disappears into the workflow.
-              </p>
+              
+              <div className={styles.mainCardBody}>
+                <p>{bio}</p>
+                <p>
+                  Whether architecting civic engagement platforms, engineering WebGL dashboards for crowd analytics, or securing cloud deployments, I focus on the holistic impact of the technology I build. I believe the best software disappears into the workflow.
+                </p>
+              </div>
 
-              <div className="pt-4 flex flex-wrap items-center gap-6 text-sm text-zinc-400 font-medium">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-zinc-300" />
+              <div className={styles.mainCardFooter}>
+                <div className={styles.footerMeta}>
+                  <MapPin className={cn("w-4 h-4", styles.footerIcon)} />
                   <span>{location}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-zinc-300" />
+                
+                <div className={styles.footerSeparator} />
+                
+                <div className={styles.footerMeta}>
+                  <Award className={cn("w-4 h-4", styles.footerIcon)} />
                   <span>Google Student Ambassador</span>
                 </div>
               </div>
@@ -87,25 +124,33 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px 0px -20% 0px' }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.08 }}
-            className="lg:col-span-5 space-y-4"
+            className={styles.subCardsWrapper}
           >
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
-                <div
-                  key={i}
-                  className="p-6 rounded-2xl bg-zinc-900/20 border border-zinc-800/50 hover:border-zinc-500/40 transition-all group flex items-start gap-4"
-                >
-                  <div className="p-3 rounded-xl bg-zinc-800/50 text-zinc-400 group-hover:bg-zinc-200 group-hover:text-zinc-900 transition-colors">
+                <div key={i} className={styles.subCard}>
+                  
+                  <div className={styles.subCardIconWrapper}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-zinc-100 group-hover:text-white transition-colors">
+                  
+                  <div className={styles.subCardContent}>
+                    <h4 className={styles.subCardTitle}>
                       {pillar.title}
                     </h4>
-                    <p className="text-sm text-zinc-400 mt-1 leading-relaxed">
+                    <p className={styles.subCardDesc}>
                       {pillar.desc}
                     </p>
+                  </div>
+
+                  <div className={styles.subCardNumber}>
+                    <div className={styles.subCardNumberLine} />
+                    <span>{pillar.num}</span>
+                  </div>
+
+                  <div className={styles.subCardArrow}>
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
               );

@@ -2,108 +2,136 @@
 
 import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
-import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 import SectionSeam from './SectionSeam';
 import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
+import styles from './ExperienceSection.module.css';
+import { cn } from '@/lib/utils';
 
 export default function ExperienceSection() {
   const { experiences } = PORTFOLIO_DATA;
 
   return (
-    <section id="experience" className="py-28 px-6 md:px-12 bg-transparent relative">
+    <section id="experience" className={styles.section}>
       <SectionSeam />
-      <div className="max-w-5xl mx-auto space-y-16">
+      <div className={styles.inner}>
+        
+        {/* Decorative Side Labels */}
+        <div className={styles.sideLabelLeft}>
+          <div className={styles.sideLabelLine} />
+          <span>EXPERIENCE</span>
+          <span>SHAPES</span>
+          <span>A BETTER</span>
+          <span>TOMORROW</span>
+        </div>
+        <div className={styles.sideLabelRight}>
+          <div className={styles.sideLabelLine} />
+          <span>LEARN</span>
+          <span>BUILD</span>
+          <span>SOLVE</span>
+          <span>IMPROVE</span>
+        </div>
 
         {/* Header */}
         <FadeUp>
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
-              <span className="h-px w-6 bg-zinc-500/50" />
+          <div className={styles.headerWrapper}>
+            <div className={styles.eyebrow}>
+              <span className={styles.eyebrowLine} />
               <span>Track Record</span>
-              <span className="h-px w-6 bg-zinc-500/50" />
+              <span className={styles.eyebrowLine} />
             </div>
-            <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-              Professional <span className="font-semibold text-zinc-300">Experience</span>
+            <h2 className={styles.mainHeading}>
+              Professional <span className={styles.mainHeadingBold}>Experience</span>
             </h2>
+            <div className={styles.subtitle}>
+              REAL PROJECTS <span>•</span> REAL IMPACT <span>•</span> CONSTANT GROWTH
+            </div>
           </div>
         </FadeUp>
 
         {/* Timeline Container */}
-        <div className="relative border-l-2 border-zinc-800 ml-4 md:ml-32 space-y-12">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={exp.id}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: index * 0.1 }}
-              className="relative pl-8 md:pl-12"
-            >
-              {/* Timeline Marker Icon */}
-              <div className="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-zinc-950 border-2 border-zinc-500 text-zinc-300 shadow-md shadow-zinc-500/10">
-                <Briefcase className="w-3.5 h-3.5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[55%]" />
-              </div>
+        <div className={styles.timelineContainer}>
+          {experiences.map((exp, index) => {
+            const isCurrent = index === 0;
 
-              {/* Date Header for desktop view */}
-              <div className="hidden md:block absolute -left-36 top-2 text-right w-28 text-xs font-semibold text-zinc-400 tracking-wider">
-                {exp.period}
-              </div>
+            // Split date if there is an " — " or "-" for multiline desktop
+            // E.g., "Apr 2026 — Present" -> ["Apr 2026", "Present"]
+            const dateParts = exp.period.split(/\s*(?:—|-)\s*/);
+            const datePrimary = dateParts[0];
+            const dateSecondary = dateParts.length > 1 ? dateParts[1] : '';
 
-              {/* Card Box */}
-              <div className="p-8 rounded-3xl bg-zinc-900/30 border border-zinc-800/60 hover:border-zinc-600 transition-colors space-y-4 backdrop-blur-sm">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-zinc-100 tracking-tight">
-                      {exp.role}
-                    </h3>
-                    <div className="text-zinc-400 font-medium text-sm tracking-wide mt-1">
-                      {exp.company}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-500 font-medium md:hidden mt-2">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-zinc-400" />
-                      {exp.period}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-zinc-400" />
-                      {exp.location}
-                    </span>
-                  </div>
+            return (
+              <motion.div
+                key={exp.id}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: index * 0.1 }}
+                className={styles.timelineRow}
+              >
+                {/* 1. Date Column */}
+                <div className={styles.dateColumn}>
+                  <span>{datePrimary}</span>
+                  {dateSecondary && <span className={styles.dateSecondary}>{dateSecondary}</span>}
                 </div>
 
-                <ul className="space-y-2 text-zinc-300 text-sm leading-relaxed list-disc list-inside mt-4">
-                  {exp.description.map((item, i) => (
-                    <li key={i} className="text-zinc-400">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                {/* 2. Track Column */}
+                <div className={styles.trackColumn}>
+                  <div className={styles.trackLine} />
+                  <div className={isCurrent ? styles.trackNodeCurrent : styles.trackNode} />
+                </div>
 
-                {/* Tech Pills */}
-                {exp.technologies && exp.technologies.length > 0 && (
-                  <div className="pt-5 border-t border-zinc-800/50 mt-4">
-                    <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-500 mb-3">
-                      Tech Stack
+                {/* 3. Card Column */}
+                <div className={styles.cardColumn}>
+                  <div className={cn(styles.card, isCurrent && styles.cardCurrent)}>
+                    <div className={styles.cornerAccentTopRight} />
+                    <div className={styles.cornerAccentBottomRight} />
+
+                    <div className={styles.cardHeader}>
+                      <div className={styles.roleInfo}>
+                        <h3 className={styles.roleTitle}>{exp.role}</h3>
+                        <div className={styles.companyName}>{exp.company}</div>
+                      </div>
+
+                      <div className={styles.headerMeta}>
+                        <div className={styles.metaItem}>
+                          <Calendar className={styles.metaIcon} />
+                          <span>{exp.period}</span>
+                        </div>
+                        <div className={styles.metaItem}>
+                          <MapPin className={styles.metaIcon} />
+                          <span>{exp.location}</span>
+                        </div>
+                        {isCurrent && <span className={styles.currentBadge}>Current</span>}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {exp.technologies.map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2.5 py-1 rounded-md bg-zinc-800/40 text-[10px] uppercase tracking-widest font-sans text-zinc-300 border border-zinc-700/50 cursor-default hover:border-zinc-500/50 transition-colors"
-                        >
-                          {tech}
-                        </span>
+
+                    <ul className={styles.descriptionList}>
+                      {exp.description.map((item, i) => (
+                        <li key={i} className={styles.descriptionItem}>
+                          {item}
+                        </li>
                       ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                    </ul>
 
+                    {exp.technologies && exp.technologies.length > 0 && (
+                      <div className={styles.techStackContainer}>
+                        <div className={styles.techStackLabel}>Tech Stack</div>
+                        <div className={styles.techStackList}>
+                          {exp.technologies.map((tech, i) => (
+                            <span key={i} className={styles.techPill}>
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

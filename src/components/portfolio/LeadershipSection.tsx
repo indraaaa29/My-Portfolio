@@ -5,6 +5,7 @@ import { Users, Presentation, Lightbulb } from 'lucide-react';
 import LogoLoop from '@/components/reactbits/LogoLoop';
 import SectionSeam from './SectionSeam';
 import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
+import styles from './LeadershipSection.module.css';
 
 export default function LeadershipSection() {
   const pillars = [
@@ -28,83 +29,96 @@ export default function LeadershipSection() {
   return (
     <section id="leadership" className="py-28 px-6 md:px-12 bg-transparent relative overflow-hidden">
       <SectionSeam />
-      <div className="max-w-7xl mx-auto space-y-16">
+      <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Header */}
         <FadeUp>
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
-            <span className="h-px w-6 bg-zinc-500/50" />
-            <span>Advocacy & Community</span>
-            <span className="h-px w-6 bg-zinc-500/50" />
+          <div className={styles.container}>
+            <div className={styles.eyebrowContainer}>
+              <div className={styles.eyebrowLine} />
+              <span className={styles.eyebrowText}>Advocacy & Community</span>
+              <div className={styles.eyebrowLine} />
+            </div>
+            <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight text-center">
+              Google Student <span className="font-semibold text-zinc-200">Ambassador</span>
+            </h2>
           </div>
-          <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-            Google Student <span className="font-semibold text-zinc-300">Ambassador</span>
-          </h2>
-        </div>
         </FadeUp>
 
-        {/* Grid Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* Bento Grid */}
+        <div className={styles.bentoGrid}>
           
           {/* Left: Highlight Card */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE }}
-            className="lg:col-span-7 space-y-6"
+            className={styles.mainCard}
           >
-            <div className="p-8 md:p-10 rounded-3xl bg-zinc-900/30 border border-zinc-800/60 backdrop-blur-sm space-y-6">
-              <h3 className="text-2xl font-semibold text-zinc-100 tracking-tight">
-                West Bengal Connector (Student Coordinator)
-              </h3>
-              <p className="text-zinc-300 text-lg leading-relaxed">
-                Selected for consistent community contributions and technical leadership. My goal is to demystify artificial intelligence and empower developers to build with modern AI ecosystems.
-              </p>
-              <p className="text-zinc-400 text-base leading-relaxed">
-                Beyond writing code, true engineering impact comes from elevating the people around you. By mentoring fellow ambassadors and coordinating campus-wide initiatives, I bridge the gap between cutting-edge AI research and practical, accessible developer tools.
-              </p>
-
-              <div className="pt-4 flex flex-wrap items-center gap-6 text-sm text-zinc-400 font-medium border-t border-zinc-800/50">
-                <div className="flex items-center gap-2 mt-4">
-                  <span className="w-2 h-2 rounded-full bg-zinc-300" />
-                  <span>Bronze Milestone Reward (Active Contributions)</span>
-                </div>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardNumber}>
+                <span>01</span>
+                <div className={styles.cardNumberLine} />
               </div>
+              <div className={styles.cardDecorativeLines}>
+                <div className={styles.diagonalLine} />
+                <div className={styles.diagonalLine} />
+                <div className={styles.diagonalLine} />
+              </div>
+            </div>
+
+            <h3 className={styles.mainTitle}>
+              West Bengal Connector (Student Coordinator)
+            </h3>
+            
+            <p className={styles.mainText}>
+              Selected for consistent community contributions and technical leadership. My goal is to demystify artificial intelligence and empower developers to build with modern AI ecosystems.
+            </p>
+            <p className={styles.mainText}>
+              Beyond writing code, true engineering impact comes from elevating the people around you. By mentoring fellow ambassadors and coordinating campus-wide initiatives, I bridge the gap between cutting-edge AI research and practical, accessible developer tools.
+            </p>
+
+            <div className={styles.mainCardFooter}>
+              <div className={styles.goldDot} />
+              <span className={styles.footerText}>Gold Milestone Reward (Active Contributions)</span>
             </div>
           </motion.div>
 
           {/* Right: Pillars Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.08 }}
-            className="lg:col-span-5 space-y-4"
-          >
+          <div className={styles.rightColumn}>
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
-                <div
+                <motion.div
                   key={i}
-                  className="p-6 rounded-2xl bg-zinc-900/20 border border-zinc-800/50 hover:border-zinc-500/40 transition-all group flex items-start gap-4"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.1 + (i * 0.1) }}
+                  className={styles.featureCard}
                 >
-                  <div className="p-3 rounded-xl bg-zinc-800/50 text-zinc-400 group-hover:bg-zinc-200 group-hover:text-zinc-900 transition-colors">
-                    <Icon className="w-6 h-6" />
+                  <div className={styles.featureCardHeader}>
+                    <span className={styles.featureNumber}>0{i + 2}</span>
+                    <div className={styles.featureNumberLine} />
                   </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-zinc-100 group-hover:text-white transition-colors">
+                  
+                  <div className={styles.iconContainer}>
+                    <Icon strokeWidth={1.5} size={22} />
+                  </div>
+                  
+                  <div className={styles.featureContent}>
+                    <h4 className={styles.featureTitle}>
                       {pillar.title}
                     </h4>
-                    <p className="text-sm text-zinc-400 mt-1 leading-relaxed">
+                    <p className={styles.featureText}>
                       {pillar.desc}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </motion.div>
+          </div>
 
         </div>
       </div>

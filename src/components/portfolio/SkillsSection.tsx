@@ -1,61 +1,108 @@
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
+import { CodeXml, Brain, Cloud } from 'lucide-react';
 import SectionSeam from './SectionSeam';
 import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
+import styles from './SkillsSection.module.css';
+
+const CATEGORY_META: Record<string, { icon: React.ElementType, subtitle: string[], index: string }> = {
+  "Web Engineering": {
+    icon: CodeXml,
+    subtitle: ["BUILD", "SCALE", "DELIVER"],
+    index: "01"
+  },
+  "AI & Machine Learning": {
+    icon: Brain,
+    subtitle: ["LEARN", "ANALYZE", "INNOVATE"],
+    index: "02"
+  },
+  "Cloud & Cybersecurity": {
+    icon: Cloud,
+    subtitle: ["SECURE", "DEPLOY", "PROTECT"],
+    index: "03"
+  }
+};
 
 export default function SkillsSection() {
   const { skills } = PORTFOLIO_DATA;
 
   return (
-    <section id="skills" className="py-28 px-6 md:px-12 bg-transparent relative">
+    <section id="skills" className={styles.section}>
       <SectionSeam />
-      <div className="max-w-7xl mx-auto space-y-16">
+      <div className={styles.inner}>
 
         {/* Header */}
         <FadeUp>
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-zinc-500 uppercase">
-              <span className="h-px w-6 bg-zinc-500/50" />
+          <div className={styles.headerWrapper}>
+            <div className={styles.eyebrow}>
+              <span className={styles.eyebrowLine} />
               <span>Core Capabilities</span>
-              <span className="h-px w-6 bg-zinc-500/50" />
+              <span className={styles.eyebrowLine} />
             </div>
-            <h2 className="text-3xl md:text-5xl font-light text-zinc-100 tracking-tight">
-              Technical <span className="font-semibold text-zinc-300">Expertise</span>
+            <h2 className={styles.mainHeading}>
+              Technical <span className={styles.mainHeadingBold}>Expertise</span>
             </h2>
+            <div className={styles.subtitle}>
+              TOOLS <span>×</span> TECHNOLOGIES <span>×</span> POSSIBILITIES
+            </div>
           </div>
         </FadeUp>
 
         {/* Skill Category Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {skills.map((cat, catIndex) => (
-            <motion.div
-              key={cat.category}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: catIndex * 0.1 }}
-              className="p-8 rounded-3xl bg-zinc-900/30 border border-zinc-800/60 hover:border-zinc-500/40 transition-all space-y-6 flex flex-col justify-between backdrop-blur-sm"
-            >
-              <div>
-                <h3 className="text-xl font-semibold text-zinc-100 border-b border-zinc-800 pb-4 mb-6 tracking-tight">
+        <div className={styles.grid}>
+          {skills.map((cat, catIndex) => {
+            const meta = CATEGORY_META[cat.category] || { icon: CodeXml, subtitle: ["SKILLS", "AND", "TOOLS"], index: `0${catIndex + 1}` };
+            const Icon = meta.icon;
+
+            return (
+              <motion.div
+                key={cat.category}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: catIndex * 0.1 }}
+                className={styles.card}
+              >
+                <div className={styles.cornerAccent} />
+
+                <div className={styles.cardHeader}>
+                  <div className={styles.indexWrapper}>
+                    <span className={styles.indexNumber}>{meta.index}</span>
+                    <div className={styles.indexLine} />
+                  </div>
+                  <div className={styles.iconWrapper}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+
+                <h3 className={styles.cardTitle}>
                   {cat.category}
                 </h3>
+                
+                <div className={styles.cardSubtitle}>
+                  {meta.subtitle.map((word, i) => (
+                    <React.Fragment key={i}>
+                      {word}
+                      {i < meta.subtitle.length - 1 && <span>·</span>}
+                    </React.Fragment>
+                  ))}
+                </div>
 
-                <div className="flex flex-wrap gap-2 pt-2">
+                <div className={styles.cardDivider} />
+
+                <div className={styles.skillsList}>
                   {cat.skills.map((s) => (
-                    <span
-                      key={s.name}
-                      className="px-2.5 py-1.5 rounded-md bg-zinc-800/40 text-[10px] uppercase tracking-widest font-sans text-zinc-300 border border-zinc-700/50 hover:border-zinc-500/50 hover:text-zinc-200 transition-colors cursor-default"
-                    >
+                    <span key={s.name} className={styles.skillPill}>
                       {s.name}
                     </span>
                   ))}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
       </div>

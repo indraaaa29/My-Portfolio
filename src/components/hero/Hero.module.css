@@ -1,9 +1,20 @@
 /* ──────────────────────────────────────────────
- * Hero — Full-Viewport Cinematic Layout
- * Visual: Apple / Linear / Korean Editorial Minimalism
+ * Hero — Premium Editorial Two-Column Layout
+ * Visual: Architectural + Editorial Creative Portfolio
  * ────────────────────────────────────────────── */
 
-/* ─── Section ─── */
+/* ─── Gold design tokens ─── */
+:root {
+  --gold: #C9A84C;
+  --gold-bright: #D4A843;
+  --gold-dim: rgba(201, 168, 76, 0.32);
+  --gold-faint: rgba(201, 168, 76, 0.10);
+  --gold-glow: rgba(201, 168, 76, 0.06);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION
+   ═══════════════════════════════════════════════ */
 
 .hero {
   position: relative;
@@ -16,7 +27,9 @@
   isolation: isolate;
 }
 
-/* ─── Layered Background Ambience ─── */
+/* ═══════════════════════════════════════════════
+   BACKGROUND LAYERS
+   ═══════════════════════════════════════════════ */
 
 .background {
   position: absolute;
@@ -26,71 +39,76 @@
   overflow: hidden;
 }
 
-/* Layer 2: Primary Warm Champagne Radial Glow (Upper-Left / Center-Left) */
+/* Primary warm champagne glow — centre-left */
 .background::before {
   content: '';
   position: absolute;
-  top: 35%;
-  left: 20%;
-  width: 75vw;
-  height: 75vw;
-  max-width: 1000px;
-  max-height: 1000px;
+  top: 38%;
+  left: 22%;
+  width: 72vw;
+  height: 72vw;
+  max-width: 900px;
+  max-height: 900px;
   transform: translate(-50%, -50%);
   background: radial-gradient(circle at center,
-      rgba(228, 196, 141, 0.03) 0%,
-      rgba(215, 185, 135, 0.012) 35%,
+      rgba(228, 196, 141, 0.032) 0%,
+      rgba(215, 185, 135, 0.012) 38%,
       transparent 70%);
   border-radius: 50%;
-  filter: blur(40px);
+  filter: blur(48px);
 }
 
-/* Layer 3: Soft Secondary Champagne Haze (Upper-Right) */
+/* Secondary champagne haze — upper-right behind portrait */
 .background::after {
   content: '';
   position: absolute;
-  top: -15%;
+  top: -10%;
   right: -5%;
-  width: 60vw;
-  height: 70vh;
+  width: 58vw;
+  height: 68vh;
   background: radial-gradient(ellipse at 85% 15%,
       rgba(228, 196, 141, 0.018) 0%,
-      rgba(200, 194, 184, 0.008) 40%,
+      rgba(200, 194, 184, 0.006) 40%,
       transparent 65%);
   pointer-events: none;
-  filter: blur(30px);
+  filter: blur(32px);
 }
 
-/* ─── Layer 5: Cinematic Multi-Stop Vignette & Micro-Texture ─── */
-
+/* Vignette — frames the composition */
 .vignette {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background: radial-gradient(ellipse at 50% 45%,
-      transparent 45%,
-      rgba(8, 8, 8, 0.3) 75%,
-      rgba(8, 8, 8, 0.58) 100%);
+      transparent 42%,
+      rgba(8, 8, 8, 0.25) 72%,
+      rgba(8, 8, 8, 0.52) 100%);
 }
 
-/* ─── Inner Wrapper (Two-Column Layout) ─── */
+/* ═══════════════════════════════════════════════
+   INNER GRID — Two-Column Layout
+   ═══════════════════════════════════════════════ */
 
 .inner {
   position: relative;
   z-index: 2;
   flex: 1;
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1fr 0.78fr;
   align-items: center;
   gap: 3rem;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
-  padding-top: 64px;
-  /* nav height */
+  padding: 0 clamp(2rem, 5vw, 5rem);
+  padding-top: 84px;   /* nav height */
+  padding-bottom: 5rem;
 }
+
+/* ═══════════════════════════════════════════════
+   LEFT COLUMN — Text Content
+   ═══════════════════════════════════════════════ */
 
 /* ─── Left Column: Text Content ─── */
 
@@ -98,357 +116,760 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  /* Vertically center the content block within the grid cell */
+  justify-content: center;
 }
 
-/* ─── Top Label ─── */
+/* ── Intro label ── */
+
+.topLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1.75rem;
+}
+
+.topLabelLine {
+  display: block;
+  width: 2.25rem;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.65;
+  flex-shrink: 0;
+}
 
 .topLabel {
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  font-size: clamp(0.6875rem, 0.85vw, 0.8125rem);
   font-weight: 500;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-neutral-500, #808080);
-  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.38);
+  margin: 0;
   user-select: none;
 }
 
-/* ─── Main Name ─── */
+/* ── Name — Two-Line Editorial Block ── */
 
-.name {
-  font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: clamp(2.8rem, 7.5vw, 6.5rem);
-  font-weight: 500;
-  letter-spacing: -0.028em;
+.nameBlock {
+  display: flex;
+  flex-direction: row; /* Horizontal alignment for INDRANIL PAUL */
+  flex-wrap: wrap; /* Allows stacking gracefully on very small screens */
+  align-items: flex-end; /* Align baselines */
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: 1.75rem;
+  width: 100%;
+  overflow: visible;
+  /* h1 reset */
+  font-size: inherit;
+  font-weight: inherit;
   line-height: 1;
-  color: var(--color-neutral-50, #fafafa);
-  margin: 0 0 1rem 0;
-  text-wrap: balance;
+  margin-top: 0;
+  padding: 0;
 }
 
-.nameWrapper {
+/*
+ * TextPressure formula: fontSize = containerWidth / (chars.length / 2)
+ * Target ~96px height.
+ * INDRANIL = 8 chars → W = 96 * 4 = 384px
+ * PAUL = 4 chars → W = 96 * 2 = 192px
+ */
+.nameRow {
   width: 100%;
-  max-width: 70%; /* Restrict visual footprint to 70% of left column */
-  height: 140px;  /* Tighter vertical rhythm */
-  margin-bottom: 2.25rem;
+  max-width: 384px;
+  height: 108px;
   display: block;
   position: relative;
-  z-index: 10;
+  overflow: visible;
 }
 
-/* ─── Title Row ─── */
+.nameRowSecond {
+  width: 100%;
+  max-width: 192px;
+  height: 108px;
+  display: block;
+  position: relative;
+  overflow: visible;
+}
+
+.nameLine,
+.nameLineSecond {
+  /* These are the containers for TextPressure spans — font-size is set by JS */
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #F5F0E8;
+  margin: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* PAUL rendered slightly dimmer for editorial two-weight contrast */
+.nameLineSecond {
+  opacity: 0.82;
+}
+
+/* ── Title Row ── */
 
 .titleRow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1.5rem;
-  margin-bottom: 2.75rem;
+  gap: 0.625rem 1.125rem;
+  margin-bottom: 2rem;
 }
 
 .titleSeparator {
-  width: 4px;
-  height: 4px;
+  width: 3.5px;
+  height: 3.5px;
   border-radius: 50%;
-  background: var(--color-primary-500, #f5b532);
+  background: var(--gold);
   flex-shrink: 0;
-  opacity: 0.6;
+  opacity: 0.72;
 }
 
 .titleText {
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-size: clamp(0.9375rem, 1.6vw, 1.25rem);
   font-weight: 400;
-  letter-spacing: -0.015em;
-  color: var(--color-neutral-400, #a0a0a0);
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.42);
   line-height: 1.4;
+  text-transform: uppercase;
 }
 
-/* ─── Description ─── */
+/* ── Description ── */
 
 .description {
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+  font-size: clamp(0.875rem, 1.1vw, 1rem);
   font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.65;
-  color: var(--color-neutral-500, #808080);
-  max-width: 52ch;
-  margin: 0 0 3.25rem 0;
+  letter-spacing: -0.005em;
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.36);
+  max-width: 48ch;
+  margin: 0 0 2.75rem 0;
   text-wrap: pretty;
 }
 
-/* ─── CTA Buttons ─── */
+/* ═══════════════════════════════════════════════
+   CTA BUTTONS
+   ═══════════════════════════════════════════════ */
 
 .ctaGroup {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   flex-wrap: wrap;
+  margin-bottom: 2.75rem;
 }
 
+/* Primary: gold solid */
 .ctaPrimary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.8125rem 1.875rem;
-  border: 1px solid transparent;
-  border-radius: 9999px;
-  background-color: var(--color-neutral-50, #fafafa);
-  color: var(--color-neutral-950, #080808);
+  padding: 0.7rem 1.625rem;
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  background: var(--gold);
+  color: #0A0A0A;
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: -0.015em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
   transition:
-    background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   white-space: nowrap;
 }
 
 .ctaPrimary svg {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  flex-shrink: 0;
 }
 
 .ctaPrimary:hover {
-  background-color: var(--color-neutral-200, #e0e0e0);
+  background-color: var(--gold-bright);
+  border-color: var(--gold-bright);
+  box-shadow: 0 4px 20px rgba(201, 168, 76, 0.22);
 }
 
-.ctaPrimary:hover svg {
-  transform: translateX(4px);
-}
-
-.ctaPrimary:active {
-  background-color: var(--color-neutral-300, #d4d4d4);
-  transform: scale(0.98);
-}
-
+.ctaPrimary:hover svg { transform: translateX(3px); }
+.ctaPrimary:active { transform: scale(0.97); }
 .ctaPrimary:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
+  outline: 2px solid rgba(201, 168, 76, 0.55);
+  outline-offset: 3px;
 }
 
+/* Secondary: quiet outline */
 .ctaSecondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.8125rem 1.875rem;
+  padding: 0.7rem 1.625rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
+  border-radius: 2px;
   background-color: transparent;
-  color: var(--color-neutral-200, #e0e0e0);
+  color: rgba(255, 255, 255, 0.55);
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: -0.015em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
   transition:
-    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   white-space: nowrap;
 }
 
 .ctaSecondary svg {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  flex-shrink: 0;
 }
 
 .ctaSecondary:hover {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.28);
   background-color: rgba(255, 255, 255, 0.04);
-  color: var(--color-neutral-50, #fafafa);
+  color: #F5F0E8;
 }
 
-.ctaSecondary:hover svg {
-  transform: translateY(2px);
-}
-
-.ctaSecondary:active {
-  background-color: rgba(255, 255, 255, 0.08);
-  transform: scale(0.98);
-}
-
+.ctaSecondary:hover svg { transform: translateY(2px); }
+.ctaSecondary:active { transform: scale(0.97); }
 .ctaSecondary:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 3px;
 }
 
-/* ─── Right Column: Minimal Portrait Placeholder ─── */
+/* ═══════════════════════════════════════════════
+   SOCIAL LINKS
+   ═══════════════════════════════════════════════ */
+
+.socialArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.socialLabel {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  margin: 0;
+  user-select: none;
+}
+
+.socialLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: rgba(255, 255, 255, 0.32);
+  text-decoration: none;
+  transition:
+    color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.socialLink:hover {
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.socialLink:focus-visible {
+  outline: 1px solid rgba(201, 168, 76, 0.5);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════════
+   RIGHT COLUMN — Portrait + Architectural Frame
+   ═══════════════════════════════════════════════ */
 
 .portraitContainer {
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  align-self: end;
+  align-items: center;
+  align-self: stretch;
   width: 100%;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
+  /* Pull portrait away from right viewport edge */
+  padding: 2rem 3rem 2rem 0;
 }
 
-/* Layer 4: Portrait Support Glow (Larger 160%, lower opacity champagne glow) */
-.portraitContainer::before {
-  content: '';
+/* Restrained gold atmosphere — centred behind portrait */
+.portraitGlow {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160%;
-  height: 160%;
-  transform: translate(-50%, -40%);
-  background: radial-gradient(ellipse at center,
-      rgba(228, 196, 141, 0.02) 0%,
-      rgba(215, 185, 135, 0.006) 50%,
+  inset: 0;
+  background: radial-gradient(ellipse at 55% 50%,
+      rgba(201, 168, 76, 0.055) 0%,
+      rgba(201, 168, 76, 0.018) 42%,
       transparent 70%);
-  filter: blur(24px);
+  filter: blur(28px);
   pointer-events: none;
   z-index: 0;
 }
 
+/* ── Main architectural frame — wraps everything ── */
+.portraitFrameOuter {
+  position: relative;
+  /* Portrait is 3:4 aspect at this width */
+  width: min(100%, 390px);
+  z-index: 2;
+}
+
+/* ── Offset secondary frame — sits inside .portraitFrameOuter ── */
+/* Offset down-right from the main frame for architectural depth */
+.portraitOffsetFrame {
+  position: absolute;
+  /* Push 10px down-right relative to the wrapper */
+  top: 10px;
+  left: 10px;
+  right: -10px;
+  bottom: -10px;
+  border: 1px solid var(--gold-faint);
+  border-radius: 1.375rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Gold corner accents — L-shaped architectural marks ── */
+.cornerAccent {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cornerTL {
+  top: -1px; left: -1px;
+  border-top: 1.5px solid var(--gold);
+  border-left: 1.5px solid var(--gold);
+  border-radius: 3px 0 0 0;
+}
+
+.cornerTR {
+  top: -1px; right: -1px;
+  border-top: 1.5px solid var(--gold);
+  border-right: 1.5px solid var(--gold);
+  border-radius: 0 3px 0 0;
+}
+
+.cornerBL {
+  bottom: -1px; left: -1px;
+  border-bottom: 1.5px solid var(--gold);
+  border-left: 1.5px solid var(--gold);
+  border-radius: 0 0 0 3px;
+}
+
+.cornerBR {
+  bottom: -1px; right: -1px;
+  border-bottom: 1.5px solid var(--gold);
+  border-right: 1.5px solid var(--gold);
+  border-radius: 0 0 3px 0;
+}
+
+/* ── Portrait image box ── */
 .portraitWrapper {
   position: relative;
-  width: min(100%, 420px);
+  width: 100%;
   aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 1.25rem;
+  /* Restrained gold border */
+  border: 1px solid var(--gold-dim);
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.04),
+    inset 0 0 50px rgba(0, 0, 0, 0.45),
+    0 24px 64px rgba(0, 0, 0, 0.55);
+  /* Stacking context so halftone paints above base image */
+  isolation: isolate;
 }
 
-/* Halftone shader layer — pinned to the portrait box, never the Hero */
+/* Halftone reveal — pinned to portrait box */
 .portraitReveal {
   position: absolute;
   inset: 0;
-  z-index: 1; /* deterministic: canvas paints above the base Image */
-  touch-action: pan-y; /* never trap touch scrolling on mobile */
+  z-index: 1;
+  touch-action: pan-y;
 }
 
-/* ─── Scroll Indicator ─── */
+/* ── Left vertical label — IDEAS / CODE / IMPACT ── */
+.verticalLabel {
+  position: absolute;
+  /* Sit just to the left of the frame */
+  left: -2.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  z-index: 6;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Thin gold rule lines above and below the words */
+.verticalLabelLine {
+  width: 1px;
+  height: 22px;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  opacity: 0.38;
+}
+
+.verticalLabel span {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+/* ── Right vertical text — faint editorial detail ── */
+.verticalLabelRight {
+  position: absolute;
+  right: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.48rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.14);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 6;
+  user-select: none;
+}
+
+/* ── Bottom thin gold gradient line ── */
+.frameBottomLine {
+  position: absolute;
+  bottom: -12px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--gold-dim) 20%,
+      var(--gold-dim) 80%,
+      transparent);
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* ── Gold dot — lower-right anchor ── */
+.bottomDot {
+  position: absolute;
+  bottom: -5px;
+  right: 22px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.75;
+  z-index: 7;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLL INDICATOR
+   ═══════════════════════════════════════════════ */
 
 .scrollIndicator {
   position: absolute;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  color: var(--color-neutral-600, #606060);
-  font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   user-select: none;
 }
 
 .scrollMouse {
-  width: 20px;
-  height: 32px;
-  border: 1.5px solid var(--color-neutral-700, #404040);
-  border-radius: 10px;
+  width: 18px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9px;
   position: relative;
   display: flex;
   justify-content: center;
 }
 
 .scrollDot {
-  width: 3px;
-  height: 3px;
+  width: 2.5px;
+  height: 2.5px;
   border-radius: 50%;
-  background: var(--color-neutral-400, #a0a0a0);
+  background: var(--gold);
+  opacity: 0.65;
   position: absolute;
-  top: 6px;
+  top: 5px;
 }
 
-/* ─── Responsive Breakdown ─── */
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
 
-@media (max-width: 1024px) {
+/* ── Large laptop ── */
+@media (max-width: 1280px) {
   .inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 0.75fr;
     gap: 2.5rem;
-    padding: 0 1.5rem;
-    padding-top: 64px;
-  }
-
-  .ctaGroup {
-    gap: 0.875rem;
+    padding-left: clamp(1.75rem, 4vw, 4rem);
+    padding-right: clamp(1.75rem, 4vw, 4rem);
   }
 
   .portraitContainer {
-    justify-content: flex-start;
+    padding-right: 2rem;
   }
 
-  .portraitWrapper {
-    max-width: 280px;
+  .portraitFrameOuter {
+    width: min(100%, 340px);
+  }
+
+  .verticalLabel {
+    left: -2rem;
+  }
+
+  .verticalLabelRight {
+    right: -2rem;
+  }
+
+  /* ≤1280px: scale down proportionally — target ~76px font
+   * INDRANIL (8 chars): W = 76*4 = 304px
+   * PAUL (4 chars):     W = 76*2 = 152px
+   */
+  .nameRow {
+    max-width: 304px;
+    height: 88px;
+  }
+
+  .nameRowSecond {
+    max-width: 152px;
+    height: 88px;
   }
 }
 
+/* ── Tablet (single column) ── */
+@media (max-width: 1024px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-top: 80px;
+    padding-bottom: 3rem;
+    padding-left: clamp(1.5rem, 4vw, 3rem);
+    padding-right: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .textContent {
+    order: 1;
+    padding-bottom: 3rem;
+  }
+
+  .portraitContainer {
+    order: 2;
+    justify-content: flex-start;
+    align-self: auto;
+    padding: 0 0 0 2.25rem; /* indent portrait to align with IDEAS label space */
+  }
+
+  .portraitFrameOuter {
+    width: min(100%, 280px);
+  }
+
+  .portraitOffsetFrame {
+    top: 7px;
+    left: 7px;
+    right: -7px;
+    bottom: -7px;
+  }
+
+  .verticalLabel {
+    left: -1.875rem;
+  }
+
+  .verticalLabelRight {
+    display: none;
+  }
+
+  /* Tablet: target ~64px font
+   * INDRANIL: W = 64*4 = 256px
+   * PAUL:     W = 64*2 = 128px
+   */
+  .nameRow {
+    max-width: 256px;
+    height: 74px;
+  }
+
+  .nameRowSecond {
+    max-width: 128px;
+    height: 74px;
+  }
+
+  .scrollIndicator {
+    display: none;
+  }
+}
+
+/* ── Mobile ── */
 @media (max-width: 768px) {
   .inner {
-    padding: 0 1.25rem;
     padding-top: 56px;
+    padding-bottom: 2.5rem;
   }
 
-  .nameWrapper {
-    max-width: 100%;
-    height: 110px;
-    margin-bottom: 1.75rem;
+  /* Mobile: target ~48px font
+   * INDRANIL: W = 48*4 = 192px
+   * PAUL:     W = 48*2 = 96px
+   */
+  .nameBlock {
+    margin-bottom: 1.25rem;
   }
 
-  .name {
-    font-size: clamp(2.2rem, 10vw, 3.2rem);
-    letter-spacing: -0.025em;
+  .nameRow {
+    max-width: 192px;
+    height: 58px;
+  }
+
+  .nameRowSecond {
+    max-width: 96px;
+    height: 58px;
   }
 
   .titleRow {
     gap: 0.5rem 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .titleText {
-    font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+    font-size: clamp(0.75rem, 3.2vw, 1rem);
   }
 
   .description {
     max-width: 100%;
-    font-size: 0.9375rem;
-    margin-bottom: 2.75rem;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
   }
 
   .ctaGroup {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
+    margin-bottom: 2rem;
   }
 
   .ctaPrimary,
   .ctaSecondary {
     width: 100%;
-    max-width: 280px;
+    max-width: 260px;
   }
 
-  .scrollIndicator {
-    display: none;
+  .portraitContainer {
+    padding: 0 0 0 1.75rem;
   }
 
-  .portraitWrapper {
-    max-width: 100%;
+  .portraitFrameOuter {
+    width: min(100%, 260px);
+  }
+
+  .portraitOffsetFrame {
+    top: 5px;
+    left: 5px;
+    right: -5px;
+    bottom: -5px;
+  }
+
+  .verticalLabel {
+    left: -1.625rem;
+  }
+
+  .frameBottomLine {
+    bottom: -9px;
   }
 }
 
+/* ── Small mobile ── */
 @media (max-width: 480px) {
   .inner {
-    padding: 0 1rem;
-    padding-top: 56px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 52px;
   }
 
-  .name {
-    font-size: clamp(1.8rem, 12vw, 2.5rem);
+  /* Small mobile: target ~36px font
+   * INDRANIL: W = 36*4 = 144px
+   * PAUL:     W = 36*2 = 72px
+   */
+  .nameRow {
+    max-width: 144px;
+    height: 44px;
+  }
+
+  .nameRowSecond {
+    max-width: 72px;
+    height: 44px;
+  }
+
+  .portraitContainer {
+    padding: 0 0 0 1.5rem;
+  }
+
+  .portraitFrameOuter {
+    width: min(100%, 240px);
+  }
+
+  .portraitOffsetFrame {
+    display: none;
+  }
+
+  .verticalLabel {
+    display: none;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .portraitFrameOuter,
+  .portraitOffsetFrame,
+  .socialLink,
+  .ctaPrimary,
+  .ctaSecondary {
+    transition: none;
   }
 }

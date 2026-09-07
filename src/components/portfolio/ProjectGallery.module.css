@@ -1,0 +1,248 @@
+/* ProjectGallery.module.css */
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 650px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  margin: 2rem 0 6rem 0;
+}
+
+.carouselArea {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.carouselTrack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.card {
+  position: absolute;
+  width: 440px;
+  height: 500px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: grab;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  will-change: transform, opacity;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.activeCard {
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  box-shadow: inset 0 0 40px rgba(201, 168, 76, 0.05), 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(201, 168, 76, 0.1);
+}
+
+.cardImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.activeCard .cardImage {
+  opacity: 0.8;
+}
+
+/* Overlay UI */
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2.5rem;
+  background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.95) 100%);
+  pointer-events: none;
+}
+
+.cardTitle {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+
+.cardSubtitle {
+  font-family: var(--font-geist-sans, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.skillsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skillPill {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.arrowIcon {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.activeCard:hover .arrowIcon {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 4rem auto 0;
+  padding: 0 2rem;
+  z-index: 50;
+}
+
+.arrowButton {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.5);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.arrowButton:hover:not(:disabled) {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: rgba(201, 168, 76, 0.4);
+  color: var(--gold);
+  transform: scale(1.05);
+}
+
+.arrowButton:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+/* Progress bar */
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.progressNumber {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.progressBar {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .card {
+    width: 380px;
+    height: 440px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 550px;
+  }
+  .carouselArea {
+    height: 420px;
+  }
+  .card {
+    width: 300px;
+    height: 380px;
+  }
+  .cardOverlay {
+    padding: 1.5rem;
+  }
+  .cardTitle {
+    font-size: 1.75rem;
+  }
+  .arrowIcon {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  .progressBar {
+    width: 120px;
+  }
+}
