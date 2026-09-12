@@ -68,7 +68,6 @@
   background: #0b0b12;
   opacity: var(--dw-dim);
   transform: translateZ(0);
-  pointer-events: none;
   transition:
     transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
@@ -95,19 +94,38 @@
   transition: opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.drift-wall__tile.is-active .drift-wall__inner,
-.drift-wall__tile:focus-visible .drift-wall__inner {
-  opacity: 1;
-  transform: translateZ(var(--dw-lift));
-  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.7);
+/* 
+  Hover styles are wrapped in a media query so they only apply to devices
+  that actually support hovering (mice). This prevents the infamous iOS Safari
+  "double-tap" bug where the first tap applies hover state and the second tap clicks.
+*/
+@media (hover: hover) {
+  .drift-wall__tile:hover .drift-wall__inner {
+    opacity: 1;
+    transform: translateZ(var(--dw-lift)) scale(1.02) translateY(-4px);
+    box-shadow: 
+      0 24px 60px -18px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(245, 181, 50, 0.15),
+      0 8px 40px -8px rgba(245, 181, 50, 0.15);
+  }
+
+  .drift-wall__tile:hover img {
+    filter: grayscale(0) saturate(1.05);
+  }
 }
 
-.drift-wall__tile.is-active img,
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  opacity: 1;
+  transform: translateZ(var(--dw-lift)) scale(1.02) translateY(-4px);
+  box-shadow:
+    0 24px 60px -18px rgba(0, 0, 0, 0.7),
+    0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
 .drift-wall__tile:focus-visible img {
   filter: grayscale(0) saturate(1.05);
 }
 
-.drift-wall__tile.is-active .drift-wall__overlay,
 .drift-wall__tile:focus-visible .drift-wall__overlay {
   opacity: 0;
 }

@@ -131,6 +131,16 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.mainCard:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201, 168, 76, 0.4);
+  background: rgba(15, 15, 15, 0.75);
+  box-shadow: 
+    inset 0 0 80px rgba(201, 168, 76, 0.08),
+    0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
 .cornerAccent {
@@ -181,9 +191,9 @@
   flex-direction: column;
   gap: 1.5rem;
   font-family: var(--font-geist-sans, 'Inter', sans-serif);
-  font-size: 1rem;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
   max-width: 65ch;
   margin-bottom: 3rem;
 }
@@ -281,9 +291,9 @@
 }
 
 .subCardDesc {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .subCardNumber {

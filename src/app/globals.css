@@ -227,3 +227,33 @@ a, button, [role="button"] {
     transform: translate(-1%, 2%) scale(1);
   }
 }
+
+/* ── Send Message button: gold energy sweep ─────────────────────────── */
+@keyframes btn-energy-sweep {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+/* ── Send Message button: three-dot sequential fade ─────────────────── */
+@keyframes btn-dot-fade {
+  0%, 80%, 100% { opacity: 0.2; }
+  40%            { opacity: 1;   }
+}
+
+/* Honour prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-energy-sweep { animation: none !important; display: none; }
+  .btn-dot          { animation: none !important; opacity: 1; }
+}

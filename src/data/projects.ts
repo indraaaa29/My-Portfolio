@@ -40,7 +40,7 @@ export const PROJECTS: Project[] = [
     stack: ['React', 'Next.js', 'TypeScript', 'Node.js', 'MongoDB'],
     color: '#D4C5A9',
     imageHue: 'linear-gradient(135deg, #0F0E0C 0%, #1A1714 40%, #2C2419 100%)',
-    image: '/project-01.png',
+    image: '/projects/votesetu-cover.png',
     status: 'Production',
     features: [
       'Secure registration and verification workflow for citizens',
@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     stack: ['React 18', 'Next.js', 'TypeScript', 'Three.js (WebGL)', 'Tailwind CSS'],
     color: '#B8C9D4',
     imageHue: 'linear-gradient(135deg, #080C10 0%, #101820 40%, #141F2A 100%)',
-    image: '/project-02.png',
+    image: '/projects/flowsync-cover.png',
     status: 'Production',
     features: [
       'Live crowd-density heatmaps across gates and restrooms',
@@ -102,7 +102,7 @@ export const PROJECTS: Project[] = [
     stack: ['React', 'TypeScript', 'Vite', 'Vitest', 'AI Integration'],
     color: '#C9C2D4',
     imageHue: 'linear-gradient(135deg, #0C080F 0%, #180F1E 40%, #1E1528 100%)',
-    image: '/project-03.png',
+    image: '/projects/carbwiser-cover.jpg',
     status: 'Hackathon',
     features: [
       'Dynamic carbon footprint analytics per activity',
@@ -133,7 +133,7 @@ export const PROJECTS: Project[] = [
     stack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'AI Integration'],
     color: '#C9D4C2',
     imageHue: 'linear-gradient(135deg, #080F08 0%, #0F1A0E 40%, #141F14 100%)',
-    image: '/project-04.png',
+    image: '/projects/enervia.jpg',
     status: 'Production',
     features: [
       'Interactive digital map of hostel blocks and rooms',
@@ -164,7 +164,7 @@ export const PROJECTS: Project[] = [
     stack: ['Cybersecurity', 'Threat Detection', 'GitHub Actions', 'Secure DevOps'],
     color: '#D4B8B8',
     imageHue: 'linear-gradient(135deg, #1A0A0A 0%, #2A1010 40%, #3A1515 100%)',
-    image: '/project-01.png',
+    image: '/projects/sentinel-architecture.jpg',
     status: 'Internship',
     features: [
       'Threat-detection workflow baked into the pipeline',
@@ -192,7 +192,7 @@ export const PROJECTS: Project[] = [
     stack: ['Python', 'OpenCV', 'Computer Vision', 'Machine Learning'],
     color: '#D4C5A9',
     imageHue: 'linear-gradient(135deg, #101010 0%, #1A1A1A 40%, #2A2A2A 100%)',
-    image: '/project-02.png',
+    image: '/projects/ai-face-recognition.png',
     status: 'Research',
     features: [
       'Real-time facial detection and tracking pipeline',
@@ -220,7 +220,7 @@ export const PROJECTS: Project[] = [
     stack: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
     color: '#B8C9D4',
     imageHue: 'linear-gradient(135deg, #0A101A 0%, #101A2A 40%, #152A3A 100%)',
-    image: '/project-03.png',
+    image: '/projects/namaste.jpg',
     status: 'Production',
     features: [
       'Responsive delivery and takeaway ordering flow',

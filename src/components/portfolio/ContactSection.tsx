@@ -1,13 +1,145 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 import SectionSeam from './SectionSeam';
 import { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
 
+
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvXeaRIiiORMX16Y_ikfAJLKGRUibbWhLmacGuCnsBkYlZ7Du15CHRQj89ZdOxSIaAhg/exec";
+
+/* ── Animated success badge: circle fade+scale, then stroke-draw checkmark ── */
+function SuccessBadge() {
+  const shouldReduceMotion = useReducedMotion();
+
+  // Circle path length ≈ 2πr where r=22 in a 48-viewBox SVG => ~138.2
+  // Checkmark path from roughly (9,24) -> (19,34) -> (39,14)
+  const TICK_LENGTH = 40; // approximate stroke path length for the tick
+
+  return (
+    <motion.div
+      className="w-16 h-16 mx-auto relative shrink-0"
+      initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.7 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={shouldReduceMotion ? { duration: 0 } : {
+        duration: 0.35,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      {/* Subtle glow ring — fades in after the tick draws, then stays */}
+      <motion.div
+        className="absolute inset-0 rounded-full"
+        style={{ boxShadow: '0 0 0 0px rgba(52, 211, 153, 0)' }}
+        initial={false}
+        animate={shouldReduceMotion
+          ? { boxShadow: '0 0 12px 3px rgba(52, 211, 153, 0.18)' }
+          : { boxShadow: [
+              '0 0 0 0px rgba(52, 211, 153, 0)',
+              '0 0 14px 4px rgba(52, 211, 153, 0.22)',
+              '0 0 10px 2px rgba(52, 211, 153, 0.14)',
+            ]
+          }
+        }
+        transition={shouldReduceMotion ? { duration: 0 } : {
+          delay: 0.75,
+          duration: 0.6,
+          ease: 'easeOut',
+          times: [0, 0.5, 1],
+        }}
+      />
+
+      {/* SVG: circle border + stroke-animated checkmark */}
+      <svg
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full"
+        aria-hidden="true"
+      >
+        {/* Circle background fill */}
+        <circle cx="32" cy="32" r="31" fill="rgba(16, 185, 129, 0.08)" stroke="rgba(16, 185, 129, 0.25)" strokeWidth="1" />
+
+        {/* Animated checkmark stroke */}
+        <motion.path
+          d="M20 32 L28 40 L44 22"
+          stroke="rgb(52, 211, 153)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+          initial={shouldReduceMotion ? false : {
+            pathLength: 0,
+            opacity: 0,
+          }}
+          animate={{
+            pathLength: 1,
+            opacity: 1,
+          }}
+          transition={shouldReduceMotion ? { duration: 0 } : {
+            pathLength: {
+              delay: 0.3,
+              duration: 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            },
+            opacity: {
+              delay: 0.3,
+              duration: 0.15,
+            },
+          }}
+        />
+      </svg>
+    </motion.div>
+  );
+}
+
+
+const playSuccessTone = () => {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    
+    const ctx = new AudioContext();
+    const masterGain = ctx.createGain();
+    
+    // Very quiet: 0.1 keeps it subtle and unobtrusive
+    masterGain.gain.value = 0.1;
+    masterGain.connect(ctx.destination);
+    
+    const playNote = (freq: number, startTime: number, duration: number) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = 'sine'; // Sine waves produce a clean, soft digital chime
+      osc.frequency.setValueAtTime(freq, startTime);
+      
+      osc.connect(gain);
+      gain.connect(masterGain);
+      
+      // Smooth attack and soft decay
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(1, startTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.1);
+    };
+    
+    const now = ctx.currentTime;
+    // Premium minimalistic two-note chime (E5 -> G#5)
+    playNote(659.25, now, 0.4);
+    playNote(830.61, now + 0.15, 0.6);
+    
+    // Clean up to prevent AudioContext memory leaks
+    setTimeout(() => {
+      ctx.close().catch(() => {});
+    }, 1500);
+  } catch (e) {
+    // Silently fail if browser blocks audio
+  }
+};
 
 export default function ContactSection() {
   const { location } = PORTFOLIO_DATA.personal;
@@ -17,17 +149,42 @@ export default function ContactSection() {
     email: '',
     message: ''
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const shouldReduceMotion = useReducedMotion();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
     
-    const subject = encodeURIComponent(`Portfolio Inquiry from ${formState.name}`);
-    const body = encodeURIComponent(`Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`);
-    window.location.href = `mailto:indranil7001@gmail.com?subject=${subject}&body=${body}`;
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formState.email)) {
+      setStatus('error');
+      return;
+    }
     
-    setSubmitted(true);
+    setStatus('loading');
+    
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(formState),
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+      });
+      
+      if (response.ok) {
+        setStatus('success');
+        if (!shouldReduceMotion) {
+          playSuccessTone();
+        }
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
   };
 
   return (
@@ -91,27 +248,27 @@ export default function ContactSection() {
               </div>
               <div className="flex items-center gap-6">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/indraaaa29"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-zinc-400 hover:text-amber-400 transition-colors"
                   aria-label="GitHub"
                 >
                   <GithubIcon className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/indranil-paul-ai/"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-zinc-400 hover:text-amber-400 transition-colors"
                   aria-label="LinkedIn"
                 >
                   <LinkedinIcon className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/indraaaa.19/?hl=en"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-zinc-400 hover:text-amber-400 transition-colors"
                   aria-label="Instagram"
                 >
@@ -129,21 +286,27 @@ export default function ContactSection() {
             transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.1 }}
             className="lg:col-span-7 relative contact-form"
           >
-            <div className="relative p-8 md:p-10 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 backdrop-blur-[2px]">
-              {submitted ? (
+            <motion.div
+              className="relative p-8 md:p-10 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 backdrop-blur-[2px]"
+              whileHover={{
+                borderColor: 'rgba(245, 181, 50, 0.35)',
+                boxShadow: '0 0 0 1px rgba(245, 181, 50, 0.12), 0 8px 40px -8px rgba(245, 181, 50, 0.1)',
+                backgroundColor: 'rgba(20, 18, 12, 0.38)',
+              }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {status === 'success' ? (
                 <div className="py-20 text-center space-y-6">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center">
-                    <CheckCircle2 className="w-8 h-8" />
-                  </div>
+                  <SuccessBadge />
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-light text-zinc-100">Message Received</h3>
+                    <h3 className="text-2xl font-light text-zinc-100">Message sent successfully ✓</h3>
                     <p className="text-zinc-400 max-w-sm mx-auto text-sm leading-relaxed">
                       Thank you for reaching out. I will respond to your inquiry within 24 hours.
                     </p>
                   </div>
                   <button
                     onClick={() => {
-                      setSubmitted(false);
+                      setStatus('idle');
                       setFormState({ name: '', email: '', message: '' });
                     }}
                     className="mt-4 px-6 py-2.5 rounded-full bg-zinc-800/50 border border-zinc-700 text-zinc-300 text-xs font-medium hover:bg-zinc-800 hover:text-zinc-100 transition-all"
@@ -198,17 +361,55 @@ export default function ContactSection() {
                   </div>
 
                   <div className="pt-2">
+                    {status === 'error' && (
+                      <p className="text-red-400 text-sm mb-4 text-center">Something went wrong. Please try again.</p>
+                    )}
                     <button
                       type="submit"
-                      className="relative overflow-hidden w-full h-[54px] rounded-lg bg-amber-500 text-zinc-950 font-medium text-sm hover:bg-amber-400 transition-colors duration-300 flex items-center justify-between px-6 group"
+                      disabled={status === 'loading'}
+                      className="relative overflow-hidden w-full h-[54px] rounded-lg bg-amber-500 text-zinc-950 font-semibold text-sm hover:bg-amber-400 hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 flex items-center justify-between px-6 group disabled:opacity-100 disabled:cursor-not-allowed"
                     >
-                      <span>Send Message</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      {/* Gold energy sweep — visible only while loading */}
+                      {status === 'loading' && (
+                        <span
+                          className="btn-energy-sweep pointer-events-none absolute inset-y-0 left-0 w-1/3"
+                          style={{
+                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%)',
+                            filter: 'blur(6px)',
+                            animation: 'btn-energy-sweep 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                          }}
+                          aria-hidden="true"
+                        />
+                      )}
+
+                      {/* Button label — fixed width to prevent layout shift */}
+                      <span className="relative z-10">
+                        {status === 'loading' ? 'Sending...' : 'Send Message'}
+                      </span>
+
+                      {/* Right side: arrow (idle) or three-dot indicator (loading) */}
+                      <span className="relative z-10 flex items-center">
+                        {status === 'loading' ? (
+                          <span className="flex items-center gap-[3px]" aria-hidden="true">
+                            {[0, 1, 2].map((i) => (
+                              <span
+                                key={i}
+                                className="btn-dot block w-[3px] h-[3px] rounded-full bg-zinc-950"
+                                style={{
+                                  animation: `btn-dot-fade 1.2s ease-in-out ${i * 0.2}s infinite`,
+                                }}
+                              />
+                            ))}
+                          </span>
+                        ) : (
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                        )}
+                      </span>
                     </button>
                   </div>
                 </form>
               )}
-            </div>
+            </motion.div>
           </motion.div>
 
         </div>

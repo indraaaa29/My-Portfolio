@@ -382,7 +382,7 @@ export function ProjectVisual({
         className="absolute inset-0 flex flex-col justify-end"
         style={{
           padding: 'clamp(1.5rem, 3vw, 2.5rem)',
-          background: 'linear-gradient(to top, rgba(5,4,3,0.85) 0%, rgba(5,4,3,0.25) 55%, rgba(5,4,3,0) 100%)',
+          background: 'linear-gradient(to top, rgba(5,4,3,0.92) 0%, rgba(5,4,3,0.45) 50%, rgba(5,4,3,0) 100%)',
           opacity: hovered ? 1 : 0,
           transition: `opacity 600ms ${EASE}`,
         }}

@@ -94,8 +94,8 @@ const DriftWall = ({
   const lastTsRef = useRef<number | null>(null);
 
   const [containerHeight, setContainerHeight] = useState(600);
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const activeIdRef = useRef<string | null>(null);
+  // activeId state removed — hover is now handled by CSS :hover (zero re-renders,
+  // per-tile precision). hoveredColRef still drives the animation loop deceleration.
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -208,15 +208,11 @@ const DriftWall = ({
     };
   }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform]);
 
-  const activate = useCallback((id: string, index: number): void => {
-    activeIdRef.current = id;
+  const activate = useCallback((index: number): void => {
     hoveredColRef.current = index;
-    setActiveId(id);
   }, []);
   const release = useCallback((): void => {
-    activeIdRef.current = null;
     hoveredColRef.current = -1;
-    setActiveId(null);
   }, []);
 
   const handlePointerMove = useCallback(
@@ -229,14 +225,6 @@ const DriftWall = ({
           y: (e.clientY - rect.top) / rect.height - 0.5
         };
       }
-      const hit = document.elementFromPoint(e.clientX, e.clientY);
-      const tile = hit && hit.closest ? (hit.closest('[data-tile-id]') as HTMLElement | null) : null;
-      if (!tile) return;
-      const id = tile.dataset.tileId ?? null;
-      if (id === activeIdRef.current) return;
-      activeIdRef.current = id;
-      hoveredColRef.current = Number(tile.dataset.col);
-      setActiveId(id);
     },
     [parallax, reduced]
   );
@@ -273,10 +261,13 @@ const DriftWall = ({
       </span>
     );
     const commonProps = {
-      className: `drift-wall__tile${activeId === id ? ' is-active' : ''}`,
+      // No is-active class needed — hover handled by CSS :hover (per-tile, no re-renders)
+      className: 'drift-wall__tile',
       'data-tile-id': id,
       'data-col': colIndex,
-      onFocus: () => activate(id, colIndex),
+      onPointerEnter: () => activate(colIndex),
+      onPointerLeave: release,
+      onFocus: () => activate(colIndex),
       onBlur: release
     };
     if (item.href) {

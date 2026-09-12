@@ -1,8 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
-import { Award, Compass, Cpu, Layers, MapPin, ArrowRight } from 'lucide-react';
+import { Award, Compass, Cpu, Layers, MapPin } from 'lucide-react';
 import SectionSeam from './SectionSeam';
 import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
 import styles from './AboutSection.module.css';
@@ -77,14 +76,8 @@ export default function AboutSection() {
         <div className={styles.grid}>
           
           {/* Left: Bio card */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px 0px -20% 0px' }}
-            transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE }}
-          >
-            <div className={styles.mainCard}>
-              <div className={styles.cornerAccent} />
+          <div className={styles.mainCard}>
+            <div className={styles.cornerAccent} />
               
               <div className={styles.cardNumber}>
                 <span>01</span>
@@ -116,16 +109,9 @@ export default function AboutSection() {
                 </div>
               </div>
             </div>
-          </motion.div>
 
           {/* Right: Pillars Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '0px 0px -20% 0px' }}
-            transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.08 }}
-            className={styles.subCardsWrapper}
-          >
+          <div className={styles.subCardsWrapper}>
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
@@ -148,14 +134,10 @@ export default function AboutSection() {
                     <div className={styles.subCardNumberLine} />
                     <span>{pillar.num}</span>
                   </div>
-
-                  <div className={styles.subCardArrow}>
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
                 </div>
               );
             })}
-          </motion.div>
+          </div>
 
         </div>
       </div>

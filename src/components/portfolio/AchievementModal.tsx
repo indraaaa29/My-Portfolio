@@ -120,6 +120,8 @@ export default function AchievementModal({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
         if (isExpanded) {
           setIsExpanded(false);
         } else {
@@ -129,7 +131,7 @@ export default function AchievementModal({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isExpanded, onClose]);
+  }, [isExpanded, handleClose]);
 
   /* ── Scroll lock (Lenis-aware) + focus entry/restore ── */
   useEffect(() => {
@@ -228,9 +230,9 @@ export default function AchievementModal({
         aria-labelledby="achievement-modal-title"
         aria-describedby="achievement-overview"
         tabIndex={-1}
-        initial={initialStyles}
+        initial={{ ...initialStyles, opacity: originRect ? 1 : 0 }}
         animate={targetRect ?? initialStyles}
-        exit={initialStyles}
+        exit={{ ...initialStyles, opacity: 0 }}
         transition={{ duration: DURATION, ease: EASE }}
         onKeyDown={handleDialogKeyDown}
         className="absolute overflow-hidden bg-[#0A0A0C]/90 border border-white/10 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9)] flex flex-col items-center outline-none"
@@ -278,7 +280,7 @@ export default function AchievementModal({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
           transition={{ duration: 0.4, delay: 0.1, ease: EASE }}
-          className="w-full flex-1 min-h-0 max-w-4xl pt-8 pb-6 px-4 md:px-8 flex flex-col gap-8 overflow-y-auto overscroll-contain"
+          className="w-full flex-1 min-h-0 max-w-4xl pt-8 pb-4 px-4 md:px-8 flex flex-col gap-8 overflow-y-auto overscroll-contain"
           data-lenis-prevent="true"
         >
           {/* Header */}
@@ -337,37 +339,38 @@ export default function AchievementModal({
             </div>
           </div>
 
-          {/* Actions — sticky so the buttons stay visible while metadata scrolls */}
-          <div className="sticky bottom-0 -mx-4 md:-mx-8 px-4 md:px-8 pt-4 pb-6 bg-[#0B0B0E]/95 backdrop-blur-xl border-t border-white/[0.06]">
-            <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-              <a
-                href={achievement.pdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-100 text-zinc-950 rounded-full font-medium hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,255,255,0.15)] transition-all"
-              >
-                View Certificate
-                <ExternalLink size={16} />
-              </a>
-              <a
-                href={achievement.pdf}
-                download
-                className="flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-900/50 text-zinc-300 border border-white/10 rounded-full font-medium hover:bg-zinc-800 hover:text-white hover:-translate-y-0.5 transition-all"
-              >
-                Download PDF
-                <Download size={16} />
-              </a>
-            </div>
-          </div>
         </motion.div>
+
+        {/* Actions bar — outside the scroll container so it never overlaps content */}
+        <div className="w-full max-w-4xl flex-shrink-0 px-4 md:px-8 pt-4 pb-6 bg-[#0B0B0E]/95 backdrop-blur-xl border-t border-white/[0.06]">
+          <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+            <a
+              href={achievement.pdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-100 text-zinc-950 rounded-full font-medium hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,255,255,0.15)] transition-all"
+            >
+              View Certificate
+              <ExternalLink size={16} />
+            </a>
+            <a
+              href={achievement.pdf}
+              download
+              className="flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-900/50 text-zinc-300 border border-white/10 rounded-full font-medium hover:bg-zinc-800 hover:text-white hover:-translate-y-0.5 transition-all"
+            >
+              Download PDF
+              <Download size={16} />
+            </a>
+          </div>
+        </div>
 
         {/* Floating Close Button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 left-4 p-2.5 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-zinc-400 hover:text-white transition-colors border border-white/10"
+          className="absolute top-4 left-4 p-2.5 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-zinc-400 hover:text-white transition-all border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 active:scale-95 group"
           aria-label="Close details"
         >
-          <X size={20} />
+          <X size={20} className="transition-transform group-hover:scale-110" />
         </button>
       </motion.div>
 
@@ -425,10 +428,10 @@ export default function AchievementModal({
                   e.stopPropagation();
                   setIsExpanded(false);
                 }}
-                className="p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-zinc-300 hover:text-white transition-colors border border-white/15"
+                className="p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-zinc-300 hover:text-white transition-all border border-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 active:scale-95 group"
                 aria-label="Close fullscreen certificate view"
               >
-                <X size={20} />
+                <X size={20} className="transition-transform group-hover:scale-110" />
               </button>
             </div>
           </motion.div>

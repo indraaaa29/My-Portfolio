@@ -46,7 +46,7 @@ export default function FullscreenVariant({ project }: { project: Project }) {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to top, rgba(5,4,3,0.82) 0%, rgba(5,4,3,0.15) 50%, rgba(5,4,3,0) 100%)',
+              background: 'linear-gradient(to top, rgba(5,4,3,0.92) 0%, rgba(5,4,3,0.45) 50%, rgba(5,4,3,0) 100%)',
             }}
           />
           {/* Frame line */}

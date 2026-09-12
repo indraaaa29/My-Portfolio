@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, MouseEvent } from 'react';
+import { useState, useEffect, MouseEvent, PointerEvent, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import DriftWall, { DriftWallItem } from '@/components/reactbits/DriftWall';
 import { ACHIEVEMENTS } from '@/data/achievements';
@@ -33,23 +33,71 @@ export default function AchievementsSection() {
     href: `#ach-${ach.id}`
   }));
 
-  const handleWallClick = (e: MouseEvent<HTMLDivElement>) => {
-    // Only plain left-clicks open the experience — middle/ctrl/cmd clicks keep
-    // their browser default so users can open the certificate in a new tab.
+  // Record the tile element at pointerdown so the click handler can use it
+  // even if a hover re-render has replaced the DOM node between pointerdown
+  // and the click event firing.
+  const pendingTileRef = useRef<{ href: string; rect: DOMRect; el: HTMLElement } | null>(null);
+  
+  // Track pointer coordinates to reliably detect clicks on moving targets.
+  // Browsers drop native 'click' events if the element moves out from under the cursor between down and up.
+  const pointerDownMetaRef = useRef<{ x: number, y: number, time: number } | null>(null);
+
+  const handleWallPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const target = e.target as HTMLElement;
     const tile = target.closest('[data-tile-id]') as HTMLAnchorElement | null;
     if (tile && tile.tagName === 'A') {
       const href = tile.getAttribute('href');
       if (href && href.startsWith('#ach-')) {
+        pendingTileRef.current = {
+          href,
+          rect: tile.getBoundingClientRect(),
+          el: tile,
+        };
+        pointerDownMetaRef.current = { x: e.clientX, y: e.clientY, time: Date.now() };
+        return;
+      }
+    }
+    pendingTileRef.current = null;
+    pointerDownMetaRef.current = null;
+  };
+
+  const handleWallPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return;
+    const meta = pointerDownMetaRef.current;
+    const pending = pendingTileRef.current;
+    
+    if (meta && pending) {
+      const dx = e.clientX - meta.x;
+      const dy = e.clientY - meta.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const timeElapsed = Date.now() - meta.time;
+      
+      // If movement is very small (< 25px) and fast (< 500ms), it's a deliberate click!
+      if (distance < 25 && timeElapsed < 500) {
         e.preventDefault();
-        const achId = href.replace('#ach-', '');
-        const rect = tile.getBoundingClientRect();
-        setOriginEl(tile);
-        setOriginRect(rect);
+        const achId = pending.href.replace('#ach-', '');
+        setOriginEl(pending.el);
+        setOriginRect(pending.rect);
         setSelectedId(achId);
       }
     }
+    // We leave pendingTileRef populated so if the browser DOES fire a native click,
+    // handleWallClick can catch it and call e.preventDefault().
+    pointerDownMetaRef.current = null;
+  };
+
+  const handleWallClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    // Use the target captured at pointerdown
+    const pending = pendingTileRef.current;
+    pendingTileRef.current = null;
+    if (!pending) return;
+
+    // The modal open action was already handled optimally in pointerUp.
+    // We just need to intercept the native click here to prevent navigation.
+    e.preventDefault();
   };
 
   const selectedAchievement = ACHIEVEMENTS.find((a) => a.id === selectedId) || null;
@@ -67,6 +115,8 @@ export default function AchievementsSection() {
             ? 'opacity-30 blur-sm scale-[0.98] pointer-events-none'
             : 'opacity-100 blur-0 scale-100 pointer-events-auto'
           }`}
+        onPointerDownCapture={handleWallPointerDown}
+        onPointerUpCapture={handleWallPointerUp}
         onClickCapture={handleWallClick}
       >
         <DriftWall
