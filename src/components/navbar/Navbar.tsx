@@ -1,87 +1,36 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import PillNav from './PillNav';
 import styles from './Navbar.module.css';
 
-/* ──────────────────────────────────────────────
- * Types
- * ────────────────────────────────────────────── */
-
 export interface NavbarProps {
-  /** Additional class name */
   className?: string;
 }
 
-/* ──────────────────────────────────────────────
- * Navigation Links
- * ────────────────────────────────────────────── */
-
-const NAV_LINKS = [
+const NAV_ITEMS = [
   { label: 'About', href: '#mindset' },
   { label: 'Projects', href: '#work' },
   { label: 'Experience', href: '#experience' },
   { label: 'Achievements', href: '#achievements' },
   { label: 'Contact', href: '#contact' },
-] as const;
-
-/* ──────────────────────────────────────────────
- * Component
- * ────────────────────────────────────────────── */
+  { label: 'Resume', href: '/resume.pdf' },
+];
 
 export default function Navbar({ className }: NavbarProps) {
-  const [, setMobileMenuOpen] = useState(false);
-
   return (
     <nav className={cn(styles.nav, className)} role="navigation" aria-label="Main navigation">
       <div className={styles.inner}>
-        {/* Brand */}
-        <Link href="/" className={styles.brand} aria-label="Home">
-          Indranil Paul
-        </Link>
-
-        {/* Desktop navigation links */}
-        <ul className={styles.desktopLinks}>
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className={styles.navLink}
-                aria-label={link.label}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-
-          <li className={styles.separator} role="separator" aria-hidden="true" />
-
-          <li>
-            <a
-              href="/resume.pdf"
-              className={styles.resumeLink}
-              aria-label="Download Resume"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Resume
-            </a>
-          </li>
-        </ul>
-
-        {/* Mobile hamburger placeholder */}
-        <button
-          className={styles.hamburger}
-          onClick={() => setMobileMenuOpen((prev) => !prev)}
-          aria-label="Toggle menu"
-          aria-expanded="false"
-          type="button"
-        >
-          <span className={styles.hamburgerLine} />
-          <span className={styles.hamburgerLine} />
-          <span className={styles.hamburgerLine} />
-        </button>
+        <PillNav
+          items={NAV_ITEMS}
+          className=""
+          ease="power3.easeOut"
+          baseColor="#f5b532"
+          pillColor="rgba(12, 12, 14, 0.85)"
+          pillTextColor="rgba(255, 255, 255, 0.85)"
+          hoveredPillTextColor="#0a0a0a"
+          initialLoadAnimation={true}
+        />
       </div>
     </nav>
   );

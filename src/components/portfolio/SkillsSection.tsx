@@ -8,7 +8,7 @@ import SectionSeam from './SectionSeam';
 import FadeUp, { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
 import styles from './SkillsSection.module.css';
 
-const CATEGORY_META: Record<string, { icon: React.ElementType, subtitle: string[], index: string }> = {
+const CATEGORY_META: Record<string, { icon: React.ElementType<any>, subtitle: string[], index: string }> = {
   "Web Engineering": {
     icon: CodeXml,
     subtitle: ["BUILD", "SCALE", "DELIVER"],
@@ -74,6 +74,7 @@ export default function SkillsSection() {
                     <div className={styles.indexLine} />
                   </div>
                   <div className={styles.iconWrapper}>
+                    {/* @ts-expect-error Typescript incorrectly infers className as never for dynamic icon */}
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>

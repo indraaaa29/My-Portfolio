@@ -3,8 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import TextPressure from '@/components/reactbits/TextPressure';
-import HalftoneReveal from '@/components/reactbits/HalftoneReveal';
-import Image from 'next/image';
+import Lanyard from '@/components/reactbits/Lanyard';
 import { cn } from '@/lib/utils';
 import styles from './Hero.module.css';
 import { CINEMATIC_EASE, REVEAL_SECONDS } from '@/components/portfolio/FadeUp';
@@ -61,74 +60,7 @@ function ScrollIndicator() {
   );
 }
 
-/* ──────────────────────────────────────────────
- * Portrait — Architectural Frame System
- * ────────────────────────────────────────────── */
 
-function Portrait({ parallaxX, parallaxY }: { parallaxX: number; parallaxY: number }) {
-  return (
-    <motion.div
-      className={styles.portraitContainer}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: REVEAL_SECONDS, ease: CINEMATIC_EASE, delay: 0.35 }}
-    >
-      {/* Restrained gold atmosphere */}
-      <div className={styles.portraitGlow} aria-hidden="true" />
-
-      {/* Primary architectural frame — wraps everything, parallaxes as one unit */}
-      <motion.div
-        className={styles.portraitFrameOuter}
-        style={{ transform: `translate(${parallaxX * 0.45}px, ${parallaxY * 0.35}px)` }}
-      >
-        {/* Offset secondary frame — inside, behind the portrait */}
-        <div className={styles.portraitOffsetFrame} aria-hidden="true" />
-
-        {/* L-shaped corner accents */}
-        <span className={cn(styles.cornerAccent, styles.cornerTL)} aria-hidden="true" />
-        <span className={cn(styles.cornerAccent, styles.cornerTR)} aria-hidden="true" />
-        <span className={cn(styles.cornerAccent, styles.cornerBL)} aria-hidden="true" />
-        <span className={cn(styles.cornerAccent, styles.cornerBR)} aria-hidden="true" />
-
-        {/* IDEAS / CODE / IMPACT — left vertical editorial label */}
-        <div className={styles.verticalLabel} aria-hidden="true">
-          <div className={styles.verticalLabelLine} />
-          <span>IDEAS</span>
-          <span>CODE</span>
-          <span>IMPACT</span>
-          <div className={styles.verticalLabelLine} />
-        </div>
-
-        {/* BUILDING A BETTER TOMORROW — right vertical faint text */}
-        <div className={styles.verticalLabelRight} aria-hidden="true">
-          BUILDING A BETTER TOMORROW
-        </div>
-
-        {/* Portrait image */}
-        <div className={styles.portraitWrapper}>
-          <Image
-            src="/images/hero/portrait.jpg"
-            alt="Indranil Paul — Creative Developer and AI Engineer"
-            fill
-            priority
-            sizes="(max-width:768px) 100vw, 40vw"
-            style={{ objectFit: 'cover', objectPosition: 'center 18%' }}
-          />
-          <HalftoneReveal
-            src="/images/hero/portrait.jpg"
-            className={styles.portraitReveal}
-          />
-        </div>
-
-        {/* Thin gold gradient line below the frame */}
-        <div className={styles.frameBottomLine} aria-hidden="true" />
-
-        {/* Gold anchor dot */}
-        <span className={styles.bottomDot} aria-hidden="true" />
-      </motion.div>
-    </motion.div>
-  );
-}
 
 /* ──────────────────────────────────────────────
  * Social Links
@@ -318,10 +250,22 @@ export default function Hero({ className }: HeroProps) {
         </motion.div>
 
         {/* ── RIGHT: Portrait Column ── */}
-        <Portrait
-          parallaxX={prefersReduced ? 0 : parallax.x}
-          parallaxY={prefersReduced ? 0 : parallax.y}
-        />
+        <motion.div
+          className={styles.portraitContainer}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Lanyard
+            position={[0, 0, 13]}
+            gravity={[0, -40, 0]}
+            frontImage="/images/hero/portrait.jpg"
+            backImage="/images/hero/portrait.jpg"
+            imageFit="cover"
+            lanyardImage="/lanyard.png"
+            lanyardWidth={2}
+          />
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}

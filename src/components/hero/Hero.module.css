@@ -437,6 +437,20 @@
   padding: 2rem 3rem 2rem 0;
 }
 
+.lanyardArea {
+  position: relative;
+  width: min(100%, 390px);
+  /* The original portrait was aspect-ratio 3/4. 390 * 4/3 = 520px. 
+     By setting min-height we allow Lanyard to anchor correctly 
+     but let it take up space visually similar to the old portrait. */
+  min-height: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  /* Lanyard wrapper uses 100vh height and might spill visually. We allow this to keep the physics looking natural, but restrict the box size. */
+}
+
 /* Restrained gold atmosphere — centred behind portrait */
 .portraitGlow {
   position: absolute;

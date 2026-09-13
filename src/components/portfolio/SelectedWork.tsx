@@ -43,7 +43,7 @@ export default function SelectedWork() {
         <div style={{ height: '1px', backgroundColor: 'var(--c-border)' }} />
       </div>
       
-      <div className="w-full relative mt-4 mb-4">
+      <div className="w-full relative">
         <ProjectGallery />
       </div>
 
