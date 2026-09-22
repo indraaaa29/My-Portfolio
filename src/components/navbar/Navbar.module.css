@@ -16,9 +16,30 @@
   height: auto;
   background: transparent;
   pointer-events: none;
+
+  /* Visible state */
+  transform: translateY(0) scale(1);
+  opacity: 1;
+
+  /* Reveal transition — soft ease-out, no overshoot */
+  transition:
+    transform 500ms cubic-bezier(0.22, 0.68, 0.35, 1),
+    opacity   400ms cubic-bezier(0.22, 0.68, 0.35, 1) 60ms;
+  will-change: transform, opacity;
 }
 
-.nav>* {
+.nav.hidden {
+  /* Hidden state — exits upward with barely perceptible scale reduction */
+  transform: translateY(-115%) scale(0.985);
+  opacity: 0;
+
+  /* Hide transition — fast start, smooth decelerate; opacity leads slightly */
+  transition:
+    transform 450ms cubic-bezier(0.32, 0, 0.15, 1),
+    opacity   320ms cubic-bezier(0.32, 0, 0.15, 1) 80ms;
+}
+
+.nav > * {
   pointer-events: auto;
 }
 
@@ -29,6 +50,17 @@
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+}
+
+.hoverTrigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  z-index: 199;
+  background: transparent;
+  pointer-events: auto;
 }
 
 /* ─── Responsive ─── */

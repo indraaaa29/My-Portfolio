@@ -351,5 +351,53 @@ export const CASE_STUDIES: Record<string, ProjectCaseStudy> = {
       'A well-structured CSS file is often vastly superior to utility classes for simple, bespoke designs.',
       'Performance is a feature; removing dependencies is the easiest way to make a site fast.'
     ]
+  },
+  '08': {
+    overview: 'Sightline is an AI-powered legal document intelligence platform designed to help people understand complex legal documents without replacing professional legal advice. The experience centers around a document-first workflow.',
+    role: 'Full Stack Engineer',
+    status: 'Production',
+    problem: 'Legal documents are difficult to understand and important information can be easy to miss. Traditional chatbots lack document-grounding and provide unreliable advice.',
+    challenges: [
+      { title: 'Document Extraction', description: 'Processing complex document structures and extracting accurate text purely client-side using PDF.js and Tesseract.js.' },
+      { title: 'Responsible AI Boundaries', description: 'Maintaining clear boundaries that the system provides information, not professional legal advice.' }
+    ],
+    solution: 'Built a platform where the document itself is the center of the AI experience following the workflow: Document → Question → Evidence → Explanation → Decision.',
+    architecture: {
+      overview: 'A full-stack Next.js application that handles document ingestion and OCR purely on the client side before communicating with Google Gemini via OpenRouter.',
+      flow: ['Next.js Client', 'PDF.js / Tesseract.js OCR', 'OpenRouter API', 'Gemini AI Model'],
+      decisions: [
+        { title: 'Client-Side OCR', description: 'Performed text extraction and OCR on the client to ensure user data privacy and reduce server load.' },
+        { title: 'Document-Grounded Inference', description: 'Structured the AI prompts to strictly rely on the uploaded document as context to avoid hallucination.' }
+      ],
+      tradeoffs: [
+        { title: 'Browser Resource Usage', description: 'Client-side OCR is computationally heavy, but necessary to keep sensitive documents out of intermediate servers.' }
+      ]
+    },
+    engineeringHighlights: [
+      { title: 'AI Integration', description: 'Engineered robust API architectures to handle grounded AI requests with high accuracy.' },
+      { title: 'Accessibility and Security', description: 'Achieved near-perfect scores for accessibility and security in independent evaluations.' }
+    ],
+    techStack: [
+      { category: 'Frontend', items: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'] },
+      { category: 'Document Processing', items: ['PDF.js', 'Tesseract.js'] },
+      { category: 'AI', items: ['Google Gemini', 'OpenRouter'] },
+      { category: 'Testing', items: ['Vitest', 'React Testing Library'] }
+    ],
+    keyFeatures: [
+      { title: 'Legal Advisor Workspace', description: 'Major document-intelligence capabilities and clause exploration.' },
+      { title: 'Understanding and Review', description: 'Moving from document upload to understanding clauses and identifying areas for further review.' }
+    ],
+    results: {
+      description: 'Achieved an outstanding 89/100 external AI evaluation score. The project demonstrated that AI becomes more useful when constrained by context and evidence.',
+      metrics: [
+        { label: 'Evaluation Score', value: '89 / 100' },
+        { label: 'Accessibility', value: '95 / 100' }
+      ]
+    },
+    engineeringReflection: [
+      'AI becomes more useful when constrained by context, evidence, and a well-designed workflow rather than treated as a generic chatbot.',
+      'Handling OCR on the client requires careful optimization of web workers to avoid locking the main thread.',
+      'Maintaining the boundary of providing information vs. legal advice dictates both UX design and prompt engineering.'
+    ]
   }
 };

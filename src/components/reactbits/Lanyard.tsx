@@ -204,19 +204,41 @@ function Band({
     return composite;
   }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map]);
 
+  const attachmentLocal = useMemo(() => {
+    const v = new THREE.Vector3(0, 1.45, 0);
+    if (nodes.clip && nodes.clamp) {
+      if (!nodes.clip.geometry.boundingBox) nodes.clip.geometry.computeBoundingBox();
+      if (!nodes.clamp.geometry.boundingBox) nodes.clamp.geometry.computeBoundingBox();
+      const clipBB = nodes.clip.geometry.boundingBox;
+      const clampBB = nodes.clamp.geometry.boundingBox;
+
+      const maxY = Math.max(clipBB.max.y, clampBB.max.y);
+      // Transform from geometry local space to RigidBody local space
+      // (scale by 2.8, offset by [0, -1.2, -0.05])
+      v.set(0, (maxY * 2.8) - 1.2, -0.05);
+    }
+    return v;
+  }, [nodes]);
+
   const [curve] = useState(
-    () => new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
+    () => new THREE.CatmullRomCurve3([
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+      new THREE.Vector3()
+    ])
   );
 
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.5]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.5]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1.5]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.45, 0]
+    [0, attachmentLocal.y, attachmentLocal.z]
   ]);
 
   useEffect(() => {
@@ -232,7 +254,7 @@ function Band({
     if (dragged && typeof dragged !== 'boolean') {
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
       dir.copy(vec).sub(state.camera.position).normalize();
-      vec.add(dir.multiplyScalar(state.camera.position.length()));
+      vec.copy(state.camera.position).add(dir.multiplyScalar(state.camera.position.length()));
       [card, j1, j2, j3, fixed].forEach(ref => ref.current?.wakeUp());
       card.current?.setNextKinematicTranslation({
         x: vec.x - dragged.x,
@@ -251,7 +273,11 @@ function Band({
       curve.points[1].copy(getLerped(j2.current));
       curve.points[2].copy(getLerped(j1.current));
       curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
+
+      // Add ONE purely visual curve point extending above fixed
+      curve.points[4].copy(curve.points[3]).add(new THREE.Vector3(0, 40, 0));
+
+      band.current.geometry.setPoints(curve.getPoints(isMobile ? 32 : 64));
 
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
@@ -264,30 +290,34 @@ function Band({
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      <group position={[0, 5, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type="dynamic">
+        <RigidBody position={[0, -1.5, 0]} ref={j1} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps} type="dynamic">
+        <RigidBody position={[0, -3, 0]} ref={j2} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps} type="dynamic">
+        <RigidBody position={[0, -4.5, 0]} ref={j3} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
         <RigidBody
-          position={[2, 0, 0]}
+          position={[0, -6, 0]}
           ref={card}
           {...segmentProps}
           type={dragged ? 'kinematicPosition' : 'dynamic'}
         >
-          <CuboidCollider args={[0.8, 1.125, 0.01]} />
+          <CuboidCollider args={[0.99, 1.4, 0.01]} />
           <group
-            scale={2.25}
+            scale={2.8}
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={(e: ThreeEvent<PointerEvent>) => {
+              (e.target as Element).releasePointerCapture(e.pointerId);
+              drag(false);
+            }}
+            onPointerCancel={(e: ThreeEvent<PointerEvent>) => {
               (e.target as Element).releasePointerCapture(e.pointerId);
               drag(false);
             }}
@@ -323,10 +353,11 @@ function Band({
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap={1 as any}
           map={texture}
-          repeat={[-4, 1]}
+          repeat={[-10, 1]}
           lineWidth={lanyardWidth}
         />
       </mesh>
     </>
   );
 }
+

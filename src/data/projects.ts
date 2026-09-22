@@ -27,6 +27,38 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    index: '08',
+    variant: 'immersive',
+    title: 'Sightline',
+    category: 'Document Intelligence',
+    year: '2026',
+    tagline: 'AI-powered legal document intelligence platform.',
+    context: 'Legal documents are difficult to understand and important information can be easy to miss.',
+    thinking: 'Make the document itself the center of the AI experience. AI becomes more useful when constrained by context, evidence, and a well-designed workflow: Document → Question → Evidence → Explanation → Decision.',
+    execution: 'Engineered document extraction, client-side OCR, AI integration, and grounding API architecture with a strong focus on testing, accessibility, and security.',
+    outcome: 'Achieved an 89/100 external AI evaluation score. Note: Sightline provides information, not legal advice.',
+    stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Gemini'],
+    color: '#D4C5A9',
+    imageHue: 'linear-gradient(135deg, #0F0E0C 0%, #1A1714 40%, #2C2419 100%)',
+    image: '/projects/sightline.png',
+    status: 'Production',
+    features: [
+      'Document understanding, simplification, and key information extraction',
+      'Clause exploration, obligations, and risk/inconsistency detection',
+      'Document-grounded Legal Advisor and action checklists',
+      'Client-side OCR for scanned PDFs'
+    ],
+    challenges: [
+      'Constraining AI to context and evidence rather than acting as a generic chatbot',
+      'Processing complex document structures and extracting accurate text purely client-side',
+      'Maintaining clear boundaries that the system provides information, not professional legal advice'
+    ],
+    links: {
+      live: 'https://sightline-chi-liart.vercel.app/',
+      github: 'https://github.com/indraaaa29/Sightline'
+    }
+  },
+  {
     index: '01',
     variant: 'immersive',
     title: 'VoteSetu',
@@ -233,3 +265,4 @@ export const PROJECTS: Project[] = [
     ]
   }
 ];
+

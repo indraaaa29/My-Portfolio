@@ -6,31 +6,91 @@ type CursorMode = 'default' | 'hover' | 'view' | 'cta';
 
 const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
+/* ────────────────────────────────────────────
+   SOFT GLASS ORB CURSOR
+   ──────────────────────────────────────────── */
+
 /**
- * Premium cursor — restraint is the luxury.
- *   default : small elegant dot + thin ring
- *   hover   : ring widens, dot dims
- *   view    : thin luxury ring with reading label (image surfaces)
- *   cta     : directional arrow inside a tight ring
+ * Premium glass-orb cursor — a subtle translucent orb with a luminous center.
+ *   default : small dot + compact glass orb (~26px)
+ *   hover   : orb expands (~40px), glow intensifies subtly
+ *   view    : same as hover (data-cursor="view" surfaces)
+ *   cta     : same as hover (data-cursor="cta" surfaces)
+ *
+ * Architecture:
+ *   dotRef (outer)    — RAF owns transform: translate3d(…) exclusively
+ *     └ dotInnerRef   — CSS transitions own transform: scale(…) for click
+ *   orbRef (outer)    — RAF owns transform: translate3d(…) exclusively
+ *     └ orbInnerRef   — CSS transitions own transform: scale(…) for click/hover
+ *
+ * Click state uses a ref (not React state) to avoid re-renders that would
+ * overwrite RAF-set transforms with JSX initial values.
  */
 export default function CustomCursor() {
+  /* Touch device guard — render nothing on coarse pointers */
+  const [isFinePointer, setIsFinePointer] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(pointer: fine)');
+    setIsFinePointer(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsFinePointer(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  if (!isFinePointer) return null;
+
+  return <GlassOrbCursorInner />;
+}
+
+function GlassOrbCursorInner() {
   const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const dotInnerRef = useRef<HTMLDivElement>(null);
+  const orbRef = useRef<HTMLDivElement>(null);
+  const orbInnerRef = useRef<HTMLDivElement>(null);
+
   const [mode, setMode] = useState<CursorMode>('default');
-  const [isClicking, setIsClicking] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
+  /* Click state as a ref — avoids re-renders that would overwrite RAF transforms */
+  const clicking = useRef(false);
+
   const pos = useRef({ x: -100, y: -100 });
-  const ringPos = useRef({ x: -100, y: -100 });
+  const orbPos = useRef({ x: -100, y: -100 });
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
+    /* Mouse position */
     const onMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
     };
 
-    const onDown = () => setIsClicking(true);
-    const onUp = () => setIsClicking(false);
+    /* Click — use pointer events for reliable capture + cancel handling */
+    const onPointerDown = () => {
+      clicking.current = true;
+      applyClickVisuals(true);
+    };
+    const onPointerUp = () => {
+      clicking.current = false;
+      applyClickVisuals(false);
+    };
+    /* pointercancel fires when the browser aborts the pointer (e.g. touch cancel) */
+    const onPointerCancel = () => {
+      clicking.current = false;
+      applyClickVisuals(false);
+    };
 
-    // Resolve cursor mode from data-cursor attributes, with fallbacks
+    /* Apply click scale directly to DOM — no React re-render needed */
+    const applyClickVisuals = (down: boolean) => {
+      if (orbInnerRef.current) {
+        orbInnerRef.current.style.transform = down ? 'scale(0.85)' : 'scale(1)';
+      }
+      if (dotInnerRef.current) {
+        dotInnerRef.current.style.transform = down ? 'scale(0.6)' : 'scale(1)';
+      }
+    };
+
+    /* Resolve cursor mode from data-cursor attributes, with fallbacks */
     const resolveMode = (el: HTMLElement | null): CursorMode => {
       if (!el) return 'default';
       const target = el.closest<HTMLElement>('[data-cursor]');
@@ -53,122 +113,147 @@ export default function CustomCursor() {
       setMode(related ? resolveMode(related) : 'default');
     };
 
+    /* Viewport exit / entry */
+    const onDocLeave = () => {
+      setIsVisible(false);
+      /* Safety: clear click state when pointer leaves viewport */
+      if (clicking.current) {
+        clicking.current = false;
+        applyClickVisuals(false);
+      }
+    };
+    const onDocEnter = () => setIsVisible(true);
+
+    /* Register events */
     window.addEventListener('mousemove', onMove);
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup', onUp);
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerCancel);
     document.addEventListener('mouseover', onEnter);
     document.addEventListener('mouseout', onLeave);
+    document.documentElement.addEventListener('mouseleave', onDocLeave);
+    document.documentElement.addEventListener('mouseenter', onDocEnter);
 
-    // Smooth ring animation loop
+    /* Smooth orb animation loop — single RAF */
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const tick = () => {
-      ringPos.current.x = lerp(ringPos.current.x, pos.current.x, 0.14);
-      ringPos.current.y = lerp(ringPos.current.y, pos.current.y, 0.14);
+      orbPos.current.x = lerp(orbPos.current.x, pos.current.x, 0.13);
+      orbPos.current.y = lerp(orbPos.current.y, pos.current.y, 0.13);
 
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px)`;
+        dotRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
       }
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px)`;
+      if (orbRef.current) {
+        orbRef.current.style.transform = `translate3d(${orbPos.current.x}px, ${orbPos.current.y}px, 0)`;
       }
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
 
+    /* Cleanup */
     return () => {
       window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerCancel);
       document.removeEventListener('mouseover', onEnter);
       document.removeEventListener('mouseout', onLeave);
+      document.documentElement.removeEventListener('mouseleave', onDocLeave);
+      document.documentElement.removeEventListener('mouseenter', onDocEnter);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
-  const isView = mode === 'view';
-  const isCta = mode === 'cta';
-  const isHover = mode === 'hover';
+  /* ── Derived state (only recalculated on mode/visibility changes) ── */
+  /* hover / view / cta all produce the expanded orb — unified interactive state */
+  const isInteractive = mode === 'hover' || mode === 'view' || mode === 'cta';
 
-  const ringSize = isView ? 64 : isCta ? 44 : isHover ? 40 : 28;
+  /* Orb sizing — default ~26px, interactive ~40px */
+  const orbSize = isInteractive ? 40 : 26;
+
+  /* ── Orb appearance tokens ── */
+  /* Warm cream base: #F5F0E8 → rgba(245,240,232,...) */
+  const orbBg = isInteractive
+    ? 'radial-gradient(circle at 38% 36%, rgba(245,240,232,0.10) 0%, rgba(245,240,232,0.04) 55%, transparent 100%)'
+    : 'radial-gradient(circle at 38% 36%, rgba(245,240,232,0.07) 0%, rgba(245,240,232,0.025) 55%, transparent 100%)';
+
+  const orbBorder = isInteractive
+    ? '1px solid rgba(245,240,232,0.13)'
+    : '1px solid rgba(245,240,232,0.08)';
+
+  const orbShadow = isInteractive
+    ? '0 0 16px 3px rgba(245,240,232,0.06), inset 0 0 8px rgba(245,240,232,0.04)'
+    : '0 0 10px 2px rgba(245,240,232,0.035), inset 0 0 5px rgba(245,240,232,0.025)';
+
+  /* Dot opacity — dim slightly on interactive */
+  const dotOpacity = isVisible ? (isInteractive ? 0.55 : 0.9) : 0;
 
   return (
     <>
-      {/* Precise dot — follows cursor exactly */}
+      {/* ── Central dot wrapper — RAF exclusively owns `transform` ── */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 z-[9999] pointer-events-none"
         style={{
-          width: '5px',
-          height: '5px',
-          marginLeft: '-2.5px',
-          marginTop: '-2.5px',
-          borderRadius: '50%',
-          backgroundColor: 'var(--c-text-primary)',
-          opacity: isView ? 0 : isCta ? 0.6 : isHover ? 0.5 : 1,
-          transition: `opacity 300ms ${EASE}, scale 200ms ${EASE}`,
-          transform: 'translate(-100px, -100px)',
-          mixBlendMode: 'difference',
-          scale: isClicking ? '0.6' : '1',
-        }}
-      />
-
-      {/* Lagging ring — thin, widens by mode, content nested so it travels with the ring */}
-      <div
-        ref={ringRef}
-        className="fixed top-0 left-0 z-[9998] pointer-events-none flex items-center justify-center"
-        style={{
-          width: `${ringSize}px`,
-          height: `${ringSize}px`,
-          marginLeft: `${-ringSize / 2}px`,
-          marginTop: `${-ringSize / 2}px`,
-          borderRadius: '50%',
-          border: isView
-            ? '1px solid rgba(245,240,232,0.85)'
-            : '1px solid rgba(245,240,232,0.4)',
-          background: isView ? 'rgba(245,240,232,0.06)' : 'transparent',
-          transition: `width 400ms ${EASE}, height 400ms ${EASE}, margin 400ms ${EASE}, opacity 250ms, background-color 400ms, border-color 400ms`,
-          transform: 'translate(-100px, -100px)',
-          opacity: isClicking ? 0.4 : 1,
-          mixBlendMode: isView ? 'normal' : 'difference',
-          backdropFilter: isView ? 'blur(1.5px)' : 'none',
+          width: '4px',
+          height: '4px',
+          marginLeft: '-2px',
+          marginTop: '-2px',
+          opacity: dotOpacity,
+          transition: `opacity 300ms ${EASE}`,
         }}
       >
-        {isView && (
-          <span
-            className="font-sans uppercase"
-            style={{
-              fontSize: '8px',
-              letterSpacing: '0.34em',
-              color: 'var(--c-text-primary)',
-              paddingLeft: '0.34em', // optically center tracked text
-              opacity: isClicking ? 0.6 : 1,
-              transition: `opacity 250ms ${EASE}`,
-            }}
-          >
-            View
-          </span>
-        )}
+        {/* Inner dot — CSS transitions own `transform: scale(…)` */}
+        <div
+          ref={dotInnerRef}
+          style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+            backgroundColor: 'var(--c-text-primary)',
+            boxShadow: '0 0 4px rgba(245,240,232,0.3)',
+            transform: clicking.current ? 'scale(0.6)' : 'scale(1)',
+            transformOrigin: 'center',
+            transition: `transform 200ms ${EASE}`,
+          }}
+        />
+      </div>
 
-        {isCta && (
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 16 16"
-            fill="none"
-            style={{
-              opacity: isClicking ? 0.6 : 1,
-              transition: `opacity 250ms ${EASE}`,
-            }}
-          >
-            <path
-              d="M4 12L12 4M12 4H6.5M12 4V9.5"
-              stroke="var(--c-text-primary)"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
+      {/* ── Glass orb wrapper — RAF exclusively owns `transform` ── */}
+      <div
+        ref={orbRef}
+        className="fixed top-0 left-0 z-[9998] pointer-events-none"
+        style={{
+          /* Fixed generous size — the visible orb scales inside */
+          width: '48px',
+          height: '48px',
+          marginLeft: '-24px',
+          marginTop: '-24px',
+          opacity: isVisible ? 1 : 0,
+          transition: `opacity 300ms ${EASE}`,
+        }}
+      >
+        {/* Inner orb disc — CSS transitions own `transform: scale(…)` */}
+        <div
+          ref={orbInnerRef}
+          style={{
+            position: 'absolute',
+            /* Center the variable-size orb inside the fixed 48px container */
+            top: `${(48 - orbSize) / 2}px`,
+            left: `${(48 - orbSize) / 2}px`,
+            width: `${orbSize}px`,
+            height: `${orbSize}px`,
+            borderRadius: '50%',
+            background: orbBg,
+            border: orbBorder,
+            boxShadow: orbShadow,
+            backdropFilter: 'blur(1.5px)',
+            WebkitBackdropFilter: 'blur(1.5px)',
+            transform: clicking.current ? 'scale(0.85)' : 'scale(1)',
+            transformOrigin: 'center',
+            transition: `width 400ms ${EASE}, height 400ms ${EASE}, top 400ms ${EASE}, left 400ms ${EASE}, background 400ms ${EASE}, border 400ms ${EASE}, box-shadow 400ms ${EASE}, transform 180ms ${EASE}`,
+          }}
+        />
       </div>
     </>
   );

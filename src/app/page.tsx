@@ -3,7 +3,6 @@
 import Hero from '@/components/hero/Hero';
 import { Navbar } from '@/components/navbar';
 import Navigation from '@/components/portfolio/Navigation';
-import GlobalGradualBlur from '@/components/portfolio/GlobalGradualBlur';
 import SelectedWork from '@/components/portfolio/SelectedWork';
 import AboutSection from '@/components/portfolio/AboutSection';
 import ExperienceSection from '@/components/portfolio/ExperienceSection';
@@ -21,7 +20,6 @@ export default function Home() {
       <LineWavesBackground />
 
       <div className="relative z-10 flex flex-col">
-        <GlobalGradualBlur />
         <Navbar />
         <Navigation />
 

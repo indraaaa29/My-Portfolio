@@ -257,13 +257,14 @@ export default function Hero({ className }: HeroProps) {
           transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <Lanyard
-            position={[0, 0, 13]}
+            position={[-2, -1.5, 22]}
             gravity={[0, -40, 0]}
+            fov={20}
             frontImage="/images/hero/portrait.jpg"
             backImage="/images/hero/portrait.jpg"
             imageFit="cover"
             lanyardImage="/lanyard.png"
-            lanyardWidth={2}
+            lanyardWidth={2.0}
           />
         </motion.div>
       </div>

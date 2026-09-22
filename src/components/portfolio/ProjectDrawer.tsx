@@ -275,17 +275,6 @@ export default function ProjectDrawer({
                     <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-zinc-950 transition-colors" />
                   </a>
                 )}
-                {project.links?.github && (
-                  <a
-                    href={project.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 bg-black/40 text-zinc-200 px-5 py-3.5 rounded-[14px] font-medium transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] hover:bg-black/60 border border-white/10 group backdrop-blur-md"
-                  >
-                    GitHub
-                    <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-zinc-200 transition-colors" />
-                  </a>
-                )}
               </div>
               {project.links?.live && (
                 <p className="text-[11px] text-zinc-500 text-center tracking-wide mt-3 animate-pulse opacity-70">

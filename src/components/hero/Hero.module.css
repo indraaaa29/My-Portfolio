@@ -102,7 +102,8 @@
   width: 100%;
   margin: 0 auto;
   padding: 0 clamp(2rem, 5vw, 5rem);
-  padding-top: 84px;   /* nav height */
+  padding-top: 84px;
+  /* nav height */
   padding-bottom: 5rem;
 }
 
@@ -153,10 +154,14 @@
 
 .nameBlock {
   display: flex;
-  flex-direction: row; /* Horizontal alignment for INDRANIL PAUL */
-  flex-wrap: wrap; /* Allows stacking gracefully on very small screens */
-  align-items: flex-end; /* Align baselines */
-  gap: clamp(2rem, 4vw, 3rem); /* Increased gap between INDRANIL and PAUL */
+  flex-direction: row;
+  /* Horizontal alignment for INDRANIL PAUL */
+  flex-wrap: wrap;
+  /* Allows stacking gracefully on very small screens */
+  align-items: flex-end;
+  /* Align baselines */
+  gap: clamp(2rem, 4vw, 3rem);
+  /* Increased gap between INDRANIL and PAUL */
   margin-bottom: 1.75rem;
   width: 100%;
   overflow: visible;
@@ -302,8 +307,14 @@
   box-shadow: 0 6px 24px rgba(201, 168, 76, 0.35);
 }
 
-.ctaPrimary:hover svg { transform: translateX(3px); }
-.ctaPrimary:active { transform: scale(0.97); }
+.ctaPrimary:hover svg {
+  transform: translateX(3px);
+}
+
+.ctaPrimary:active {
+  transform: scale(0.97);
+}
+
 .ctaPrimary:focus-visible {
   outline: 2px solid rgba(201, 168, 76, 0.55);
   outline-offset: 3px;
@@ -364,8 +375,14 @@
   left: 200%;
 }
 
-.ctaSecondary:hover svg { transform: translateY(2px); }
-.ctaSecondary:active { transform: scale(0.97); }
+.ctaSecondary:hover svg {
+  transform: translateY(2px);
+}
+
+.ctaSecondary:active {
+  transform: scale(0.97);
+}
+
 .ctaSecondary:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.35);
   outline-offset: 3px;
@@ -440,15 +457,12 @@
 .lanyardArea {
   position: relative;
   width: min(100%, 390px);
-  /* The original portrait was aspect-ratio 3/4. 390 * 4/3 = 520px. 
-     By setting min-height we allow Lanyard to anchor correctly 
-     but let it take up space visually similar to the old portrait. */
-  min-height: 520px;
+  height: 100%;
+  min-height: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2;
-  /* Lanyard wrapper uses 100vh height and might spill visually. We allow this to keep the physics looking natural, but restrict the box size. */
 }
 
 /* Restrained gold atmosphere — centred behind portrait */
@@ -497,28 +511,32 @@
 }
 
 .cornerTL {
-  top: -1px; left: -1px;
+  top: -1px;
+  left: -1px;
   border-top: 1.5px solid var(--gold);
   border-left: 1.5px solid var(--gold);
   border-radius: 3px 0 0 0;
 }
 
 .cornerTR {
-  top: -1px; right: -1px;
+  top: -1px;
+  right: -1px;
   border-top: 1.5px solid var(--gold);
   border-right: 1.5px solid var(--gold);
   border-radius: 0 3px 0 0;
 }
 
 .cornerBL {
-  bottom: -1px; left: -1px;
+  bottom: -1px;
+  left: -1px;
   border-bottom: 1.5px solid var(--gold);
   border-left: 1.5px solid var(--gold);
   border-radius: 0 0 0 3px;
 }
 
 .cornerBR {
-  bottom: -1px; right: -1px;
+  bottom: -1px;
+  right: -1px;
   border-bottom: 1.5px solid var(--gold);
   border-right: 1.5px solid var(--gold);
   border-radius: 0 0 3px 0;
@@ -738,7 +756,8 @@
     order: 2;
     justify-content: flex-start;
     align-self: auto;
-    padding: 0 0 0 2.25rem; /* indent portrait to align with IDEAS label space */
+    padding: 0 0 0 2.25rem;
+    /* indent portrait to align with IDEAS label space */
   }
 
   .portraitFrameOuter {
@@ -897,6 +916,7 @@
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
+
   .portraitFrameOuter,
   .portraitOffsetFrame,
   .socialLink,
