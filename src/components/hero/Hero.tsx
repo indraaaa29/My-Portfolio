@@ -127,13 +127,24 @@ export default function Hero({ className }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const [prefersReduced, setPrefersReduced] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Reduced motion check
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReduced(mq.matches);
     const h = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
     mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
+
+    // Mobile check
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      mq.removeEventListener('change', h);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -257,13 +268,13 @@ export default function Hero({ className }: HeroProps) {
           transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <Lanyard
-            position={[-2, -1.5, 22]}
+            position={isMobile ? [0, 0, 32] : [-2, -1.5, 22]}
             gravity={[0, -40, 0]}
-            fov={20}
+            fov={isMobile ? 26 : 20}
             frontImage="/images/hero/profile.png"
             backImage="/images/hero/profile.png"
             imageFit="cover"
-            lanyardImage="/lanyard-premium.png"
+            lanyardImage="/lanyard.png"
             lanyardWidth={2.0}
           />
         </motion.div>

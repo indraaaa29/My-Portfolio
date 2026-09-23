@@ -246,33 +246,42 @@ export default function ContactSection() {
               <div className="text-[10px] font-semibold text-zinc-500 mb-4 tracking-[0.15em] uppercase">
                 Follow & Connect
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col items-start gap-5">
                 <a
                   href="https://github.com/indraaaa29"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-400 hover:text-amber-400 transition-colors"
+                  className="group relative flex items-center text-zinc-400 hover:text-amber-400 transition-all"
                   aria-label="GitHub"
                 >
-                  <GithubIcon className="w-5 h-5" />
+                  <GithubIcon className="w-5 h-5 shrink-0" />
+                  <span className="absolute left-full ml-2 opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium pointer-events-none">
+                    Github
+                  </span>
                 </a>
                 <a
                   href="https://www.linkedin.com/in/indranil-paul-ai/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-400 hover:text-amber-400 transition-colors"
+                  className="group relative flex items-center text-zinc-400 hover:text-amber-400 transition-all"
                   aria-label="LinkedIn"
                 >
-                  <LinkedinIcon className="w-5 h-5" />
+                  <LinkedinIcon className="w-5 h-5 shrink-0" />
+                  <span className="absolute left-full ml-2 opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium pointer-events-none">
+                    Linkedin
+                  </span>
                 </a>
                 <a
                   href="https://www.instagram.com/indraaaa.19/?hl=en"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-400 hover:text-amber-400 transition-colors"
+                  className="group relative flex items-center text-zinc-400 hover:text-amber-400 transition-all"
                   aria-label="Instagram"
                 >
-                  <InstagramIcon className="w-5 h-5" />
+                  <InstagramIcon className="w-5 h-5 shrink-0" />
+                  <span className="absolute left-full ml-2 opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium pointer-events-none">
+                    Instagram
+                  </span>
                 </a>
               </div>
             </div>

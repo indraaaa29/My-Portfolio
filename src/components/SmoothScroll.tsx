@@ -19,6 +19,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       wheelMultiplier: 1,
       touchMultiplier: 2,
       infinite: false,
+      autoRaf: false,
     });
 
     // Expose the instance so overlays (modal, drawer) can stop/start it

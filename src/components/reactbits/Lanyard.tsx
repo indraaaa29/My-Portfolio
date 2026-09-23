@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 // Use standard path for Next.js public directory
 const cardGLB = '/card.glb';
-const lanyard = '/lanyard-premium.png';
+const lanyard = '/lanyard.png';
 
 import './Lanyard.css';
 
