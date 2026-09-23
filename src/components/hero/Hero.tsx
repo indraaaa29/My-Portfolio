@@ -235,7 +235,7 @@ export default function Hero({ className }: HeroProps) {
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className={styles.ctaSecondary} data-cursor="hover">
+            <a href="https://drive.google.com/file/d/1qVUmDShE9FH4ksZBTtKJqnLdFVOdzIhd/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className={styles.ctaSecondary} data-cursor="hover">
               <span>Download Resume</span>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
@@ -260,10 +260,10 @@ export default function Hero({ className }: HeroProps) {
             position={[-2, -1.5, 22]}
             gravity={[0, -40, 0]}
             fov={20}
-            frontImage="/images/hero/portrait.jpg"
-            backImage="/images/hero/portrait.jpg"
+            frontImage="/images/hero/profile.png"
+            backImage="/images/hero/profile.png"
             imageFit="cover"
-            lanyardImage="/lanyard.png"
+            lanyardImage="/lanyard-premium.png"
             lanyardWidth={2.0}
           />
         </motion.div>

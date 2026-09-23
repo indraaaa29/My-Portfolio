@@ -250,7 +250,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
   /* Determine if Resume item needs special handling (opens in new tab) */
   const isResumeLink = (href: string) =>
-    href.endsWith('.pdf') || href.includes('resume');
+    href.endsWith('.pdf') || href.includes('resume') || href.includes('drive.google.com');
 
   return (
     <div className="pill-nav-container">

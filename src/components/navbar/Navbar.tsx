@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { label: 'Experience', href: '#experience' },
   { label: 'Achievements', href: '#achievements' },
   { label: 'Contact', href: '#contact' },
-  { label: 'Resume', href: '/resume.pdf' },
+  { label: 'Resume', href: 'https://drive.google.com/file/d/1qVUmDShE9FH4ksZBTtKJqnLdFVOdzIhd/view?usp=drive_link' },
 ];
 
 export default function Navbar({ className }: NavbarProps) {

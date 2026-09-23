@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 // Use standard path for Next.js public directory
 const cardGLB = '/card.glb';
-const lanyard = '/lanyard.png';
+const lanyard = '/lanyard-premium.png';
 
 import './Lanyard.css';
 
@@ -152,6 +152,87 @@ function Band({
   // isn't supplied for a given face, then skip compositing it below.
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
   const backTex = useTexture(backImage || BLANK_PIXEL);
+
+    // Procedural Strap Texture
+  const strapTexture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    const W = 2048; // length of pattern
+    const H = 256;  // width of strap
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      // Base dark charcoal
+      ctx.fillStyle = '#080808';
+      ctx.fillRect(0, 0, W, H);
+
+      // Edge stitching (warm gold)
+      ctx.strokeStyle = '#9A6B2F';
+      ctx.lineWidth = 4;
+      ctx.setLineDash([12, 8]);
+      ctx.beginPath();
+      ctx.moveTo(0, 12); ctx.lineTo(W, 12);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, H - 12); ctx.lineTo(W, H - 12);
+      ctx.stroke();
+
+      // Sweeping gold waves
+      ctx.setLineDash([]);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#B8893D';
+      
+      // Wave 1
+      ctx.beginPath();
+      ctx.moveTo(0, H * 0.2);
+      ctx.bezierCurveTo(W * 0.33, H * 1.5, W * 0.66, -H * 0.5, W, H * 0.8);
+      ctx.stroke();
+
+      // Wave 2
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#E2B866';
+      ctx.beginPath();
+      ctx.moveTo(0, H * 0.8);
+      ctx.bezierCurveTo(W * 0.25, -H * 0.2, W * 0.75, H * 1.2, W, H * 0.2);
+      ctx.stroke();
+      
+      // Draw 4-point star
+      const drawStar = (cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number) => {
+        let rot = Math.PI / 2 * 3;
+        let x = cx;
+        let y = cy;
+        let step = Math.PI / spikes;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - outerRadius);
+        for (let i = 0; i < spikes; i++) {
+          x = cx + Math.cos(rot) * outerRadius;
+          y = cy + Math.sin(rot) * outerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+          x = cx + Math.cos(rot) * innerRadius;
+          y = cy + Math.sin(rot) * innerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+        }
+        ctx.lineTo(cx, cy - outerRadius);
+        ctx.closePath();
+        ctx.fillStyle = '#E2B866';
+        ctx.fill();
+      };
+      
+      // Add stars evenly spaced
+      drawStar(W * 0.25, H / 2, 4, 30, 8);
+      drawStar(W * 0.5, H / 2, 4, 50, 12);
+      drawStar(W * 0.75, H / 2, 4, 30, 8);
+    }
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 16;
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
 
   // Composite the front/back images into the card's texture atlas (front = left
   // half, back = right half). Each image is drawn aspect-preserving (no stretch).
@@ -336,12 +417,22 @@ function Band({
                 metalness={0.8}
               />
             </mesh>
-            <mesh
-              geometry={nodes.clip.geometry}
-              material={materials.metal}
-              material-roughness={0.3}
-            />
-            <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+            <mesh geometry={nodes.clip.geometry}>
+              <meshStandardMaterial
+                color="#C5A059"
+                roughness={0.3}
+                metalness={1.0}
+                envMapIntensity={2.0}
+              />
+            </mesh>
+            <mesh geometry={nodes.clamp.geometry}>
+              <meshStandardMaterial
+                color="#C5A059"
+                roughness={0.3}
+                metalness={1.0}
+                envMapIntensity={2.0}
+              />
+            </mesh>
           </group>
         </RigidBody>
       </group>
@@ -352,8 +443,8 @@ function Band({
           depthTest={false}
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap={1 as any}
-          map={texture}
-          repeat={[-10, 1]}
+          map={strapTexture}
+          repeat={[-4, 1]}
           lineWidth={lanyardWidth}
         />
       </mesh>
