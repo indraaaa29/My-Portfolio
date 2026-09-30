@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useSyncExternalStore, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import PillNav from './PillNav';
 import styles from './Navbar.module.css';
+import { SITE_CONFIG } from '@/lib/config';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export interface NavbarProps {
   className?: string;
@@ -15,44 +17,28 @@ const NAV_ITEMS = [
   { label: 'Experience', href: '#experience' },
   { label: 'Achievements', href: '#achievements' },
   { label: 'Contact', href: '#contact' },
-  { label: 'Resume', href: 'https://drive.google.com/file/d/1qVUmDShE9FH4ksZBTtKJqnLdFVOdzIhd/view?usp=drive_link' },
+  { label: 'Resume', href: SITE_CONFIG.resumeUrl },
 ];
 
 export default function Navbar({ className }: NavbarProps) {
-  const [isPastHero, setIsPastHero] = useState(false);
-  const [isHoverReveal, setIsHoverReveal] = useState(false);
-  const [isHoverable, setIsHoverable] = useState(false);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    // Check if device supports hover (desktop/pointer)
-    setIsHoverable(window.matchMedia('(hover: hover)').matches);
-
-    const handleScroll = () => {
-      // Hide when user has scrolled past 50% of the viewport (leaving Hero)
-      if (window.scrollY > window.innerHeight * 0.5) {
-        setIsPastHero(true);
-      } else {
-        setIsPastHero(false);
-      }
+  const isHoverable = useMediaQuery('(hover: hover)');
+  
+  const subscribeScroll = useCallback((callback: () => void) => {
+    window.addEventListener('scroll', callback, { passive: true });
+    window.addEventListener('resize', callback, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', callback);
+      window.removeEventListener('resize', callback);
     };
-    
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    handleScroll(); // Initial check on mount
-    
-    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const getSnapshot = () => window.scrollY > window.innerHeight * 0.5;
+  const getServerSnapshot = () => false;
+
+  const isPastHero = useSyncExternalStore(subscribeScroll, getSnapshot, getServerSnapshot);
+
+  const [isHoverReveal, setIsHoverReveal] = useState(false);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);

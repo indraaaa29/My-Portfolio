@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 import SectionSeam from './SectionSeam';
 import { CINEMATIC_EASE, REVEAL_SECONDS } from './FadeUp';
+import { SITE_CONFIG } from '@/lib/config';
 
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvXeaRIiiORMX16Y_ikfAJLKGRUibbWhLmacGuCnsBkYlZ7Du15CHRQj89ZdOxSIaAhg/exec";
@@ -248,7 +249,7 @@ export default function ContactSection() {
               </div>
               <div className="flex flex-col items-start gap-5">
                 <a
-                  href="https://github.com/indraaaa29"
+                  href={SITE_CONFIG.socials.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative flex items-center text-zinc-400 hover:text-amber-400 transition-all"
@@ -260,7 +261,7 @@ export default function ContactSection() {
                   </span>
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/indranil-paul-ai/"
+                  href={SITE_CONFIG.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative flex items-center text-zinc-400 hover:text-amber-400 transition-all"
@@ -272,7 +273,7 @@ export default function ContactSection() {
                   </span>
                 </a>
                 <a
-                  href="https://www.instagram.com/indraaaa.19/?hl=en"
+                  href={SITE_CONFIG.socials.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative flex items-center text-zinc-400 hover:text-amber-400 transition-all"

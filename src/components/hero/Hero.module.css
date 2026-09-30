@@ -802,91 +802,88 @@
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .inner {
-    padding-top: 56px;
-    padding-bottom: 2.5rem;
+    padding-top: 70px;
+    padding-bottom: 3rem;
+    position: relative;
+    /* Ensure the wrapper doesn't crop the absolute lanyard container */
+    overflow: visible;
   }
 
-  /* Mobile: target ~48px font
-   * INDRANIL: W = 48*4 = 192px
-   * PAUL:     W = 48*2 = 96px
-   */
+  .textContent {
+    width: 68%;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Target ~52px font for INDRANIL PAUL */
   .nameBlock {
     margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
   .nameRow {
-    max-width: 192px;
-    height: 58px;
+    max-width: 208px;
+    height: 60px;
   }
 
   .nameRowSecond {
-    max-width: 96px;
-    height: 58px;
+    max-width: 104px;
+    height: 60px;
   }
 
   .titleRow {
-    gap: 0.5rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
     margin-bottom: 1.5rem;
   }
 
+  .titleSeparator {
+    display: none;
+  }
+
   .titleText {
-    font-size: clamp(0.75rem, 3.2vw, 1rem);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
   }
 
   .description {
     max-width: 100%;
-    font-size: 0.875rem;
-    margin-bottom: 2rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    margin-bottom: 2.25rem;
+    padding-right: 0.5rem;
   }
 
   .ctaGroup {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
   .ctaPrimary,
   .ctaSecondary {
     width: 100%;
-    max-width: 260px;
-  }
-
-  .textContent {
-    width: 65%;
-    position: relative;
-    z-index: 10;
+    max-width: 240px;
+    padding: 0.8rem 1.25rem;
+    font-size: 0.65rem;
   }
 
   .portraitContainer {
     position: absolute;
-    right: -2rem;
-    top: 50px;
-    bottom: 0;
-    width: 45%;
+    right: -4%;
+    top: -70px; /* Reach the very top of the viewport */
+    bottom: -3rem; /* Reach the very bottom of the viewport */
+    width: 62%;
     min-height: auto;
     padding: 0;
     justify-content: center;
     z-index: 5;
-  }
-
-  .portraitFrameOuter {
-    width: min(100%, 260px);
-  }
-
-  .portraitOffsetFrame {
-    top: 5px;
-    left: 5px;
-    right: -5px;
-    bottom: -5px;
-  }
-
-  .verticalLabel {
-    left: -1.625rem;
-  }
-
-  .frameBottomLine {
-    bottom: -9px;
+    pointer-events: auto;
   }
 }
 
@@ -898,35 +895,18 @@
     padding-top: 52px;
   }
 
-  /* Small mobile: target ~36px font
-   * INDRANIL: W = 36*4 = 144px
-   * PAUL:     W = 36*2 = 72px
+  /* Small mobile: target ~42px font
+   * INDRANIL: W = 42*4 = 168px
+   * PAUL:     W = 42*2 = 84px
    */
   .nameRow {
-    max-width: 144px;
-    height: 44px;
+    max-width: 168px;
+    height: 50px;
   }
 
   .nameRowSecond {
-    max-width: 72px;
-    height: 44px;
-  }
-
-  .portraitContainer {
-    padding: 0;
-    justify-content: center;
-  }
-
-  .portraitFrameOuter {
-    width: min(100%, 240px);
-  }
-
-  .portraitOffsetFrame {
-    display: none;
-  }
-
-  .verticalLabel {
-    display: none;
+    max-width: 84px;
+    height: 50px;
   }
 }
 

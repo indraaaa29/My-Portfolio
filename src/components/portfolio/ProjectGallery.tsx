@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useSyncExternalStore, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
 import ProjectDrawer from '@/components/portfolio/ProjectDrawer';
@@ -20,14 +20,16 @@ const PROJECT_ORDER = [
 export default function ProjectGallery() {
   const [selectedProjectIndex, setSelectedProjectIndex] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(1440);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+  
+  const subscribeResize = useCallback((callback: () => void) => {
+    window.addEventListener('resize', callback, { passive: true });
+    return () => window.removeEventListener('resize', callback);
   }, []);
+
+  const getSnapshot = () => typeof window !== 'undefined' ? window.innerWidth : 1440;
+  const getServerSnapshot = () => 1440;
+
+  const windowWidth = useSyncExternalStore(subscribeResize, getSnapshot, getServerSnapshot);
 
   const mappedProjects = useMemo(() => {
     // Filter and sort according to requested order

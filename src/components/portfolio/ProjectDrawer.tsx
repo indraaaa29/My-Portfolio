@@ -77,11 +77,13 @@ export default function ProjectDrawer({
   const drawerRef = useRef<HTMLDivElement>(null);
   const lastFocusedRef = useRef<Element | null>(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [prevProject, setPrevProject] = useState(project);
 
-  // Reset image index when the project changes
-  useEffect(() => {
+  // Reset image index when the project changes directly during render
+  if (project !== prevProject) {
+    setPrevProject(project);
     setCurrentImgIndex(0);
-  }, [project]);
+  }
 
   // Remember the trigger element, restore focus after closing
   useEffect(() => {

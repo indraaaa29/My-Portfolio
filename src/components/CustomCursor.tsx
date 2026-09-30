@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, useCallback } from 'react';
 
 type CursorMode = 'default' | 'hover' | 'view' | 'cta';
 
@@ -28,15 +28,15 @@ const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
  */
 export default function CustomCursor() {
   /* Touch device guard — render nothing on coarse pointers */
-  const [isFinePointer, setIsFinePointer] = useState(true);
-
-  useEffect(() => {
+  const subscribe = useCallback((callback: () => void) => {
     const mq = window.matchMedia('(pointer: fine)');
-    setIsFinePointer(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsFinePointer(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    mq.addEventListener('change', callback);
+    return () => mq.removeEventListener('change', callback);
   }, []);
+  const getSnapshot = () => window.matchMedia('(pointer: fine)').matches;
+  const getServerSnapshot = () => true;
+
+  const isFinePointer = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   if (!isFinePointer) return null;
 
@@ -212,7 +212,7 @@ function GlassOrbCursorInner() {
             borderRadius: '50%',
             backgroundColor: 'var(--c-text-primary)',
             boxShadow: '0 0 4px rgba(245,240,232,0.3)',
-            transform: clicking.current ? 'scale(0.6)' : 'scale(1)',
+            transform: 'scale(1)',
             transformOrigin: 'center',
             transition: `transform 200ms ${EASE}`,
           }}
@@ -249,7 +249,7 @@ function GlassOrbCursorInner() {
             boxShadow: orbShadow,
             backdropFilter: 'blur(1.5px)',
             WebkitBackdropFilter: 'blur(1.5px)',
-            transform: clicking.current ? 'scale(0.85)' : 'scale(1)',
+            transform: 'scale(1)',
             transformOrigin: 'center',
             transition: `width 400ms ${EASE}, height 400ms ${EASE}, top 400ms ${EASE}, left 400ms ${EASE}, background 400ms ${EASE}, border 400ms ${EASE}, box-shadow 400ms ${EASE}, transform 180ms ${EASE}`,
           }}

@@ -1,15 +1,15 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { Canvas, extend, useFrame, type ThreeElement, type ThreeEvent } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint, type RapierRigidBody, type RigidBodyProps } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
+import { DESIGN_TOKENS } from '@/lib/design-tokens';
 
 // Use standard path for Next.js public directory
 const cardGLB = '/card.glb';
-const lanyard = '/lanyard.png';
 
 import './Lanyard.css';
 
@@ -41,7 +41,6 @@ interface LanyardProps {
   frontImage?: string | null;
   backImage?: string | null;
   imageFit?: 'cover' | 'contain';
-  lanyardImage?: string | null;
   lanyardWidth?: number;
 }
 
@@ -53,13 +52,13 @@ export default function Lanyard({
   frontImage = null,
   backImage = null,
   imageFit = 'cover',
-  lanyardImage = null,
   lanyardWidth = 1
 }: LanyardProps) {
-  const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = (): void => setIsMobile(window.innerWidth < 768);
+    handleResize(); // trigger once to set initial client state
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -79,7 +78,6 @@ export default function Lanyard({
             frontImage={frontImage}
             backImage={backImage}
             imageFit={imageFit}
-            lanyardImage={lanyardImage}
             lanyardWidth={lanyardWidth}
           />
         </Physics>
@@ -101,7 +99,6 @@ interface BandProps {
   frontImage?: string | null;
   backImage?: string | null;
   imageFit?: 'cover' | 'contain';
-  lanyardImage?: string | null;
   lanyardWidth?: number;
 }
 
@@ -116,7 +113,6 @@ function Band({
   frontImage = null,
   backImage = null,
   imageFit = 'cover',
-  lanyardImage = null,
   lanyardWidth = 1
 }: BandProps) {
   const band = useRef<THREE.Mesh<InstanceType<typeof MeshLineGeometry>, InstanceType<typeof MeshLineMaterial>>>(null!);
@@ -146,93 +142,24 @@ function Band({
   };
 
   const { nodes, materials } = useGLTF(cardGLB) as any;
-  const texture = useTexture(lanyardImage || lanyard);
 
   // useTexture must be called unconditionally; use a blank pixel when an image
   // isn't supplied for a given face, then skip compositing it below.
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
   const backTex = useTexture(backImage || BLANK_PIXEL);
 
-    // Procedural Strap Texture
-  const strapTexture = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    const W = 2048; // length of pattern
-    const H = 256;  // width of strap
-    canvas.width = W;
-    canvas.height = H;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      // Base dark charcoal
-      ctx.fillStyle = '#080808';
-      ctx.fillRect(0, 0, W, H);
-
-      // Edge stitching (warm gold)
-      ctx.strokeStyle = '#9A6B2F';
-      ctx.lineWidth = 4;
-      ctx.setLineDash([12, 8]);
-      ctx.beginPath();
-      ctx.moveTo(0, 12); ctx.lineTo(W, 12);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, H - 12); ctx.lineTo(W, H - 12);
-      ctx.stroke();
-
-      // Sweeping gold waves
-      ctx.setLineDash([]);
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#B8893D';
-      
-      // Wave 1
-      ctx.beginPath();
-      ctx.moveTo(0, H * 0.2);
-      ctx.bezierCurveTo(W * 0.33, H * 1.5, W * 0.66, -H * 0.5, W, H * 0.8);
-      ctx.stroke();
-
-      // Wave 2
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#E2B866';
-      ctx.beginPath();
-      ctx.moveTo(0, H * 0.8);
-      ctx.bezierCurveTo(W * 0.25, -H * 0.2, W * 0.75, H * 1.2, W, H * 0.2);
-      ctx.stroke();
-      
-      // Draw 4-point star
-      const drawStar = (cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number) => {
-        let rot = Math.PI / 2 * 3;
-        let x = cx;
-        let y = cy;
-        let step = Math.PI / spikes;
-
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - outerRadius);
-        for (let i = 0; i < spikes; i++) {
-          x = cx + Math.cos(rot) * outerRadius;
-          y = cy + Math.sin(rot) * outerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-          x = cx + Math.cos(rot) * innerRadius;
-          y = cy + Math.sin(rot) * innerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-        }
-        ctx.lineTo(cx, cy - outerRadius);
-        ctx.closePath();
-        ctx.fillStyle = '#E2B866';
-        ctx.fill();
-      };
-      
-      // Add stars evenly spaced
-      drawStar(W * 0.25, H / 2, 4, 30, 8);
-      drawStar(W * 0.5, H / 2, 4, 50, 12);
-      drawStar(W * 0.75, H / 2, 4, 30, 8);
-    }
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = 16;
-    tex.needsUpdate = true;
-    return tex;
-  }, []);
+  // Procedural Strap Texture replaced by static asset for performance
+  const strapTexture = useTexture('/lanyard-premium.png');
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability -- Mutating texture properties directly is the required pattern in @react-three/fiber for configuring loaded assets without breaking the cache.
+    strapTexture.wrapS = strapTexture.wrapT = THREE.RepeatWrapping;
+    // eslint-disable-next-line react-hooks/immutability
+    strapTexture.colorSpace = THREE.SRGBColorSpace;
+    // eslint-disable-next-line react-hooks/immutability
+    strapTexture.anisotropy = 16;
+    // eslint-disable-next-line react-hooks/immutability
+    strapTexture.needsUpdate = true;
+  }, [strapTexture]);
 
   // Composite the front/back images into the card's texture atlas (front = left
   // half, back = right half). Each image is drawn aspect-preserving (no stretch).
@@ -301,15 +228,17 @@ function Band({
     return v;
   }, [nodes]);
 
-  const [curve] = useState(
-    () => new THREE.CatmullRomCurve3([
+  const [curve] = useState(() => {
+    const c = new THREE.CatmullRomCurve3([
       new THREE.Vector3(),
       new THREE.Vector3(),
       new THREE.Vector3(),
       new THREE.Vector3(),
       new THREE.Vector3()
-    ])
-  );
+    ]);
+    c.curveType = 'chordal';
+    return c;
+  });
 
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
@@ -321,6 +250,18 @@ function Band({
     [0, 0, 0],
     [0, attachmentLocal.y, attachmentLocal.z]
   ]);
+
+  useEffect(() => {
+    // Subtle initial sway for discoverability
+    // Hints to the user that this is an interactive physics object
+    const timer = setTimeout(() => {
+      if (card.current) {
+        card.current.wakeUp();
+        card.current.applyImpulse({ x: 1.2, y: 0, z: 0.5 }, true);
+      }
+    }, 1800);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (hovered) {
@@ -365,9 +306,6 @@ function Band({
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true);
     }
   });
-
-  curve.curveType = 'chordal';
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
   return (
     <>
@@ -419,7 +357,7 @@ function Band({
             </mesh>
             <mesh geometry={nodes.clip.geometry}>
               <meshStandardMaterial
-                color="#C5A059"
+                color={DESIGN_TOKENS.colors.gold}
                 roughness={0.3}
                 metalness={1.0}
                 envMapIntensity={2.0}
@@ -427,7 +365,7 @@ function Band({
             </mesh>
             <mesh geometry={nodes.clamp.geometry}>
               <meshStandardMaterial
-                color="#C5A059"
+                color={DESIGN_TOKENS.colors.gold}
                 roughness={0.3}
                 metalness={1.0}
                 envMapIntensity={2.0}

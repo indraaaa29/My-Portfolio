@@ -13,13 +13,14 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://indranilpaul.dev'),
   title: 'Indranil Paul | Full Stack Developer & AI Engineer',
   description: 'Bridging the gap between intelligent systems, scalable web architecture, and secure infrastructure.',
   authors: [{ name: 'Indranil Paul' }],
   openGraph: {
     title: 'Indranil Paul | Full Stack Developer & AI Engineer',
     description: 'Bridging the gap between intelligent systems, scalable web architecture, and secure infrastructure.',
-    url: 'https://indranilpaul.dev', // TODO: update with real domain
+    url: 'https://indranilpaul.dev',
     siteName: 'Indranil Paul Portfolio',
     type: 'website',
   },

@@ -15,6 +15,7 @@
   --c-text-secondary: #888880; /* warm neutral — not zinc */
   --c-text-tertiary: #444440;
   --c-accent: #F5F0E8;
+  --c-gold: #C5A059;
   --c-scrim: rgba(5, 4, 3, 0.82);
 
   /* Typography scale */
@@ -111,6 +112,18 @@ body {
 /* Hide cursor on all interactive elements — custom cursor handles it */
 a, button, [role="button"] {
   cursor: none;
+}
+
+/* ────────────────────────────────────────────
+   ACCESSIBILITY: FOCUS STATES
+   ──────────────────────────────────────────── */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 4px;
 }
 
 /* Touch devices keep the native cursor — custom cursor is a fine-pointer experience */
@@ -256,4 +269,11 @@ a, button, [role="button"] {
 @media (prefers-reduced-motion: reduce) {
   .btn-energy-sweep { animation: none !important; display: none; }
   .btn-dot          { animation: none !important; opacity: 1; }
+  
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -2,8 +2,11 @@
 
 import React from 'react';
 import LineWaves from '@/components/reactbits/LineWaves';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export default function LineWavesBackground() {
+  const isHoverable = useMediaQuery('(hover: hover) and (pointer: fine)');
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-transparent">
       <LineWaves
@@ -18,7 +21,7 @@ export default function LineWavesBackground() {
         color1="#D6A85F"
         color2="#D6A85F"
         color3="#D6A85F"
-        enableMouseInteraction={true}
+        enableMouseInteraction={isHoverable}
         mouseInfluence={0.2}
       />
     </div>

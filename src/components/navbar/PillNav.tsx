@@ -231,6 +231,16 @@ const PillNav: React.FC<PillNavProps> = ({
     onMobileMenuClick?.();
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        toggleMobileMenu();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileMenuOpen]);
+
   const isExternalLink = (href: string) =>
     href.startsWith('http://') ||
     href.startsWith('https://') ||
@@ -284,7 +294,7 @@ const PillNav: React.FC<PillNavProps> = ({
                   aria-label={item.ariaLabel || item.label}
                   onMouseEnter={() => handleEnter(i)}
                   onMouseLeave={() => handleLeave(i)}
-                  {...(isResumeLink(item.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  {...(isExternalLink(item.href) && !item.href.startsWith('#') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   <span
                     className="hover-circle"
@@ -309,6 +319,8 @@ const PillNav: React.FC<PillNavProps> = ({
           className="mobile-menu-button mobile-only"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
           ref={hamburgerRef}
         >
           <span className="hamburger-line" />
@@ -316,7 +328,7 @@ const PillNav: React.FC<PillNavProps> = ({
         </button>
       </nav>
 
-      <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
+      <div id="mobile-menu" className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
         <ul className="mobile-menu-list">
           {items.map(item => (
             <li key={item.href}>
@@ -324,7 +336,7 @@ const PillNav: React.FC<PillNavProps> = ({
                 href={item.href}
                 className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
                 onClick={() => setIsMobileMenuOpen(false)}
-                {...(isResumeLink(item.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                {...(isExternalLink(item.href) && !item.href.startsWith('#') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {item.label}
               </a>
