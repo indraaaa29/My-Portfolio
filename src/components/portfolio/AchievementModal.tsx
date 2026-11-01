@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence, MotionConfig, type Target } from 'framer-motion';
 import { Achievement } from '@/data/achievements';
 import { X, ExternalLink, Download, Maximize2 } from 'lucide-react';
@@ -250,16 +251,17 @@ export default function AchievementModal({
                 : undefined
             }
           >
-            <img
+            <Image
               src={achievement.thumbnail}
               alt={achievement.title}
+              width={achievement.thumbnailWidth || 1200}
+              height={achievement.thumbnailHeight || 800}
               className={
                 achievement.thumbnailWidth && achievement.thumbnailHeight
                   ? 'w-full h-full object-contain'
                   : 'w-full h-auto max-h-[50vh] md:max-h-[70vh] object-contain'
               }
-              loading="eager"
-              decoding="async"
+              priority
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A0A0C]/90 pointer-events-none" />
 
@@ -409,9 +411,11 @@ export default function AchievementModal({
               }
             }}
           >
-            <img
+            <Image
               src={achievement.thumbnail}
-              alt={achievement.title}
+              alt={`${achievement.title} — expanded certificate view`}
+              width={achievement.thumbnailWidth || 2200}
+              height={achievement.thumbnailHeight || 1700}
               className="w-full h-full object-contain cursor-zoom-out"
               onClick={(e) => {
                 e.stopPropagation();

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 'use client';
 import { useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react';
 import { Canvas, extend, useFrame, type ThreeElement, type ThreeEvent } from '@react-three/fiber';
@@ -151,13 +150,10 @@ function Band({
   // Procedural Strap Texture replaced by static asset for performance
   const strapTexture = useTexture('/lanyard-premium.png');
   useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/immutability -- Mutating texture properties directly is the required pattern in @react-three/fiber for configuring loaded assets without breaking the cache.
+    // eslint-disable-next-line react-hooks/immutability -- Mutating texture properties directly is required in Three.js/R3F for configuring loaded texture uniforms
     strapTexture.wrapS = strapTexture.wrapT = THREE.RepeatWrapping;
-    // eslint-disable-next-line react-hooks/immutability
     strapTexture.colorSpace = THREE.SRGBColorSpace;
-    // eslint-disable-next-line react-hooks/immutability
     strapTexture.anisotropy = 16;
-    // eslint-disable-next-line react-hooks/immutability
     strapTexture.needsUpdate = true;
   }, [strapTexture]);
 

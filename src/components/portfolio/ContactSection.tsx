@@ -223,7 +223,7 @@ export default function ContactSection() {
               </p>
             </div>
 
-            <div className="space-y-8 pt-8 border-t border-zinc-900/50">
+            <div className="space-y-8">
               <div className="group">
                 <div className="text-[10px] font-semibold text-zinc-500 mb-2 tracking-[0.15em] uppercase">Email</div>
                 <a
@@ -243,7 +243,7 @@ export default function ContactSection() {
             </div>
 
             {/* Social Links */}
-            <div className="pt-8 border-t border-zinc-900/50">
+            <div>
               <div className="text-[10px] font-semibold text-zinc-500 mb-4 tracking-[0.15em] uppercase">
                 Follow & Connect
               </div>

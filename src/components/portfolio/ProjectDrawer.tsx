@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import Image from 'next/image';
 import { Project } from '@/data/projects';
 import { CASE_STUDIES } from '@/data/projectCaseStudies';
 import { ArrowUpRight, X, ArrowLeft, ArrowRight } from 'lucide-react';
@@ -215,14 +216,15 @@ export default function ProjectDrawer({
           {/* 1 — Hero image */}
           <Reveal isOpen={isOpen} delay={80}>
             <div className="relative w-full h-[220px] md:h-[280px] rounded-[20px] overflow-hidden bg-zinc-900 border border-white/5">
-              <img
+              <Image
                 src={images[currentImgIndex]}
                 alt={`${project.title} — project preview`}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 680px"
+                className="object-cover"
+                priority={isOpen}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" aria-hidden="true" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" aria-hidden="true" />
               <div className="absolute bottom-4 left-5 flex items-center gap-2 text-xs text-zinc-300">
                 <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10">{project.category}</span>
                 <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10">{project.year}</span>

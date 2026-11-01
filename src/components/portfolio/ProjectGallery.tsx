@@ -50,29 +50,25 @@ export default function ProjectGallery() {
 
   const totalCount = mappedProjects.length;
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (selectedProjectIndex !== null) {
       // Drawer is open
-      setSelectedProjectIndex((selectedProjectIndex + 1) % totalCount);
+      setSelectedProjectIndex(prev => (prev !== null ? (prev + 1) % totalCount : null));
     } else {
       // Carousel is active
-      if (activeIndex < totalCount - 1) {
-        setActiveIndex(prev => prev + 1);
-      }
+      setActiveIndex(prev => (prev < totalCount - 1 ? prev + 1 : prev));
     }
-  };
+  }, [selectedProjectIndex, totalCount]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (selectedProjectIndex !== null) {
       // Drawer is open
-      setSelectedProjectIndex((selectedProjectIndex - 1 + totalCount) % totalCount);
+      setSelectedProjectIndex(prev => (prev !== null ? (prev - 1 + totalCount) % totalCount : null));
     } else {
       // Carousel is active
-      if (activeIndex > 0) {
-        setActiveIndex(prev => prev - 1);
-      }
+      setActiveIndex(prev => (prev > 0 ? prev - 1 : prev));
     }
-  };
+  }, [selectedProjectIndex, totalCount]);
 
   const handleDragEnd = (event: any, info: any) => {
     const DRAG_BUFFER = 50;
@@ -106,7 +102,7 @@ export default function ProjectGallery() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [activeIndex, selectedProjectIndex, totalCount]);
+  }, [handleNext, handlePrev]);
 
   return (
     <div className={styles.container}>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 
 interface TextPressureProps {
+  as?: 'h1' | 'span' | 'div';
   text?: string;
   fontFamily?: string;
   fontUrl?: string;
@@ -41,6 +42,7 @@ const debounce = (func: (...args: any[]) => void, delay: number) => {
 };
 
 const TextPressure: React.FC<TextPressureProps> = ({
+  as: Tag = 'h1',
   text = 'Compressa',
   fontFamily = 'Roboto Flex',
   fontUrl = 'https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap',
@@ -57,7 +59,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
   minFontSize = 24
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const titleRef = useRef<HTMLElement | null>(null);
   const spansRef = useRef<(HTMLSpanElement | null)[]>([]);
 
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -202,7 +204,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
         }
       `}</style>
     );
-  }, [fontFamily, fontUrl, flex, stroke, textColor, strokeColor]);
+  }, [fontUrl, textColor, strokeColor]);
 
   const dynamicClassName = [className, flex ? 'flex' : '', stroke ? 'stroke' : ''].filter(Boolean).join(' ');
 
@@ -217,8 +219,8 @@ const TextPressure: React.FC<TextPressureProps> = ({
       }}
     >
       {styleElement}
-      <h1
-        ref={titleRef}
+      <Tag
+        ref={titleRef as any}
         className={`text-pressure-title ${dynamicClassName}`}
         style={{
           fontFamily,
@@ -250,7 +252,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
             {char}
           </span>
         ))}
-      </h1>
+      </Tag>
     </div>
   );
 };

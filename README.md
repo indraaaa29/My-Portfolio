@@ -1,84 +1,153 @@
-# Portfolio — Indranil Paul
+# Indranil Paul — Interactive Portfolio
 
-<p align="center">
-  A production-ready, cinematic developer and photographer portfolio built with Next.js, Three.js, and GSAP. Designed to showcase engineering capability through rich, interactive visual experiences while maintaining uncompromising performance and accessibility.
-</p>
+An immersive developer portfolio combining cinematic UI, interactive 3D physics, and performance-focused frontend engineering.
 
-<p align="center">
-  <a href="https://github.com/indraaaa29/My-Portfolio"><strong>View Repository</strong></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16-black?style=flat&logo=next.js" alt="Next.js" />
-  <img src="https://img.shields.io/badge/React-19-blue?style=flat&logo=react" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Three.js-black?style=flat&logo=three.js&logoColor=white" alt="Three.js" />
-  <img src="https://img.shields.io/badge/GSAP-88CE02?style=flat&logo=greensock&logoColor=white" alt="GSAP" />
-</p>
-
----
+[**Live Website**](https://indranilpaul.dev) · [**Source Code**](https://github.com/indraaaa29/My-Portfolio)
 
 ![Desktop Hero Screenshot](docs/screenshots/hero-desktop.png)
 
-## Overview
+## Project Snapshot
 
-This project is a premium personal portfolio built to serve dual purposes: acting as a traditional resume/showcase, and standing as an interactive technical demonstration itself. The visual direction is heavily inspired by cinematic, dark-themed aesthetics with striking gold accents. 
+| Category | Technology |
+|---|---|
+| **Type** | Personal Portfolio |
+| **Framework** | Next.js 16 (App Router) |
+| **Language** | TypeScript |
+| **Rendering** | React 19 + Three.js |
+| **Physics** | Rapier (@react-three/rapier) |
+| **Animation** | GSAP |
+| **Scrolling** | Lenis |
+| **Deployment** | Vercel (Ready) |
 
-What makes this implementation technically interesting is the balance between highly demanding visual interactions (WebGL, physics simulations, complex DOM animations) and strict production standards (SSR, 0 accessibility violations, flawless performance metrics).
+## Technical Highlights
 
-## Interactive Lanyard
+- **Server-rendered application shell**: Optimized App Router architecture maximizing initial render speed.
+- **Interactive 3D physics**: A responsive, physics-based developer lanyard integrated directly into the DOM flow.
+- **Responsive Lanyard interaction**: Precise rigid-body constraints adapted for both ultra-wide and mobile viewports.
+- **GPU-aware visual effects**: Hardware-accelerated CSS and WebGL elements offloading the main thread.
+- **Smooth scrolling**: Native-feeling momentum scroll built on Lenis.
+- **Accessible navigation**: Focus-visible rings, semantic HTML, and proper keyboard navigation indexing.
+- **SEO infrastructure**: Fully configured metadata, `robots.txt`, and automated `sitemap.xml`.
+- **Production-focused validation**: Zero ESLint warnings, strictly typed interfaces, and optimized image delivery.
 
-![Lanyard Interaction](docs/screenshots/navigation.png)
+## Why This Portfolio Is Different
 
-A centerpiece of the visual experience is the fully interactive, physics-based developer lanyard integrated into the hero section.
+Most portfolios lean into either strict minimalism or unoptimized visual bloat. This project was engineered to prove that a **highly visual, interactive web experience does not require sacrificing performance or accessibility**.
 
-- **Technology**: Built using `React Three Fiber` and `@react-three/rapier` for rigid-body physics.
-- **Implementation**: The lanyard simulates a physical strap and badge using spherical and rope joints. The user can drag, pull, and toss the badge around the screen, and the physics engine calculates gravity, momentum, and collision in real-time.
-- **Design Philosophy**: It breaks the static nature of standard web portfolios, inviting immediate tactile interaction and creating a memorable, playful first impression without disrupting the serious cinematic tone.
+Key differentiators include an **interactive physics-based Lanyard** that responds to pointer gestures and gravity without blocking the main React thread, a **cinematic visual system** driven by centralized design tokens rather than ad-hoc inline styles, and **performance optimization** that respects users via automatic `prefers-reduced-motion` fallbacks.
 
-## Features
+## Visual Showcase
 
-- **Cinematic Portfolio Hero**: A dark, atmospheric landing experience using dynamic `TextPressure` variable fonts and particle backgrounds.
-- **Interactive Physics-based Lanyard**: Real-time WebGL interactive 3D physics badge.
-- **Responsive Layout**: Pixel-perfect adaptation across desktop, tablet, and mobile breakpoints.
-- **Smooth Lenis Scrolling**: Native-feeling, hardware-accelerated momentum scrolling.
-- **GSAP Animations**: Precision-timed scroll-triggered reveals and transitions.
-- **Custom Cursor**: Interactive custom cursor tracking.
-- **Dark Cinematic Visual System**: Centralized design tokens enforcing a strict dark-gold palette.
-- **Resume Integration**: Seamless Google Drive resume linking.
-- **Accessibility Support**: Keyboard-navigable structure, semantic HTML, and proper focus rings.
-- **Reduced-Motion Support**: Automatic fallback and disabled physics for users preferring reduced motion.
-- **SEO Ready**: Dynamically generated `sitemap.xml`, `robots.txt`, and comprehensive metadata.
+| Desktop Experience | Interactive Lanyard |
+| :---: | :---: |
+| ![Desktop Hero](docs/screenshots/hero-desktop.png) | ![Navigation](docs/screenshots/navigation.png) |
 
-## Gallery
-
-| Mobile Experience | Contact & Socials |
+| Mobile Viewport (390px) | Contact & Socials |
 | :---: | :---: |
 | ![Mobile Hero](docs/screenshots/hero-mobile.png) | ![Connect Section](docs/screenshots/connect.png) |
 
+## Interactive Lanyard
+
+### What it is
+A physics-based interactive identity card and strap spanning the hero section.
+
+### How it works
+The lanyard is driven by `React Three Fiber` mapping declarative React state to a `Three.js` scene graph. We use `@react-three/rapier` to apply physical properties to a chain of rigid bodies. **Spherical joints** link the strap segments together, while a **rope joint** bounds the maximum distance of the badge. Pointer interaction applies localized kinetic impulses to the rigid bodies, allowing the card to be dragged or tossed while naturally settling back via gravity and damping.
+
+### Why it exists
+It breaks the rigid, expected layout of a standard web resume. It invites tactile interaction immediately upon load, creating a playful, memorable first impression while contrasting cleanly against the cinematic, serious tone of the background.
+
+### Performance considerations
+Generating textures procedurally at runtime was causing severe WebGL overhead. This was refactored into a static optimized PNG (`lanyard-premium.png`), drastically cutting initialization time and completely eliminating texture-generation stutter.
+
+### Responsive behavior
+The lanyard's anchor points, mass, and bounding boxes are dynamically calculated based on the viewport, ensuring that it remains reachable on a 390px mobile screen without clipping, and scales proportionately on a 1920px 4K display.
+
+## How It Works
+
+1. **Next.js renders the portfolio shell** entirely on the server for instant First Contentful Paint.
+2. **Interactive client components initialize** only where user interaction dictates (like the Navigation Pill and the Lanyard).
+3. **Hero establishes the visual identity** using variable fonts (`TextPressure`) mapped to container queries.
+4. **Three.js/R3F powers the interactive Lanyard**, spinning up an isolated WebGL context.
+5. **Rapier handles physics**, mapping pointer events to rigid-body impulses.
+6. **GSAP/Lenis provide motion and scrolling**, mapping DOM element positions to the smooth momentum scroll progression.
+7. **Responsive logic adapts the experience** gracefully down to 320px screens.
+
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    A[Next.js App Router] --> B[Server Page Component]
+    B --> C[Interactive Client Components]
+    C --> D[Hero Typography]
+    C --> E[Pill Navigation]
+    C --> F[Lanyard Canvas]
+    C --> G[LineWaves Background]
+    F --> H[React Three Fiber]
+    H --> I[Three.js Scene]
+    F --> J[Rapier Physics Engine]
+    C --> K[GSAP Timeline]
+    C --> L[Lenis Smooth Scroll]
+```
+
+## Engineering Decisions
+
+| Decision | Reason |
+|---|---|
+| **Server Component root** | Reduce unnecessary client-side JavaScript bundle payload. |
+| **Static Lanyard texture** | Avoid expensive runtime texture generation stalling the main thread. |
+| **React Three Fiber** | Integrate complex 3D rendering gracefully with React component lifecycles. |
+| **Rapier Physics Engine** | Provide deterministic, high-performance rigid body calculations. |
+| **Lenis over native scroll** | Synchronize GSAP ScrollTrigger animations to a unified hardware-accelerated momentum. |
+| **Centralized Design Tokens** | Enforce a consistent cinematic visual system globally. |
+| **Reduced Motion Fallback** | Ensure accessibility for users with vestibular sensitivities by pausing physics. |
+
 ## Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| **Next.js 16** | Application framework, SSR, routing, and metadata generation |
-| **React 19** | UI architecture and component state |
-| **TypeScript** | Strict type safety and interface definitions |
-| **Tailwind CSS** | Utility-first styling and centralized design tokens |
-| **Three.js** | Low-level 3D rendering pipeline |
-| **React Three Fiber** | Declarative React integration for Three.js scene graph |
-| **Rapier** | Fast, deterministic Rust-based physics engine for the Lanyard |
-| **GSAP** | Timeline-based DOM animation and ScrollTrigger effects |
-| **Lenis** | Smooth scrolling infrastructure |
+**Core**
+- `Next.js 16.2`
+- `React 19`
+- `TypeScript`
 
-## Architecture
+**3D / Interaction**
+- `Three.js`
+- `@react-three/fiber`
+- `@react-three/drei`
+- `@react-three/rapier`
 
-The project leverages the **Next.js App Router** paradigm, keeping as much as possible inside Server Components. 
+**Motion**
+- `GSAP 3.15`
+- `Lenis`
 
-- **Server-First Base**: `layout.tsx` and `page.tsx` are rendered entirely on the server to ensure high performance and immediate First Contentful Paint.
-- **Interactive Islands**: Components demanding client interactivity (like `Lanyard.tsx`, GSAP components, and the `Navbar`) use the `"use client"` directive, strictly isolating their execution to minimize the JavaScript payload sent to the browser.
-- **Physics Isolation**: The Rapier physics engine and Three.js canvas are isolated entirely within the Lanyard component to avoid polluting the global DOM rendering cycle.
-- **Animation Pipeline**: Animations are delegated to GSAP via `useGSAP` hooks mapped to Lenis scroll events, bypassing React's rendering loop entirely for hardware-accelerated 60fps performance.
+**Styling**
+- `Tailwind CSS 4`
+- Standard Vanilla `CSS`
+
+## Responsive by Design
+
+The portfolio is engineered to look visually flawless regardless of device size. Mobile composition moves the interactive Lanyard precisely out of the way of the primary typography while retaining full interaction. Font sizes and spacing rely on `clamp()` and responsive container measurements rather than fixed breakpoints, ensuring complete fluidity.
+
+## Performance Engineering
+
+- **Server/client boundary optimization**: `page.tsx` and `layout.tsx` are strictly Server Components. The WebGL context is pushed deeply into the client-side leaf component (`Lanyard.tsx`).
+- **Static texture loading**: The lanyard strap is pre-baked into a static asset, preventing blocking runtime calculations.
+- **Reduced redundant rendering**: `useSyncExternalStore` handles resize and scroll progress events to prevent cascading React state updates on every scroll tick.
+- **Image optimization**: Heavy assets are converted to `webp` and delivered through Next.js optimized routing.
+
+## Accessibility
+
+- **Keyboard Navigation**: The entire site can be navigated cleanly using the `Tab` key.
+- **Focus-visible indicators**: Elegant, customized focus rings appear only for keyboard users, leaving mouse users with an uninterrupted cinematic aesthetic.
+- **Semantic HTML**: Proper `<header>`, `<main>`, `<nav>`, and `<section>` landmarks.
+- **Reduced-motion support**: Animations respect OS-level motion preferences, falling back gracefully.
+
+## SEO
+
+The project is thoroughly production-aware for search engines:
+- `metadataBase` dynamically resolves to `https://indranilpaul.dev`
+- Comprehensive dynamic `<head>` metadata (titles, descriptions, OpenGraph).
+- Automated `robots.txt` configuration.
+- Automated `sitemap.xml` mapping.
 
 ## Project Structure
 
@@ -91,8 +160,6 @@ src/
 │   ├── robots.ts
 │   └── sitemap.ts
 ├── components/
-│   ├── CustomCursor.tsx
-│   ├── SmoothScroll.tsx
 │   ├── background/
 │   ├── hero/
 │   ├── navbar/
@@ -110,11 +177,70 @@ src/
     ├── design-tokens.ts
     ├── scroll-lock.ts
     └── utils.ts
-
-docs/
-└── screenshots/
-    ├── connect.png
-    ├── hero-desktop.png
-    ├── hero-mobile.png
-    └── navigation.png
 ```
+
+## Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/indraaaa29/My-Portfolio.git
+
+# Enter the directory
+cd My-Portfolio
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Production / Deployment
+
+```bash
+# Verify type safety
+npx tsc --noEmit
+
+# Ensure strict linting compliance
+npm run lint
+
+# Generate optimized production bundle
+npm run build
+
+# Start the production server
+npm run start
+```
+
+## Engineering Evolution
+
+### Architecture
+The project evolved from a highly client-heavy SPA into a strict Next.js App Router architecture, moving the root wrapper entirely to the server and cleanly defining interactive client components.
+### Performance
+Early iterations involved generating the physical strap texture procedurally via Canvas API, which choked mobile rendering. This was refactored into an optimized static image texture.
+### Code Quality
+React Hooks that aggressively re-rendered components on scroll (`useScrollProgress`) were stripped out, delegating animation entirely to GSAP timelines.
+### Source Cleanup
+All unused experimental features, bloated utilities, and orphaned component directories were purged, creating a minimal, maintainable source tree.
+
+## About
+
+I am a Computer Science & Engineering student focused on AI/ML and software development, with a deep interest in building experiences that bridge the gap between heavy technical logic and beautiful interfaces.
+
+This repository represents my approach to combining **engineering + design + interaction + visual storytelling**. It isn't intended to be just a static collection of links—it’s an interactive representation of how I build and think. The physics-based 3D Lanyard, cinematic visual direction, and hardware-accelerated motion are entirely intentional, built to prove that highly creative web experiences can still be executed with strict performance-conscious implementation.
+
+### What I’m Into
+- 💻 **Software Engineering**
+- 🤖 **AI & Machine Learning**
+- 🎨 **UI/UX & Creative Development**
+- 🌐 **Interactive Web Experiences**
+- 📷 **Photography & Visual Storytelling**
+- 🚀 **Building & Experimenting**
+
+### Currently Building
+I am currently focused on engineering robust full-stack architectures and exploring ways to integrate intelligent AI models directly into scalable, production-ready web platforms.
+
+> *I like building things that perform beautifully, look intentional, and leave a lasting impression.*
+
+**Find me:** [Portfolio](https://indranilpaul.dev) · [GitHub](https://github.com/indraaaa29) · [LinkedIn](https://www.linkedin.com/in/indranil-paul-ai/)

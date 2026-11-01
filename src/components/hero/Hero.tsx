@@ -180,6 +180,7 @@ export default function Hero({ className }: HeroProps) {
           <motion.h1 className={styles.nameBlock} variants={itemVariants}>
             <span className={styles.nameRow}>
               <TextPressure
+                as="span"
                 text="INDRANIL"
                 className={styles.nameLine}
                 flex={true}
@@ -195,6 +196,7 @@ export default function Hero({ className }: HeroProps) {
             </span>
             <span className={styles.nameRowSecond}>
               <TextPressure
+                as="span"
                 text="PAUL"
                 className={styles.nameLineSecond}
                 flex={true}

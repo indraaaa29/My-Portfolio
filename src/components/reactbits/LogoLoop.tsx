@@ -71,6 +71,7 @@ const useResizeObserver = (
     return () => {
       observers.forEach(observer => observer?.disconnect());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 };
 
@@ -111,6 +112,7 @@ const useImageLoader = (
         img.removeEventListener('error', handleImageLoad);
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 };
 
@@ -178,7 +180,7 @@ const useAnimationLoop = (
       }
       lastTimestampRef.current = null;
     };
-  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical]);
+  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef]);
 };
 
 export const LogoLoop = React.memo<LogoLoopProps>(
@@ -303,24 +305,16 @@ export const LogoLoop = React.memo<LogoLoopProps>(
         const isNodeItem = 'node' in item;
         const content = isNodeItem ? (
           <span className="logoloop__node" aria-hidden={!!item.href && !item.ariaLabel}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(item as any).node}
           </span>
         ) : (
           <img
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             src={(item as any).src}
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             srcSet={(item as any).srcSet}
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             sizes={(item as any).sizes}
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             width={(item as any).width}
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             height={(item as any).height}
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             alt={(item as any).alt ?? ''}
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             title={(item as any).title}
             loading="lazy"
             decoding="async"
@@ -328,15 +322,11 @@ export const LogoLoop = React.memo<LogoLoopProps>(
           />
         );
         const itemAriaLabel = isNodeItem
-          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
           ? ((item as any).ariaLabel ?? (item as any).title)
-          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
           : ((item as any).alt ?? (item as any).title);
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         const itemContent = (item as any).href ? (
           <a
             className="logoloop__link"
-            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
             href={(item as any).href}
             aria-label={itemAriaLabel || 'logo link'}
             target="_blank"

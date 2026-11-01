@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUp, Sparkles } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import SectionSeam from './SectionSeam';
 
 export default function Footer() {
@@ -11,18 +11,7 @@ export default function Footer() {
   return (
     <footer className="relative py-12 px-6 md:px-12 bg-transparent text-zinc-400">
       <SectionSeam compact />
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        
-        {/* Brand */}
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-zinc-950 font-bold text-xs">
-            <Sparkles className="w-3 h-3 text-zinc-950" />
-          </div>
-          <span className="text-white font-semibold tracking-wider text-sm">
-            INDRANIL PAUL<span className="text-amber-500">.</span>
-          </span>
-        </div>
-
+      <div className="max-w-7xl mx-auto flex items-center justify-end">
         {/* Back to Top */}
         <button
           onClick={scrollToTop}

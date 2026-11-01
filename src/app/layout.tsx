@@ -3,7 +3,6 @@ import { Inter, Bebas_Neue } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import CustomCursor from '@/components/CustomCursor';
-import AgentationDev from '@/components/AgentationDev';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -40,7 +39,6 @@ export default function RootLayout({
         <SmoothScroll>
           {children}
         </SmoothScroll>
-        <AgentationDev />
       </body>
     </html>
   );

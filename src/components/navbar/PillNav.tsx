@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import './PillNav.css';
 
@@ -180,7 +180,7 @@ const PillNav: React.FC<PillNavProps> = ({
     }
   };
 
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = useCallback(() => {
     const newState = !isMobileMenuOpen;
     setIsMobileMenuOpen(newState);
 
@@ -229,7 +229,7 @@ const PillNav: React.FC<PillNavProps> = ({
     }
 
     onMobileMenuClick?.();
-  };
+  }, [isMobileMenuOpen, ease, onMobileMenuClick]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -239,7 +239,7 @@ const PillNav: React.FC<PillNavProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, toggleMobileMenu]);
 
   const isExternalLink = (href: string) =>
     href.startsWith('http://') ||
